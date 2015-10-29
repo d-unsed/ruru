@@ -2,3 +2,9 @@
 name = "ruru"
 version = "0.1.0"
 authors = ["Dmitry Gritsay <unseductable@gmail.com>"]
+
+build = "build/build.rs"
+
+[lib]
+name = "ruru"
+crate-type = ["dylib"]
