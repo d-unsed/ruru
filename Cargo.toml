@@ -8,3 +8,6 @@ build = "build/build.rs"
 [lib]
 name = "ruru"
 crate-type = ["dylib"]
+
+[dependencies]
+libc = "0.1.12"
