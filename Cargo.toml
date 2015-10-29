@@ -1,0 +1,4 @@
+[package]
+name = "ruru"
+version = "0.1.0"
+authors = ["Dmitry Gritsay <unseductable@gmail.com>"]
