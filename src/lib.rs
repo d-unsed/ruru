@@ -1,8 +1,9 @@
 extern crate libc;
 
+mod bindings;
 mod types;
 mod unsafe_bindings;
-mod bindings;
+mod util;
 
 #[test]
 fn it_works() {
