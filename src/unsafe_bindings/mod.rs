@@ -1,2 +1,3 @@
-pub mod util;
+pub mod array;
 pub mod class;
+pub mod util;

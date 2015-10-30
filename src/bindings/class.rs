@@ -1,5 +1,3 @@
-// use std::ffi::CString;
-
 use types;
 use unsafe_bindings;
 use util;
