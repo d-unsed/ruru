@@ -1,1 +1,3 @@
-pub mod traits;
+pub mod class;
+
+mod traits;
