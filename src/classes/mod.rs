@@ -1,3 +1,4 @@
+pub mod array;
 pub mod class;
 
-mod traits;
+pub mod traits;
