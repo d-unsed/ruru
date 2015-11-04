@@ -1,4 +1,12 @@
+use std::process::Command;
+
 fn main() {
-    // Rbenv-specific path
-    println!("cargo:rustc-link-search=native=~/.rbenv/versions/2.2.3/lib");
+    let rbenv = Command::new("rbenv")
+                        .arg("prefix")
+                        .output()
+                        .unwrap_or_else(|e| panic!("Rbenv not found: {}", e));
+
+    let ruby_path =  String::from_utf8_lossy(&rbenv.stdout);
+
+    println!("cargo:rustc-flags=-L {}/lib", ruby_path.trim());
 }
