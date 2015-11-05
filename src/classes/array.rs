@@ -9,13 +9,13 @@ pub struct Array {
 }
 
 impl Array {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Array {
             value: array::array_new()
         }
     }
 
-    fn push<T: traits::RawObject>(&mut self, item: T) -> &mut Self {
+    pub fn push<T: traits::RawObject>(&mut self, item: T) -> &mut Self {
         array::array_push(self.value(), item.value());
 
         self

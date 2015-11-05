@@ -22,16 +22,23 @@ impl traits::RawObject for Class {
 
 impl Class {
     // TODO: replace rb_cObject with optional superclass
-    fn new(name: &str) -> Self {
+    pub fn new(name: &str) -> Self {
         Class {
             value: class::define_class(name, globals::rb_cObject)
         }
     }
 
-    fn define_method(&self,
-                     name: &str,
-                     callback: extern fn(types::rb_value) -> types::rb_value,
-                     argc: i32) {
+    pub fn define_method(&self,
+                         name: &str,
+                         callback: extern fn(types::rb_value) -> types::rb_value,
+                         argc: i32) {
+        class::define_method(self.value, name, callback, 0);
+    }
+
+    pub fn def_with_closure(&self,
+                         name: &str,
+                         callback: extern fn(types::rb_value) -> types::rb_value,
+                         argc: i32) {
         class::define_method(self.value, name, callback, 0);
     }
 }
