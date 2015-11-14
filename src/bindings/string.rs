@@ -12,6 +12,6 @@ pub fn string_from_value(value: types::rb_value) -> String {
     unsafe {
         let str = string::rb_string_value_cstr(&value);
 
-        util::cstr_as_str(str)
+        util::cstr_as_string(str)
     }
 }
