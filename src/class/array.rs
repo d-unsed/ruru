@@ -1,4 +1,4 @@
-use bindings::array;
+use binding::array;
 use types;
 
 use super::traits;

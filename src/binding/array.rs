@@ -1,5 +1,5 @@
 use types;
-use unsafe_bindings::array;
+use unsafe_binding::array;
 
 pub fn new() -> types::rb_value {
     unsafe {

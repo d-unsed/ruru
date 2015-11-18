@@ -1,5 +1,5 @@
 use types;
-use unsafe_bindings::string;
+use unsafe_binding::string;
 use util;
 
 pub fn string_new(string: &str) -> types::rb_value {

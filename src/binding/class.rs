@@ -1,5 +1,5 @@
 use types;
-use unsafe_bindings::class;
+use unsafe_binding::class;
 use util;
 
 pub fn define_class(name: &str, superclass: types::rb_value) -> types::rb_value {

@@ -1,4 +1,4 @@
-use bindings::string;
+use binding::string;
 use types;
 
 use super::traits;

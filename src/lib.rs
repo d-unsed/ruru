@@ -1,9 +1,9 @@
 extern crate libc;
 
-mod bindings;
-mod classes;
+mod binding;
+mod class;
 mod types;
-mod unsafe_bindings;
+mod unsafe_binding;
 mod util;
 
 #[test]

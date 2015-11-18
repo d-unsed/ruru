@@ -1,5 +1,4 @@
-use bindings::globals;
-use bindings::class;
+use binding::{class, global};
 use types;
 
 use super::traits;
@@ -24,7 +23,7 @@ impl Class {
     // TODO: replace rb_cObject with optional superclass
     pub fn new(name: &str) -> Self {
         Class {
-            value: class::define_class(name, globals::rb_cObject)
+            value: class::define_class(name, global::rb_cObject)
         }
     }
 
