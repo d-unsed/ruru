@@ -1,6 +1,7 @@
+use binding::util;
 use types;
 
-use super::{array, class, string};
+use super::{array, class, object, string};
 
 pub trait RawObject {
     fn from_value(value: types::rb_value) -> Self;
@@ -17,5 +18,12 @@ pub trait RawObject {
 
     fn as_string(&self) -> string::RString {
         string::RString::from_value(self.value())
+    }
+
+    fn send<T: RawObject>(&self, method: &str, arguments: Vec<T>) -> object::Object {
+        let arguments = arguments.iter().map(|object| object.value()).collect();
+        let result = util::call_method(self.value(), method, arguments);
+
+        object::Object::from_value(result)
     }
 }

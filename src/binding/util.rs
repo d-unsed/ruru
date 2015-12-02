@@ -15,6 +15,6 @@ pub fn call_method(receiver: types::rb_value,
     let argv = arguments.as_ptr();
 
     unsafe {
-        util::rb_funcall2(receiver, method_id, argc, argv)
+        util::rb_funcallv(receiver, method_id, argc, argv)
     }
 }
