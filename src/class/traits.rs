@@ -8,6 +8,10 @@ pub trait RawObject {
 
     fn value(&self) -> types::rb_value;
 
+    fn as_object(&self) -> object::Object {
+        object::Object::from_value(self.value())
+    }
+
     fn as_array(&self) -> array::Array {
         array::Array::from_value(self.value())
     }
@@ -20,7 +24,7 @@ pub trait RawObject {
         string::RString::from_value(self.value())
     }
 
-    fn send<T: RawObject>(&self, method: &str, arguments: Vec<T>) -> object::Object {
+    fn send(&self, method: &str, arguments: Vec<object::Object>) -> object::Object {
         let arguments = arguments.iter().map(|object| object.value()).collect();
         let result = util::call_method(self.value(), method, arguments);
 
