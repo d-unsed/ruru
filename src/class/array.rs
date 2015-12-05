@@ -1,7 +1,6 @@
 use binding::array;
 use types;
 
-use super::traits;
 use super::traits::RawObject;
 
 pub struct Array {
@@ -15,14 +14,14 @@ impl Array {
         }
     }
 
-    pub fn push<T: traits::RawObject>(&mut self, item: T) -> &mut Self {
+    pub fn push<T: RawObject>(&mut self, item: T) -> &mut Self {
         array::push(self.value(), item.value());
 
         self
     }
 }
 
-impl traits::RawObject for Array {
+impl RawObject for Array {
     fn value(&self) -> types::rb_value {
         self.value
     }

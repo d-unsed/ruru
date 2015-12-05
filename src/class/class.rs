@@ -1,13 +1,13 @@
 use binding::{class, global};
 use types;
 
-use super::traits;
+use super::traits::RawObject;
 
 pub struct Class {
     value: types::rb_value
 }
 
-impl traits::RawObject for Class {
+impl RawObject for Class {
     fn value(&self) -> types::rb_value {
         self.value
     }

@@ -1,7 +1,6 @@
 use binding::string;
 use types;
 
-use super::traits;
 use super::traits::RawObject;
 
 pub struct RString {
@@ -20,7 +19,7 @@ impl RString {
     }
 }
 
-impl traits::RawObject for RString {
+impl RawObject for RString {
     fn value(&self) -> types::rb_value {
         self.value
     }
