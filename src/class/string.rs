@@ -12,12 +12,12 @@ pub struct RString {
 impl RString {
     pub fn new(string: &str) -> Self {
         RString {
-            value: string::string_new(string)
+            value: string::new(string)
         }
     }
 
     pub fn to_string(&self) -> String {
-        string::string_from_value(self.value)
+        string::from_value(self.value)
     }
 }
 
