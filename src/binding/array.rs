@@ -7,9 +7,9 @@ pub fn new() -> types::rb_value {
     }
 }
 
-pub fn entry(array: types::rb_value, offset: types::c_long) -> types::rb_value {
+pub fn entry(array: types::rb_value, offset: i64) -> types::rb_value {
     unsafe {
-        array::rb_ary_entry(array, offset)
+        array::rb_ary_entry(array, offset as types::c_long)
     }
 }
 

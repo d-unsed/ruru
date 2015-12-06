@@ -3,6 +3,7 @@ use std::convert::From;
 use binding::array;
 use types;
 
+use super::object;
 use super::traits::RawObject;
 
 pub struct Array {
@@ -14,6 +15,12 @@ impl Array {
         Array {
             value: array::new()
         }
+    }
+
+    pub fn at(&self, index: i64) -> object::Object {
+        let value = array::entry(self.value(), index);
+
+        object::Object::from(value)
     }
 
     pub fn push<T: RawObject>(&mut self, item: T) -> &mut Self {
