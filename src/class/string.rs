@@ -1,3 +1,5 @@
+use std::convert::From;
+
 use binding::string;
 use types;
 
@@ -19,14 +21,16 @@ impl RString {
     }
 }
 
-impl RawObject for RString {
-    fn value(&self) -> types::rb_value {
-        self.value
-    }
-
-    fn from_value(value: types::rb_value) -> Self {
+impl From<types::rb_value> for RString {
+    fn from(value: types::rb_value) -> Self {
         RString {
             value: value
         }
+    }
+}
+
+impl RawObject for RString {
+    fn value(&self) -> types::rb_value {
+        self.value
     }
 }

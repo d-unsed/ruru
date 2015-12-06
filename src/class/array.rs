@@ -1,3 +1,5 @@
+use std::convert::From;
+
 use binding::array;
 use types;
 
@@ -21,14 +23,16 @@ impl Array {
     }
 }
 
-impl RawObject for Array {
-    fn value(&self) -> types::rb_value {
-        self.value
-    }
-
-    fn from_value(value: types::rb_value) -> Self {
+impl From<types::rb_value> for Array {
+    fn from(value: types::rb_value) -> Self {
         Array {
             value: value
         }
+    }
+}
+
+impl RawObject for Array {
+    fn value(&self) -> types::rb_value {
+        self.value
     }
 }
