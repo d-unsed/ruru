@@ -6,6 +6,12 @@ mod types;
 mod unsafe_binding;
 mod util;
 
+pub use class::array::Array;
+pub use class::class::Class;
+pub use class::hash::Hash;
+pub use class::object::Object;
+pub use class::string::RString;
+
 #[test]
 fn it_works() {
 }
