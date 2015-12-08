@@ -3,3 +3,4 @@ pub mod class;
 pub mod hash;
 pub mod string;
 pub mod util;
+pub mod vm;
