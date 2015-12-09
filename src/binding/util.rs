@@ -13,6 +13,12 @@ pub fn num_to_int(num: types::rb_value) -> i64 {
     }
 }
 
+pub fn id_to_sym(id: types::rb_id) -> types::rb_value {
+    unsafe {
+        util::rb_id2sym(id)
+    }
+}
+
 pub fn internal_id(string: &str) -> types::rb_id {
     unsafe {
         util::rb_intern(::util::str_as_ptr(string))
