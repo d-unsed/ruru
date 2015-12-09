@@ -23,7 +23,7 @@ impl Hash {
         object::Object::from(value)
     }
 
-    pub fn store<T: RawObject>(&mut self, key: T, value: T) -> object::Object {
+    pub fn store<K: RawObject, V: RawObject>(&mut self, key: K, value: V) -> object::Object {
         let value = hash::aset(self.value(), key.value(), value.value());
 
         object::Object::from(value)
