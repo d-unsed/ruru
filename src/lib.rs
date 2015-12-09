@@ -14,6 +14,8 @@ pub use class::string::RString;
 pub use class::symbol::Symbol;
 pub use class::vm::VM;
 
+pub use class::traits;
+
 #[test]
 fn it_works() {
 }
