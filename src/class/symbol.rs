@@ -15,6 +15,10 @@ impl Symbol {
             value: util::id_to_sym(util::internal_id(string))
         }
     }
+
+    pub fn to_string(&self) -> String {
+        util::id_to_name(util::sym_to_id(self.value()))
+    }
 }
 
 impl From<types::rb_value> for Symbol {
