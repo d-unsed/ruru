@@ -3,14 +3,10 @@ use std::convert::From;
 use binding::util;
 use types;
 
-use super::{array, class, object, string};
+use super::{array, class, hash, object, string};
 
 pub trait RawObject : From<types::rb_value> {
     fn value(&self) -> types::rb_value;
-
-    fn as_object(&self) -> object::Object {
-        object::Object::from(self.value())
-    }
 
     fn as_array(&self) -> array::Array {
         array::Array::from(self.value())
@@ -18,6 +14,14 @@ pub trait RawObject : From<types::rb_value> {
 
     fn as_class(&self) -> class::Class {
         class::Class::from(self.value())
+    }
+
+    fn as_hash(&self) -> hash::Hash {
+        hash::Hash::from(self.value())
+    }
+
+    fn as_object(&self) -> object::Object {
+        object::Object::from(self.value())
     }
 
     fn as_string(&self) -> string::RString {
