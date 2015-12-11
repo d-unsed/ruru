@@ -19,9 +19,8 @@ impl Class {
 
     pub fn define_method(&self,
                          name: &str,
-                         callback: extern fn(types::rb_value) -> types::rb_value,
-                         argc: i32) {
-        class::define_method(self.value, name, callback, 0);
+                         callback: extern fn(i32, *const types::rb_value, types::rb_value) -> types::rb_value) {
+        class::define_method(self.value, name, callback);
     }
 }
 
