@@ -23,13 +23,6 @@ impl Class {
                          argc: i32) {
         class::define_method(self.value, name, callback, 0);
     }
-
-    pub fn def_with_closure(&self,
-                         name: &str,
-                         callback: extern fn(types::rb_value) -> types::rb_value,
-                         argc: i32) {
-        class::define_method(self.value, name, callback, 0);
-    }
 }
 
 impl From<types::rb_value> for Class {
