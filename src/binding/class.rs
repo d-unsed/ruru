@@ -16,7 +16,7 @@ pub fn define_module(name: &str) -> types::rb_value {
 
 pub fn define_method(klass: types::rb_value,
                      name: &str,
-                     callback: extern fn(i32, *const types::rb_value, types::rb_value) -> types::rb_value) {
+                     callback: extern fn(types::argc, *const types::rb_value, types::rb_value) -> types::rb_value) {
     unsafe {
         class::rb_define_method(klass, util::str_as_ptr(name), callback, -1);
     }
@@ -25,7 +25,7 @@ pub fn define_method(klass: types::rb_value,
 pub fn define_singleton_method(klass: types::rb_value,
                                name: &str,
                                callback: extern fn(types::rb_value) -> types::rb_value,
-                               argc: i32) {
+                               argc: types::argc) {
     unsafe {
         class::rb_define_singleton_method(klass, util::str_as_ptr(name), callback, argc);
     }
