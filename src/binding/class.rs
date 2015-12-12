@@ -24,9 +24,8 @@ pub fn define_method(klass: types::rb_value,
 
 pub fn define_singleton_method(klass: types::rb_value,
                                name: &str,
-                               callback: extern fn(types::rb_value) -> types::rb_value,
-                               argc: types::argc) {
+                               callback: extern fn(types::argc, *const types::rb_value, types::rb_value) -> types::rb_value) {
     unsafe {
-        class::rb_define_singleton_method(klass, util::str_as_ptr(name), callback, argc);
+        class::rb_define_singleton_method(klass, util::str_as_ptr(name), callback, -1);
     }
 }
