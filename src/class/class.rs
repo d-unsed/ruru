@@ -22,6 +22,12 @@ impl Class {
                          callback: extern fn(types::argc, *const types::rb_value, types::rb_value) -> types::rb_value) {
         class::define_method(self.value, name, callback);
     }
+
+    pub fn define_singleton_method(&self,
+                         name: &str,
+                         callback: extern fn(types::argc, *const types::rb_value, types::rb_value) -> types::rb_value) {
+        class::define_singleton_method(self.value, name, callback);
+    }
 }
 
 impl From<types::rb_value> for Class {
