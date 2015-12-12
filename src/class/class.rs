@@ -17,15 +17,11 @@ impl Class {
         }
     }
 
-    pub fn define_method(&self,
-                         name: &str,
-                         callback: extern fn(types::argc, *const types::rb_value, types::rb_value) -> types::rb_value) {
+    pub fn define_method(&self, name: &str, callback: types::callback) {
         class::define_method(self.value, name, callback);
     }
 
-    pub fn define_singleton_method(&self,
-                         name: &str,
-                         callback: extern fn(types::argc, *const types::rb_value, types::rb_value) -> types::rb_value) {
+    pub fn define_singleton_method(&self, name: &str, callback: types::callback) {
         class::define_singleton_method(self.value, name, callback);
     }
 }

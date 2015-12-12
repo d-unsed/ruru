@@ -7,11 +7,11 @@ extern "C" {
 
     pub fn rb_define_method(klass: types::rb_value,
                             name: *const types::c_char,
-                            callback: extern fn(types::argc, *const types::rb_value, types::rb_value) -> types::rb_value,
+                            callback: types::callback,
                             argc: types::c_int);
 
     pub fn rb_define_singleton_method(klass: types::rb_value,
                                       name: *const types::c_char,
-                                      callback: extern fn(types::argc, *const types::rb_value, types::rb_value) -> types::rb_value,
+                                      callback: types::callback,
                                       argc: types::c_int);
 }
