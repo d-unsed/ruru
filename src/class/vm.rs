@@ -18,4 +18,8 @@ impl VM {
 
         arguments.iter().map(|value| object::Object::from(*value)).collect()
     }
+
+    pub fn parse_itself(itself: types::rb_value) -> object::Object {
+        object::Object::from(itself)
+    }
 }
