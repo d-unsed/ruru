@@ -5,7 +5,7 @@ extern "C" {
     pub static rb_cObject: types::rb_value;
 }
 
-enum RubySpecialConsts {
+pub enum RubySpecialConsts {
     False = 0,
     True = 0x14,
     Nil = 0x08,
