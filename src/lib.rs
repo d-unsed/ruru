@@ -7,6 +7,7 @@ mod unsafe_binding;
 mod util;
 
 pub use class::array::Array;
+pub use class::boolean::Boolean;
 pub use class::class::Class;
 pub use class::hash::Hash;
 pub use class::object::Object;

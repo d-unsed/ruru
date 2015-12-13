@@ -1,4 +1,5 @@
 pub mod array;
+pub mod boolean;
 pub mod class;
 pub mod hash;
 pub mod object;
