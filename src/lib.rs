@@ -9,6 +9,7 @@ mod util;
 pub use class::array::Array;
 pub use class::boolean::Boolean;
 pub use class::class::Class;
+pub use class::fixnum::Fixnum;
 pub use class::hash::Hash;
 pub use class::object::Object;
 pub use class::string::RString;

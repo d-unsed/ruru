@@ -4,7 +4,7 @@ use binding;
 use binding::util;
 use types;
 
-use super::{array, class, hash, object, string};
+use super::{array, class, fixnum, hash, object, string};
 
 pub trait RawObject : From<types::rb_value> {
     fn value(&self) -> types::rb_value;
@@ -21,6 +21,10 @@ pub trait RawObject : From<types::rb_value> {
 
     fn as_class(&self) -> class::Class {
         class::Class::from(self.value())
+    }
+
+    fn as_fixnum(&self) -> fixnum::Fixnum {
+        fixnum::Fixnum::from(self.value())
     }
 
     fn as_hash(&self) -> hash::Hash {

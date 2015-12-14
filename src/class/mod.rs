@@ -1,6 +1,7 @@
 pub mod array;
 pub mod boolean;
 pub mod class;
+pub mod fixnum;
 pub mod hash;
 pub mod object;
 pub mod string;
