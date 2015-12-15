@@ -1,7 +1,7 @@
 use std::convert::From;
 
 use types;
-use binding::util;
+use binding::fixnum;
 
 use super::traits::RawObject;
 
@@ -12,12 +12,12 @@ pub struct Fixnum {
 impl Fixnum {
     pub fn new(num: i64) -> Self {
         Fixnum {
-            value: util::int_to_num(num)
+            value: fixnum::int_to_num(num)
         }
     }
 
     pub fn to_i64(&self) -> i64 {
-        util::num_to_int(self.value)
+        fixnum::num_to_int(self.value)
     }
 }
 

@@ -1,18 +1,6 @@
 use types;
 use unsafe_binding::util;
 
-pub fn int_to_num(num: i64) -> types::rb_value {
-    unsafe {
-        util::rb_int2inum(num as types::rb_signed_value)
-    }
-}
-
-pub fn num_to_int(num: types::rb_value) -> i64 {
-    unsafe {
-        util::rb_num2int(num)
-    }
-}
-
 pub fn id_to_sym(id: types::rb_id) -> types::rb_value {
     unsafe {
         util::rb_id2sym(id)
