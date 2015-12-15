@@ -1,6 +1,6 @@
 use std::convert::From;
 
-use binding::util;
+use binding::{symbol, util};
 use types;
 
 use super::traits::RawObject;
@@ -12,12 +12,12 @@ pub struct Symbol {
 impl Symbol {
     pub fn new(string: &str) -> Self {
         Symbol {
-            value: util::id_to_sym(util::internal_id(string))
+            value: symbol::id_to_sym(util::internal_id(string))
         }
     }
 
     pub fn to_string(&self) -> String {
-        util::id_to_name(util::sym_to_id(self.value()))
+        symbol::id_to_name(symbol::sym_to_id(self.value()))
     }
 }
 
