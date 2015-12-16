@@ -1,7 +1,10 @@
 use std::ffi::{CStr, CString};
 
 use binding::global;
+use class::object;
 use types;
+
+use class::traits::RawObject;
 
 pub fn str_as_ptr(str: &str) -> *const types::c_char {
     CString::new(str).unwrap().as_ptr()
@@ -28,4 +31,16 @@ pub fn value_to_bool(value: types::rb_value) -> bool {
     } else {
         true
     }
+}
+
+pub fn create_arguments(arguments: Vec<object::Object>) -> (types::c_int, *const types::rb_value) {
+    (arguments.len() as types::c_int, arguments_as_ptr(arguments))
+}
+
+fn arguments_as_ptr(arguments: Vec<object::Object>) -> *const types::rb_value {
+    arguments
+        .iter()
+        .map(|object| object.value())
+        .collect::<Vec<types::rb_value>>()
+        .as_ptr()
 }
