@@ -2,7 +2,9 @@ use std::convert::From;
 
 use binding::{class, global};
 use types;
+use util;
 
+use super::{object, vm};
 use super::traits::RawObject;
 
 pub struct Class {
@@ -15,6 +17,13 @@ impl Class {
         Class {
             value: class::define_class(name, global::rb_cObject)
         }
+    }
+
+    pub fn new_instance(&self, arguments: Vec<object::Object>) -> object::Object {
+        let (argc, argv) = util::create_arguments(arguments);
+        let instance = class::new_instance(self.value(), argc, argv);
+
+        object::Object::from(instance)
     }
 
     pub fn define_method(&self, name: &str, callback: types::callback) {
