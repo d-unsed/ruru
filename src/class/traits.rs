@@ -16,8 +16,9 @@ pub trait RawObject : From<types::rb_value> {
     }
 
     fn send(&self, method: &str, arguments: Vec<object::Object>) -> object::Object {
-        let arguments = arguments.iter().map(|object| object.value()).collect();
-        let result = util::call_method(self.value(), method, arguments);
+        let (argc, argv) = ::util::create_arguments(arguments);
+
+        let result = util::call_method(self.value(), method, argc, argv);
 
         object::Object::from(result)
     }
