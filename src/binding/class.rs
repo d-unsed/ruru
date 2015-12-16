@@ -20,6 +20,12 @@ pub fn object_class(object: types::rb_value) -> types::rb_value {
     }
 }
 
+pub fn new_instance(klass: types::rb_value, argc: types::argc, argv: *const types::rb_value) -> types::rb_value {
+    unsafe {
+        class::rb_class_new_instance(argc, argv, klass)
+    }
+}
+
 pub fn define_method(klass: types::rb_value, name: &str, callback: types::callback) {
     unsafe {
         class::rb_define_method(klass, util::str_as_ptr(name), callback, -1);
