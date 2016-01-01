@@ -26,11 +26,11 @@ impl Class {
         object::Object::from(instance)
     }
 
-    pub fn define_method(&self, name: &str, callback: types::callback) {
-        class::define_method(self.value, name, callback);
+    pub fn define_method<T: RawObject>(&self, name: &str, callback: types::callback<T>) {
+        class::define_method::<T>(self.value, name, callback);
     }
 
-    pub fn define_singleton_method(&self, name: &str, callback: types::callback) {
+    pub fn define_singleton_method<T: RawObject>(&self, name: &str, callback: types::callback<T>) {
         class::define_singleton_method(self.value, name, callback);
     }
 }

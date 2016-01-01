@@ -5,6 +5,7 @@ use types;
 use super::{array, class, fixnum, hash, string};
 use super::traits::RawObject;
 
+#[derive(Clone)]
 pub struct Object {
     value: types::rb_value
 }
