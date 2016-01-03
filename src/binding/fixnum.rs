@@ -1,14 +1,14 @@
-use types;
-use unsafe_binding::fixnum;
+use types::{rb_signed_value, rb_value};
+use unsafe_binding::fixnum::{rb_int2inum, rb_num2int};
 
-pub fn int_to_num(num: i64) -> types::rb_value {
+pub fn int_to_num(num: i64) -> rb_value {
     unsafe {
-        fixnum::rb_int2inum(num as types::rb_signed_value)
+        rb_int2inum(num as rb_signed_value)
     }
 }
 
-pub fn num_to_int(num: types::rb_value) -> i64 {
+pub fn num_to_int(num: rb_value) -> i64 {
     unsafe {
-        fixnum::rb_num2int(num)
+        rb_num2int(num)
     }
 }

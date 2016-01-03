@@ -1,32 +1,32 @@
-use types;
-use unsafe_binding::array;
+use types::{c_long, rb_value};
+use unsafe_binding::array::{rb_ary_new, rb_ary_entry, rb_ary_join, rb_ary_push, rb_ary_store};
 
-pub fn new() -> types::rb_value {
+pub fn new() -> rb_value {
     unsafe {
-        array::rb_ary_new()
+        rb_ary_new()
     }
 }
 
-pub fn entry(array: types::rb_value, offset: i64) -> types::rb_value {
+pub fn entry(array: rb_value, offset: i64) -> rb_value {
     unsafe {
-        array::rb_ary_entry(array, offset as types::c_long)
+        rb_ary_entry(array, offset as c_long)
     }
 }
 
-pub fn join(array: types::rb_value, separator: types::rb_value) -> types::rb_value {
+pub fn join(array: rb_value, separator: rb_value) -> rb_value {
     unsafe {
-        array::rb_ary_join(array, separator)
+        rb_ary_join(array, separator)
     }
 }
 
-pub fn push(array: types::rb_value, item: types::rb_value) -> types::rb_value {
+pub fn push(array: rb_value, item: rb_value) -> rb_value {
     unsafe {
-        array::rb_ary_push(array, item)
+        rb_ary_push(array, item)
     }
 }
 
-pub fn store(array: types::rb_value, offset: i64, item: types::rb_value) -> types::rb_value {
+pub fn store(array: rb_value, offset: i64, item: rb_value) -> rb_value {
     unsafe {
-        array::rb_ary_store(array, offset as types::c_long, item)
+        rb_ary_store(array, offset as c_long, item)
     }
 }

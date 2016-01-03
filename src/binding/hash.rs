@@ -1,20 +1,20 @@
-use types;
-use unsafe_binding::hash;
+use types::rb_value;
+use unsafe_binding::hash::{rb_hash_aref, rb_hash_aset, rb_hash_new};
 
-pub fn new() -> types::rb_value {
+pub fn new() -> rb_value {
     unsafe {
-        hash::rb_hash_new()
+        rb_hash_new()
     }
 }
 
-pub fn aref(hash: types::rb_value, key: types::rb_value) -> types::rb_value {
+pub fn aref(hash: rb_value, key: rb_value) -> rb_value {
     unsafe {
-        hash::rb_hash_aref(hash, key)
+        rb_hash_aref(hash, key)
     }
 }
 
-pub fn aset(hash: types::rb_value, key: types::rb_value, value: types::rb_value) -> types::rb_value {
+pub fn aset(hash: rb_value, key: rb_value, value: rb_value) -> rb_value {
     unsafe {
-        hash::rb_hash_aset(hash, key, value)
+        rb_hash_aset(hash, key, value)
     }
 }

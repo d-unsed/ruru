@@ -1,7 +1,7 @@
-use unsafe_binding::vm;
+use unsafe_binding::vm::ruby_init;
 
 pub fn init() {
     unsafe {
-        vm::ruby_init();
+        ruby_init();
     }
 }

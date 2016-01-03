@@ -1,19 +1,20 @@
-use types;
-use unsafe_binding::util;
+use types::{argc, rb_id, rb_value};
+use unsafe_binding::util::{rb_funcallv, rb_intern};
+use util::str_as_ptr;
 
-pub fn internal_id(string: &str) -> types::rb_id {
+pub fn internal_id(string: &str) -> rb_id {
     unsafe {
-        util::rb_intern(::util::str_as_ptr(string))
+        rb_intern(str_as_ptr(string))
     }
 }
 
-pub fn call_method(receiver: types::rb_value,
+pub fn call_method(receiver: rb_value,
                    method: &str,
-                   argc: types::argc,
-                   argv: *const types::rb_value) -> types::rb_value {
+                   argc: argc,
+                   argv: *const rb_value) -> rb_value {
     let method_id = internal_id(method);
 
     unsafe {
-        util::rb_funcallv(receiver, method_id, argc, argv)
+        rb_funcallv(receiver, method_id, argc, argv)
     }
 }

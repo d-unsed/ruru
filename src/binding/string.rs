@@ -1,17 +1,17 @@
-use types;
-use unsafe_binding::string;
-use util;
+use types::rb_value;
+use unsafe_binding::string::{rb_str_new_cstr, rb_string_value_cstr};
+use util::{cstr_as_string, str_as_ptr};
 
-pub fn new(string: &str) -> types::rb_value {
+pub fn new(string: &str) -> rb_value {
     unsafe {
-        string::rb_str_new_cstr(util::str_as_ptr(string))
+        rb_str_new_cstr(str_as_ptr(string))
     }
 }
 
-pub fn from_value(value: types::rb_value) -> String {
+pub fn from_value(value: rb_value) -> String {
     unsafe {
-        let str = string::rb_string_value_cstr(&value);
+        let str = rb_string_value_cstr(&value);
 
-        util::cstr_as_string(str)
+        cstr_as_string(str)
     }
 }
