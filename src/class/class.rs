@@ -1,42 +1,43 @@
 use std::convert::From;
 
-use binding::{class, global};
-use types;
-use util;
+use binding::class::{define_class, new_instance, define_method, define_singleton_method};
+use binding::global::rb_cObject;
+use types::{callback, rb_value};
+use util::create_arguments;
 
-use super::{object, vm};
+use super::object::Object;
 use super::traits::RawObject;
 
 pub struct Class {
-    value: types::rb_value
+    value: rb_value
 }
 
 impl Class {
     // TODO: replace rb_cObject with optional superclass
     pub fn new(name: &str) -> Self {
         Class {
-            value: class::define_class(name, global::rb_cObject)
+            value: define_class(name, rb_cObject)
         }
     }
 
-    pub fn new_instance(&self, arguments: Vec<object::Object>) -> object::Object {
-        let (argc, argv) = util::create_arguments(arguments);
-        let instance = class::new_instance(self.value(), argc, argv);
+    pub fn new_instance(&self, arguments: Vec<Object>) -> Object {
+        let (argc, argv) = create_arguments(arguments);
+        let instance = new_instance(self.value(), argc, argv);
 
-        object::Object::from(instance)
+        Object::from(instance)
     }
 
-    pub fn define_method<T: RawObject>(&self, name: &str, callback: types::callback<T>) {
-        class::define_method::<T>(self.value, name, callback);
+    pub fn define_method<T: RawObject>(&self, name: &str, callback: callback<T>) {
+        define_method::<T>(self.value, name, callback);
     }
 
-    pub fn define_singleton_method<T: RawObject>(&self, name: &str, callback: types::callback<T>) {
-        class::define_singleton_method(self.value, name, callback);
+    pub fn define_singleton_method<T: RawObject>(&self, name: &str, callback: callback<T>) {
+        define_singleton_method(self.value, name, callback);
     }
 }
 
-impl From<types::rb_value> for Class {
-    fn from(value: types::rb_value) -> Self {
+impl From<rb_value> for Class {
+    fn from(value: rb_value) -> Self {
         Class {
             value: value
         }
@@ -44,7 +45,7 @@ impl From<types::rb_value> for Class {
 }
 
 impl RawObject for Class {
-    fn value(&self) -> types::rb_value {
+    fn value(&self) -> rb_value {
         self.value
     }
 }

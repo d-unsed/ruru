@@ -1,28 +1,29 @@
 use std::convert::From;
 
-use binding::{symbol, util};
-use types;
+use binding::symbol::{id_to_name, id_to_sym, sym_to_id};
+use binding::util::internal_id;
+use types::rb_value;
 
 use super::traits::RawObject;
 
 pub struct Symbol {
-    value: types::rb_value
+    value: rb_value
 }
 
 impl Symbol {
     pub fn new(string: &str) -> Self {
         Symbol {
-            value: symbol::id_to_sym(util::internal_id(string))
+            value: id_to_sym(internal_id(string))
         }
     }
 
     pub fn to_string(&self) -> String {
-        symbol::id_to_name(symbol::sym_to_id(self.value()))
+        id_to_name(sym_to_id(self.value()))
     }
 }
 
-impl From<types::rb_value> for Symbol {
-    fn from(value: types::rb_value) -> Self {
+impl From<rb_value> for Symbol {
+    fn from(value: rb_value) -> Self {
         Symbol {
             value: value
         }
@@ -30,7 +31,7 @@ impl From<types::rb_value> for Symbol {
 }
 
 impl RawObject for Symbol {
-    fn value(&self) -> types::rb_value {
+    fn value(&self) -> rb_value {
         self.value
     }
 }

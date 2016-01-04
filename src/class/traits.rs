@@ -1,25 +1,27 @@
 use std::convert::From;
 
-use binding;
-use binding::util;
-use types;
+use binding::class::object_class;
+use binding::util::call_method;
+use types::rb_value;
+use util::create_arguments;
 
-use super::{class, object};
+use super::class::Class;
+use super::object::Object;
 
-pub trait RawObject : From<types::rb_value> {
-    fn value(&self) -> types::rb_value;
+pub trait RawObject : From<rb_value> {
+    fn value(&self) -> rb_value;
 
-    fn class(&self) -> class::Class {
-        let class = binding::class::object_class(self.value());
+    fn class(&self) -> Class {
+        let class = object_class(self.value());
 
-        class::Class::from(class)
+        Class::from(class)
     }
 
-    fn send(&self, method: &str, arguments: Vec<object::Object>) -> object::Object {
-        let (argc, argv) = ::util::create_arguments(arguments);
+    fn send(&self, method: &str, arguments: Vec<Object>) -> Object {
+        let (argc, argv) = create_arguments(arguments);
 
-        let result = util::call_method(self.value(), method, argc, argv);
+        let result = call_method(self.value(), method, argc, argv);
 
-        object::Object::from(result)
+        Object::from(result)
     }
 }

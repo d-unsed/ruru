@@ -1,39 +1,44 @@
 use std::convert::From;
 
-use types;
+use types::rb_value;
 
-use super::{array, class, fixnum, hash, string};
+use super::array::Array;
+use super::class::Class;
+use super::fixnum::Fixnum;
+use super::hash::Hash;
+use super::string::RString;
+
 use super::traits::RawObject;
 
 #[derive(Clone)]
 pub struct Object {
-    value: types::rb_value
+    value: rb_value
 }
 
 impl Object {
-    pub fn as_array(&self) -> array::Array {
-        array::Array::from(self.value())
+    pub fn as_array(&self) -> Array {
+        Array::from(self.value())
     }
 
-    pub fn as_class(&self) -> class::Class {
-        class::Class::from(self.value())
+    pub fn as_class(&self) -> Class {
+        Class::from(self.value())
     }
 
-    pub fn as_fixnum(&self) -> fixnum::Fixnum {
-        fixnum::Fixnum::from(self.value())
+    pub fn as_fixnum(&self) -> Fixnum {
+        Fixnum::from(self.value())
     }
 
-    pub fn as_hash(&self) -> hash::Hash {
-        hash::Hash::from(self.value())
+    pub fn as_hash(&self) -> Hash {
+        Hash::from(self.value())
     }
 
-    pub fn as_string(&self) -> string::RString {
-        string::RString::from(self.value())
+    pub fn as_string(&self) -> RString {
+        RString::from(self.value())
     }
 }
 
-impl From<types::rb_value> for Object {
-    fn from(value: types::rb_value) -> Self {
+impl From<rb_value> for Object {
+    fn from(value: rb_value) -> Self {
         Object {
             value: value
         }
@@ -41,7 +46,7 @@ impl From<types::rb_value> for Object {
 }
 
 impl RawObject for Object {
-    fn value(&self) -> types::rb_value {
+    fn value(&self) -> rb_value {
         self.value
     }
 }

@@ -1,49 +1,51 @@
 use std::convert::From;
 
-use binding::array;
-use types;
+use binding::array::{entry, join, new, push, store};
+use types::rb_value;
 
-use super::{object, string};
+use super::object::Object;
+use super::string::RString;
+
 use super::traits::RawObject;
 
 pub struct Array {
-    value: types::rb_value
+    value: rb_value
 }
 
 impl Array {
     pub fn new() -> Self {
         Array {
-            value: array::new()
+            value: new()
         }
     }
 
-    pub fn at(&self, index: i64) -> object::Object {
-        let value = array::entry(self.value(), index);
+    pub fn at(&self, index: i64) -> Object {
+        let value = entry(self.value(), index);
 
-        object::Object::from(value)
+        Object::from(value)
     }
 
-    pub fn join(&self, separator: string::RString) -> string::RString {
-        let value = array::join(self.value(), separator.value());
+    pub fn join(&self, separator: RString) -> RString {
+        let value = join(self.value(), separator.value());
 
-        string::RString::from(value)
+        RString::from(value)
     }
 
     pub fn push<T: RawObject>(&mut self, item: T) -> &mut Self {
-        array::push(self.value(), item.value());
+        push(self.value(), item.value());
 
         self
     }
 
-    pub fn store<T: RawObject>(&mut self, index: i64, item: T) -> object::Object {
-        let value = array::store(self.value(), index, item.value());
+    pub fn store<T: RawObject>(&mut self, index: i64, item: T) -> Object {
+        let value = store(self.value(), index, item.value());
 
-        object::Object::from(value)
+        Object::from(value)
     }
 }
 
-impl From<types::rb_value> for Array {
-    fn from(value: types::rb_value) -> Self {
+impl From<rb_value> for Array {
+    fn from(value: rb_value) -> Self {
         Array {
             value: value
         }
@@ -51,7 +53,7 @@ impl From<types::rb_value> for Array {
 }
 
 impl RawObject for Array {
-    fn value(&self) -> types::rb_value {
+    fn value(&self) -> rb_value {
         self.value
     }
 }

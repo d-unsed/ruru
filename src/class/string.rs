@@ -1,28 +1,28 @@
 use std::convert::From;
 
-use binding::string;
-use types;
+use binding::string::{from_value, new};
+use types::rb_value;
 
 use super::traits::RawObject;
 
 pub struct RString {
-    value: types::rb_value
+    value: rb_value
 }
 
 impl RString {
     pub fn new(string: &str) -> Self {
         RString {
-            value: string::new(string)
+            value: new(string)
         }
     }
 
     pub fn to_string(&self) -> String {
-        string::from_value(self.value)
+        from_value(self.value)
     }
 }
 
-impl From<types::rb_value> for RString {
-    fn from(value: types::rb_value) -> Self {
+impl From<rb_value> for RString {
+    fn from(value: rb_value) -> Self {
         RString {
             value: value
         }
@@ -30,7 +30,7 @@ impl From<types::rb_value> for RString {
 }
 
 impl RawObject for RString {
-    fn value(&self) -> types::rb_value {
+    fn value(&self) -> rb_value {
         self.value
     }
 }

@@ -1,37 +1,37 @@
 use std::convert::From;
 
-use binding::hash;
-use types;
+use binding::hash::{aset, aref, new};
+use types::rb_value;
 
-use super::object;
+use super::object::Object;
 use super::traits::RawObject;
 
 pub struct Hash {
-    value: types::rb_value
+    value: rb_value
 }
 
 impl Hash {
     pub fn new() -> Self {
         Hash {
-            value: hash::new()
+            value: new()
         }
     }
 
-    pub fn at<T: RawObject>(&self, key: T) -> object::Object {
-        let value = hash::aref(self.value(), key.value());
+    pub fn at<T: RawObject>(&self, key: T) -> Object {
+        let value = aref(self.value(), key.value());
 
-        object::Object::from(value)
+        Object::from(value)
     }
 
-    pub fn store<K: RawObject, V: RawObject>(&mut self, key: K, value: V) -> object::Object {
-        let value = hash::aset(self.value(), key.value(), value.value());
+    pub fn store<K: RawObject, V: RawObject>(&mut self, key: K, value: V) -> Object {
+        let value = aset(self.value(), key.value(), value.value());
 
-        object::Object::from(value)
+        Object::from(value)
     }
 }
 
-impl From<types::rb_value> for Hash {
-    fn from(value: types::rb_value) -> Self {
+impl From<rb_value> for Hash {
+    fn from(value: rb_value) -> Self {
         Hash {
             value: value
         }
@@ -39,7 +39,7 @@ impl From<types::rb_value> for Hash {
 }
 
 impl RawObject for Hash {
-    fn value(&self) -> types::rb_value {
+    fn value(&self) -> rb_value {
         self.value
     }
 }

@@ -1,28 +1,28 @@
 use std::convert::From;
 
-use types;
-use binding::fixnum;
+use types::rb_value;
+use binding::fixnum::{int_to_num, num_to_int};
 
 use super::traits::RawObject;
 
 pub struct Fixnum {
-    value: types::rb_value
+    value: rb_value
 }
 
 impl Fixnum {
     pub fn new(num: i64) -> Self {
         Fixnum {
-            value: fixnum::int_to_num(num)
+            value: int_to_num(num)
         }
     }
 
     pub fn to_i64(&self) -> i64 {
-        fixnum::num_to_int(self.value)
+        num_to_int(self.value)
     }
 }
 
-impl From<types::rb_value> for Fixnum {
-    fn from(value: types::rb_value) -> Self {
+impl From<rb_value> for Fixnum {
+    fn from(value: rb_value) -> Self {
         Fixnum {
             value: value
         }
@@ -30,7 +30,7 @@ impl From<types::rb_value> for Fixnum {
 }
 
 impl RawObject for Fixnum {
-    fn value(&self) -> types::rb_value {
+    fn value(&self) -> rb_value {
         self.value
     }
 }
