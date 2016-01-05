@@ -1,13 +1,13 @@
 use std::convert::From;
 
 use binding::hash::{aset, aref, new};
-use types::rb_value;
+use types::Value;
 
 use super::object::Object;
 use super::traits::RawObject;
 
 pub struct Hash {
-    value: rb_value
+    value: Value
 }
 
 impl Hash {
@@ -30,8 +30,8 @@ impl Hash {
     }
 }
 
-impl From<rb_value> for Hash {
-    fn from(value: rb_value) -> Self {
+impl From<Value> for Hash {
+    fn from(value: Value) -> Self {
         Hash {
             value: value
         }
@@ -39,7 +39,7 @@ impl From<rb_value> for Hash {
 }
 
 impl RawObject for Hash {
-    fn value(&self) -> rb_value {
+    fn value(&self) -> Value {
         self.value
     }
 }

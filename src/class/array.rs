@@ -1,7 +1,7 @@
 use std::convert::From;
 
 use binding::array::{entry, join, new, push, store};
-use types::rb_value;
+use types::Value;
 
 use super::object::Object;
 use super::string::RString;
@@ -9,7 +9,7 @@ use super::string::RString;
 use super::traits::RawObject;
 
 pub struct Array {
-    value: rb_value
+    value: Value
 }
 
 impl Array {
@@ -44,8 +44,8 @@ impl Array {
     }
 }
 
-impl From<rb_value> for Array {
-    fn from(value: rb_value) -> Self {
+impl From<Value> for Array {
+    fn from(value: Value) -> Self {
         Array {
             value: value
         }
@@ -53,7 +53,7 @@ impl From<rb_value> for Array {
 }
 
 impl RawObject for Array {
-    fn value(&self) -> rb_value {
+    fn value(&self) -> Value {
         self.value
     }
 }

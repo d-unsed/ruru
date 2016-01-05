@@ -1,10 +1,10 @@
-use types::{c_long, rb_value};
+use types::{c_long, Value};
 
 #[link(name = "ruby")]
 extern "C" {
-    pub fn rb_ary_entry(array: rb_value, offset: c_long) -> rb_value;
-    pub fn rb_ary_join(array: rb_value, separator: rb_value) -> rb_value;
-    pub fn rb_ary_new() -> rb_value;
-    pub fn rb_ary_push(array: rb_value, item: rb_value) -> rb_value;
-    pub fn rb_ary_store(array: rb_value, index: c_long, item: rb_value) -> rb_value;
+    pub fn rb_ary_entry(array: Value, offset: c_long) -> Value;
+    pub fn rb_ary_join(array: Value, separator: Value) -> Value;
+    pub fn rb_ary_new() -> Value;
+    pub fn rb_ary_push(array: Value, item: Value) -> Value;
+    pub fn rb_ary_store(array: Value, index: c_long, item: Value) -> Value;
 }

@@ -1,15 +1,15 @@
 extern crate libc;
 
-use class::object;
+use class::object::Object;
 use class::traits::RawObject;
 
 pub use libc::{c_char, c_int, c_long, c_void};
 
-pub type rb_value = libc::uintptr_t;
-pub type rb_signed_value = libc::intptr_t;
+pub type Value = libc::uintptr_t;
+pub type SignedValue = libc::intptr_t;
 pub type Id = libc::uintptr_t;
 
-pub type argc = libc::c_int;
+pub type Argc = libc::c_int;
 
-pub type callback<T: RawObject> = extern fn(argc, *const object::Object, object::Object) -> T;
-pub type callback_ptr = *const c_void;
+pub type Callback<T: RawObject> = extern fn(Argc, *const Object, Object) -> T;
+pub type CallbackPtr = *const c_void;

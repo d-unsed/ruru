@@ -2,14 +2,14 @@ use std::convert::From;
 
 use binding::class::{define_class, new_instance, define_method, define_singleton_method};
 use binding::global::rb_cObject;
-use types::{callback, rb_value};
+use types::{Callback, Value};
 use util::create_arguments;
 
 use super::object::Object;
 use super::traits::RawObject;
 
 pub struct Class {
-    value: rb_value
+    value: Value
 }
 
 impl Class {
@@ -27,17 +27,17 @@ impl Class {
         Object::from(instance)
     }
 
-    pub fn define_method<T: RawObject>(&self, name: &str, callback: callback<T>) {
+    pub fn define_method<T: RawObject>(&self, name: &str, callback: Callback<T>) {
         define_method::<T>(self.value, name, callback);
     }
 
-    pub fn define_singleton_method<T: RawObject>(&self, name: &str, callback: callback<T>) {
+    pub fn define_singleton_method<T: RawObject>(&self, name: &str, callback: Callback<T>) {
         define_singleton_method(self.value, name, callback);
     }
 }
 
-impl From<rb_value> for Class {
-    fn from(value: rb_value) -> Self {
+impl From<Value> for Class {
+    fn from(value: Value) -> Self {
         Class {
             value: value
         }
@@ -45,7 +45,7 @@ impl From<rb_value> for Class {
 }
 
 impl RawObject for Class {
-    fn value(&self) -> rb_value {
+    fn value(&self) -> Value {
         self.value
     }
 }

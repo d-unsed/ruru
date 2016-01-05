@@ -1,8 +1,8 @@
-use types::{Id, rb_value};
+use types::{Id, Value};
 use unsafe_binding::symbol::{rb_id2name, rb_id2sym, rb_sym2id};
 use util::cstr_as_string;
 
-pub fn id_to_sym(id: Id) -> rb_value {
+pub fn id_to_sym(id: Id) -> Value {
     unsafe {
         rb_id2sym(id)
     }
@@ -16,7 +16,7 @@ pub fn id_to_name(id: Id) -> String {
     }
 }
 
-pub fn sym_to_id(sym: rb_value) -> Id {
+pub fn sym_to_id(sym: Value) -> Id {
     unsafe {
         rb_sym2id(sym)
     }

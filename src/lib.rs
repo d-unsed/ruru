@@ -2,7 +2,7 @@ extern crate libc;
 
 mod binding;
 mod class;
-mod types;
+pub mod types;
 mod unsafe_binding;
 mod util;
 

@@ -2,14 +2,14 @@ use std::convert::From;
 
 use binding::class::object_class;
 use binding::util::call_method;
-use types::rb_value;
+use types::Value;
 use util::create_arguments;
 
 use super::class::Class;
 use super::object::Object;
 
-pub trait RawObject : From<rb_value> {
-    fn value(&self) -> rb_value;
+pub trait RawObject : From<Value> {
+    fn value(&self) -> Value;
 
     fn class(&self) -> Class {
         let class = object_class(self.value());

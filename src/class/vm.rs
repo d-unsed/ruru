@@ -2,7 +2,7 @@ use std::slice;
 
 use binding::vm::init;
 use class::object::Object;
-use types::{argc, rb_value};
+use types::{Argc, Value};
 
 use class::traits::RawObject;
 
@@ -13,13 +13,13 @@ impl VM {
         init();
     }
 
-    pub fn parse_arguments(argc: argc, arguments: *const Object) -> Vec<Object> {
+    pub fn parse_arguments(argc: Argc, arguments: *const Object) -> Vec<Object> {
         unsafe {
             slice::from_raw_parts(arguments, argc as usize).to_vec()
         }
     }
 
-    pub fn parse_itself(itself: rb_value) -> Object {
+    pub fn parse_itself(itself: Value) -> Object {
         Object::from(itself)
     }
 }

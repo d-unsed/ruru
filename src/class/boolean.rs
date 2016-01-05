@@ -1,12 +1,12 @@
 use std::convert::From;
 
-use types::rb_value;
+use types::Value;
 use util::{bool_to_value, value_to_bool};
 
 use super::traits::RawObject;
 
 pub struct Boolean {
-    value: rb_value
+    value: Value
 }
 
 impl Boolean {
@@ -21,8 +21,8 @@ impl Boolean {
     }
 }
 
-impl From<rb_value> for Boolean {
-    fn from(value: rb_value) -> Self {
+impl From<Value> for Boolean {
+    fn from(value: Value) -> Self {
         Boolean {
             value: value
         }
@@ -30,7 +30,7 @@ impl From<rb_value> for Boolean {
 }
 
 impl RawObject for Boolean {
-    fn value(&self) -> rb_value {
+    fn value(&self) -> Value {
         self.value
     }
 }

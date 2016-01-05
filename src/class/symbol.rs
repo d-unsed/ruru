@@ -2,12 +2,12 @@ use std::convert::From;
 
 use binding::symbol::{id_to_name, id_to_sym, sym_to_id};
 use binding::util::internal_id;
-use types::rb_value;
+use types::Value;
 
 use super::traits::RawObject;
 
 pub struct Symbol {
-    value: rb_value
+    value: Value
 }
 
 impl Symbol {
@@ -22,8 +22,8 @@ impl Symbol {
     }
 }
 
-impl From<rb_value> for Symbol {
-    fn from(value: rb_value) -> Self {
+impl From<Value> for Symbol {
+    fn from(value: Value) -> Self {
         Symbol {
             value: value
         }
@@ -31,7 +31,7 @@ impl From<rb_value> for Symbol {
 }
 
 impl RawObject for Symbol {
-    fn value(&self) -> rb_value {
+    fn value(&self) -> Value {
         self.value
     }
 }

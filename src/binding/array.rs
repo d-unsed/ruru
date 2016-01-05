@@ -1,31 +1,31 @@
-use types::{c_long, rb_value};
+use types::{c_long, Value};
 use unsafe_binding::array::{rb_ary_new, rb_ary_entry, rb_ary_join, rb_ary_push, rb_ary_store};
 
-pub fn new() -> rb_value {
+pub fn new() -> Value {
     unsafe {
         rb_ary_new()
     }
 }
 
-pub fn entry(array: rb_value, offset: i64) -> rb_value {
+pub fn entry(array: Value, offset: i64) -> Value {
     unsafe {
         rb_ary_entry(array, offset as c_long)
     }
 }
 
-pub fn join(array: rb_value, separator: rb_value) -> rb_value {
+pub fn join(array: Value, separator: Value) -> Value {
     unsafe {
         rb_ary_join(array, separator)
     }
 }
 
-pub fn push(array: rb_value, item: rb_value) -> rb_value {
+pub fn push(array: Value, item: Value) -> Value {
     unsafe {
         rb_ary_push(array, item)
     }
 }
 
-pub fn store(array: rb_value, offset: i64, item: rb_value) -> rb_value {
+pub fn store(array: Value, offset: i64, item: Value) -> Value {
     unsafe {
         rb_ary_store(array, offset as c_long, item)
     }

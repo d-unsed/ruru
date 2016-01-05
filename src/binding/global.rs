@@ -1,8 +1,8 @@
-use types::rb_value;
+use types::Value;
 
 #[link(name = "ruby")]
 extern "C" {
-    pub static rb_cObject: rb_value;
+    pub static rb_cObject: Value;
 }
 
 pub enum RubySpecialConsts {

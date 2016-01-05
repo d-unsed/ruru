@@ -1,6 +1,6 @@
 use std::convert::From;
 
-use types::rb_value;
+use types::Value;
 
 use super::array::Array;
 use super::class::Class;
@@ -12,7 +12,7 @@ use super::traits::RawObject;
 
 #[derive(Clone)]
 pub struct Object {
-    value: rb_value
+    value: Value
 }
 
 impl Object {
@@ -37,8 +37,8 @@ impl Object {
     }
 }
 
-impl From<rb_value> for Object {
-    fn from(value: rb_value) -> Self {
+impl From<Value> for Object {
+    fn from(value: Value) -> Self {
         Object {
             value: value
         }
@@ -46,7 +46,7 @@ impl From<rb_value> for Object {
 }
 
 impl RawObject for Object {
-    fn value(&self) -> rb_value {
+    fn value(&self) -> Value {
         self.value
     }
 }

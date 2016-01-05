@@ -1,7 +1,7 @@
-use types::{c_long, rb_signed_value, rb_value};
+use types::{c_long, SignedValue, Value};
 
 #[link(name = "ruby")]
 extern "C" {
-    pub fn rb_int2inum(num: rb_signed_value) -> rb_value;
-    pub fn rb_num2int(num: rb_value) -> c_long;
+    pub fn rb_int2inum(num: SignedValue) -> Value;
+    pub fn rb_num2int(num: Value) -> c_long;
 }

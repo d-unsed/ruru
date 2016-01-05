@@ -1,46 +1,46 @@
 use std::ffi::{CStr, CString};
 
-use binding::global;
-use class::object;
-use types;
+use binding::global::RubySpecialConsts;
+use class::object::Object;
+use types::{c_char, c_int, Value};
 
 use class::traits::RawObject;
 
-pub fn str_as_ptr(str: &str) -> *const types::c_char {
+pub fn str_as_ptr(str: &str) -> *const c_char {
     CString::new(str).unwrap().as_ptr()
 }
 
-pub fn cstr_as_string(str: *const types::c_char) -> String {
+pub fn cstr_as_string(str: *const c_char) -> String {
     unsafe {
         CStr::from_ptr(str).to_string_lossy().into_owned()
     }
 }
 
-pub fn bool_to_value(state: bool) -> types::rb_value {
+pub fn bool_to_value(state: bool) -> Value {
     let value = match state {
-        false => global::RubySpecialConsts::False,
-        true => global::RubySpecialConsts::True
+        false => RubySpecialConsts::False,
+        true => RubySpecialConsts::True
     };
 
-    value as types::rb_value
+    value as Value
 }
 
-pub fn value_to_bool(value: types::rb_value) -> bool {
-    if value == (global::RubySpecialConsts::False as types::rb_value) {
+pub fn value_to_bool(value: Value) -> bool {
+    if value == (RubySpecialConsts::False as Value) {
         false
     } else {
         true
     }
 }
 
-pub fn create_arguments(arguments: Vec<object::Object>) -> (types::c_int, *const types::rb_value) {
-    (arguments.len() as types::c_int, arguments_as_ptr(arguments))
+pub fn create_arguments(arguments: Vec<Object>) -> (c_int, *const Value) {
+    (arguments.len() as c_int, arguments_as_ptr(arguments))
 }
 
-fn arguments_as_ptr(arguments: Vec<object::Object>) -> *const types::rb_value {
+fn arguments_as_ptr(arguments: Vec<Object>) -> *const Value {
     arguments
         .iter()
         .map(|object| object.value())
-        .collect::<Vec<types::rb_value>>()
+        .collect::<Vec<Value>>()
         .as_ptr()
 }
