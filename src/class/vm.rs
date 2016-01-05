@@ -4,8 +4,6 @@ use binding::vm::init;
 use class::object::Object;
 use types::{Argc, Value};
 
-use class::traits::RawObject;
-
 pub struct VM;
 
 impl VM {
