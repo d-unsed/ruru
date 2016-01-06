@@ -5,7 +5,7 @@ use binding::global::rb_cObject;
 use types::{Callback, Value};
 use util::create_arguments;
 
-use super::object::Object;
+use super::any_object::AnyObject;
 use super::traits::RawObject;
 
 pub struct Class {
@@ -20,11 +20,11 @@ impl Class {
         }
     }
 
-    pub fn new_instance(&self, arguments: Vec<Object>) -> Object {
+    pub fn new_instance(&self, arguments: Vec<AnyObject>) -> AnyObject {
         let (argc, argv) = create_arguments(arguments);
         let instance = new_instance(self.value(), argc, argv);
 
-        Object::from(instance)
+        AnyObject::from(instance)
     }
 
     pub fn define_method<T: RawObject>(&self, name: &str, callback: Callback<T>) {

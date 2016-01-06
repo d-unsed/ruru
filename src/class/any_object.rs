@@ -11,11 +11,11 @@ use super::string::RString;
 use super::traits::RawObject;
 
 #[derive(Clone)]
-pub struct Object {
+pub struct AnyObject {
     value: Value
 }
 
-impl Object {
+impl AnyObject {
     pub fn as_array(&self) -> Array {
         Array::from(self.value())
     }
@@ -37,15 +37,15 @@ impl Object {
     }
 }
 
-impl From<Value> for Object {
+impl From<Value> for AnyObject {
     fn from(value: Value) -> Self {
-        Object {
+        AnyObject {
             value: value
         }
     }
 }
 
-impl RawObject for Object {
+impl RawObject for AnyObject {
     fn value(&self) -> Value {
         self.value
     }

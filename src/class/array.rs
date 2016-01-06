@@ -3,7 +3,7 @@ use std::convert::From;
 use binding::array::{entry, join, new, push, store};
 use types::Value;
 
-use super::object::Object;
+use super::any_object::AnyObject;
 use super::string::RString;
 
 use super::traits::RawObject;
@@ -19,10 +19,10 @@ impl Array {
         }
     }
 
-    pub fn at(&self, index: i64) -> Object {
+    pub fn at(&self, index: i64) -> AnyObject {
         let value = entry(self.value(), index);
 
-        Object::from(value)
+        AnyObject::from(value)
     }
 
     pub fn join(&self, separator: RString) -> RString {
@@ -37,10 +37,10 @@ impl Array {
         self
     }
 
-    pub fn store<T: RawObject>(&mut self, index: i64, item: T) -> Object {
+    pub fn store<T: RawObject>(&mut self, index: i64, item: T) -> AnyObject {
         let value = store(self.value(), index, item.value());
 
-        Object::from(value)
+        AnyObject::from(value)
     }
 }
 

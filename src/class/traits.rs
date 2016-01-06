@@ -5,8 +5,8 @@ use binding::util::call_method;
 use types::Value;
 use util::create_arguments;
 
+use super::any_object::AnyObject;
 use super::class::Class;
-use super::object::Object;
 
 pub trait RawObject : From<Value> {
     fn value(&self) -> Value;
@@ -17,11 +17,11 @@ pub trait RawObject : From<Value> {
         Class::from(class)
     }
 
-    fn send(&self, method: &str, arguments: Vec<Object>) -> Object {
+    fn send(&self, method: &str, arguments: Vec<AnyObject>) -> AnyObject {
         let (argc, argv) = create_arguments(arguments);
 
         let result = call_method(self.value(), method, argc, argv);
 
-        Object::from(result)
+        AnyObject::from(result)
     }
 }

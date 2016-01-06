@@ -3,7 +3,7 @@ use std::convert::From;
 use binding::hash::{aset, aref, new};
 use types::Value;
 
-use super::object::Object;
+use super::any_object::AnyObject;
 use super::traits::RawObject;
 
 pub struct Hash {
@@ -17,16 +17,16 @@ impl Hash {
         }
     }
 
-    pub fn at<T: RawObject>(&self, key: T) -> Object {
+    pub fn at<T: RawObject>(&self, key: T) -> AnyObject {
         let value = aref(self.value(), key.value());
 
-        Object::from(value)
+        AnyObject::from(value)
     }
 
-    pub fn store<K: RawObject, V: RawObject>(&mut self, key: K, value: V) -> Object {
+    pub fn store<K: RawObject, V: RawObject>(&mut self, key: K, value: V) -> AnyObject {
         let value = aset(self.value(), key.value(), value.value());
 
-        Object::from(value)
+        AnyObject::from(value)
     }
 }
 

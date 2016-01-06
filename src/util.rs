@@ -1,7 +1,7 @@
 use std::ffi::{CStr, CString};
 
 use binding::global::RubySpecialConsts;
-use class::object::Object;
+use class::any_object::AnyObject;
 use types::{c_char, c_int, Value};
 
 use class::traits::RawObject;
@@ -33,11 +33,11 @@ pub fn value_to_bool(value: Value) -> bool {
     }
 }
 
-pub fn create_arguments(arguments: Vec<Object>) -> (c_int, *const Value) {
+pub fn create_arguments(arguments: Vec<AnyObject>) -> (c_int, *const Value) {
     (arguments.len() as c_int, arguments_as_ptr(arguments))
 }
 
-fn arguments_as_ptr(arguments: Vec<Object>) -> *const Value {
+fn arguments_as_ptr(arguments: Vec<AnyObject>) -> *const Value {
     arguments
         .iter()
         .map(|object| object.value())
