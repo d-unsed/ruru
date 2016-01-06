@@ -6,7 +6,7 @@ use types::Value;
 use super::any_object::AnyObject;
 use super::string::RString;
 
-use super::traits::RawObject;
+use super::traits::Object;
 
 pub struct Array {
     value: Value
@@ -31,13 +31,13 @@ impl Array {
         RString::from(value)
     }
 
-    pub fn push<T: RawObject>(&mut self, item: T) -> &mut Self {
+    pub fn push<T: Object>(&mut self, item: T) -> &mut Self {
         push(self.value(), item.value());
 
         self
     }
 
-    pub fn store<T: RawObject>(&mut self, index: i64, item: T) -> AnyObject {
+    pub fn store<T: Object>(&mut self, index: i64, item: T) -> AnyObject {
         let value = store(self.value(), index, item.value());
 
         AnyObject::from(value)
@@ -52,7 +52,7 @@ impl From<Value> for Array {
     }
 }
 
-impl RawObject for Array {
+impl Object for Array {
     fn value(&self) -> Value {
         self.value
     }

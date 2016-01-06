@@ -8,7 +8,7 @@ use super::fixnum::Fixnum;
 use super::hash::Hash;
 use super::string::RString;
 
-use super::traits::RawObject;
+use super::traits::Object;
 
 #[derive(Clone)]
 pub struct AnyObject {
@@ -45,7 +45,7 @@ impl From<Value> for AnyObject {
     }
 }
 
-impl RawObject for AnyObject {
+impl Object for AnyObject {
     fn value(&self) -> Value {
         self.value
     }

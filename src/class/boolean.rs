@@ -3,7 +3,7 @@ use std::convert::From;
 use types::Value;
 use util::{bool_to_value, value_to_bool};
 
-use super::traits::RawObject;
+use super::traits::Object;
 
 pub struct Boolean {
     value: Value
@@ -29,7 +29,7 @@ impl From<Value> for Boolean {
     }
 }
 
-impl RawObject for Boolean {
+impl Object for Boolean {
     fn value(&self) -> Value {
         self.value
     }

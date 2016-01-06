@@ -8,7 +8,7 @@ use util::create_arguments;
 use super::any_object::AnyObject;
 use super::class::Class;
 
-pub trait RawObject : From<Value> {
+pub trait Object : From<Value> {
     fn value(&self) -> Value;
 
     fn class(&self) -> Class {

@@ -4,7 +4,7 @@ use binding::global::RubySpecialConsts;
 use class::any_object::AnyObject;
 use types::{c_char, c_int, Value};
 
-use class::traits::RawObject;
+use class::traits::Object;
 
 pub fn str_as_ptr(str: &str) -> *const c_char {
     CString::new(str).unwrap().as_ptr()

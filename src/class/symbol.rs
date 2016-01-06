@@ -4,7 +4,7 @@ use binding::symbol::{id_to_name, id_to_sym, sym_to_id};
 use binding::util::internal_id;
 use types::Value;
 
-use super::traits::RawObject;
+use super::traits::Object;
 
 pub struct Symbol {
     value: Value
@@ -30,7 +30,7 @@ impl From<Value> for Symbol {
     }
 }
 
-impl RawObject for Symbol {
+impl Object for Symbol {
     fn value(&self) -> Value {
         self.value
     }

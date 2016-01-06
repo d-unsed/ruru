@@ -3,7 +3,7 @@ use unsafe_binding::class::{rb_class_new_instance, rb_define_class, rb_define_me
                             rb_define_module, rb_define_singleton_method, rb_obj_class};
 use util::str_as_ptr;
 
-use class::traits::RawObject;
+use class::traits::Object;
 
 pub fn define_class(name: &str, superclass: Value) -> Value {
     unsafe {
@@ -29,13 +29,13 @@ pub fn new_instance(klass: Value, argc: Argc, argv: *const Value) -> Value {
     }
 }
 
-pub fn define_method<T: RawObject>(klass: Value, name: &str, callback: Callback<T>) {
+pub fn define_method<T: Object>(klass: Value, name: &str, callback: Callback<T>) {
     unsafe {
         rb_define_method(klass, str_as_ptr(name), callback as CallbackPtr, -1);
     }
 }
 
-pub fn define_singleton_method<T: RawObject>(klass: Value, name: &str, callback: Callback<T>) {
+pub fn define_singleton_method<T: Object>(klass: Value, name: &str, callback: Callback<T>) {
     unsafe {
         rb_define_singleton_method(klass, str_as_ptr(name), callback as CallbackPtr, -1);
     }

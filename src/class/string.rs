@@ -3,7 +3,7 @@ use std::convert::From;
 use binding::string::{from_value, new};
 use types::Value;
 
-use super::traits::RawObject;
+use super::traits::Object;
 
 pub struct RString {
     value: Value
@@ -29,7 +29,7 @@ impl From<Value> for RString {
     }
 }
 
-impl RawObject for RString {
+impl Object for RString {
     fn value(&self) -> Value {
         self.value
     }

@@ -6,7 +6,7 @@ use types::{Callback, Value};
 use util::create_arguments;
 
 use super::any_object::AnyObject;
-use super::traits::RawObject;
+use super::traits::Object;
 
 pub struct Class {
     value: Value
@@ -27,11 +27,11 @@ impl Class {
         AnyObject::from(instance)
     }
 
-    pub fn define_method<T: RawObject>(&self, name: &str, callback: Callback<T>) {
+    pub fn define_method<T: Object>(&self, name: &str, callback: Callback<T>) {
         define_method::<T>(self.value, name, callback);
     }
 
-    pub fn define_singleton_method<T: RawObject>(&self, name: &str, callback: Callback<T>) {
+    pub fn define_singleton_method<T: Object>(&self, name: &str, callback: Callback<T>) {
         define_singleton_method(self.value, name, callback);
     }
 }
@@ -44,7 +44,7 @@ impl From<Value> for Class {
     }
 }
 
-impl RawObject for Class {
+impl Object for Class {
     fn value(&self) -> Value {
         self.value
     }

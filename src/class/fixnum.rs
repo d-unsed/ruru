@@ -3,7 +3,7 @@ use std::convert::From;
 use types::Value;
 use binding::fixnum::{int_to_num, num_to_int};
 
-use super::traits::RawObject;
+use super::traits::Object;
 
 pub struct Fixnum {
     value: Value
@@ -29,7 +29,7 @@ impl From<Value> for Fixnum {
     }
 }
 
-impl RawObject for Fixnum {
+impl Object for Fixnum {
     fn value(&self) -> Value {
         self.value
     }
