@@ -2,9 +2,10 @@ extern crate libc;
 
 mod binding;
 mod class;
-mod types;
 mod unsafe_binding;
 mod util;
+
+pub mod types;
 
 pub use class::any_object::AnyObject;
 pub use class::array::Array;

@@ -2,6 +2,7 @@ use std::convert::From;
 
 use binding::class::{define_class, new_instance, define_method, define_singleton_method};
 use binding::global::rb_cObject;
+use binding::util::get_constant;
 use types::{Callback, Value};
 use util::create_arguments;
 
@@ -17,6 +18,13 @@ impl Class {
     pub fn new(name: &str) -> Self {
         Class {
             value: define_class(name, rb_cObject)
+        }
+    }
+
+    // TODO: replace rb_cObject with optional class/module value
+    pub fn from_existing(name: &str) -> Self {
+        Class {
+            value: get_constant(name, rb_cObject)
         }
     }
 
