@@ -24,4 +24,8 @@ pub trait Object : From<Value> {
 
         AnyObject::from(result)
     }
+
+    fn as_any_object(&self) -> AnyObject {
+        AnyObject::from(self.value())
+    }
 }
