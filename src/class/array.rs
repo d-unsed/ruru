@@ -31,10 +31,10 @@ impl Array {
         RString::from(value)
     }
 
-    pub fn push<T: Object>(&mut self, item: T) -> &mut Self {
-        push(self.value(), item.value());
+    pub fn push<T: Object>(&mut self, item: T) -> Self {
+        let value = push(self.value(), item.value());
 
-        self
+        Array::from(value)
     }
 
     pub fn store<T: Object>(&mut self, index: i64, item: T) -> AnyObject {
