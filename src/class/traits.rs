@@ -1,6 +1,6 @@
 use std::convert::From;
 
-use binding::class::object_class;
+use binding::class::{instance_variable_get, instance_variable_set, object_class};
 use binding::util::call_method;
 use types::Value;
 use util::create_arguments;
@@ -27,5 +27,17 @@ pub trait Object : From<Value> {
 
     fn as_any_object(&self) -> AnyObject {
         AnyObject::from(self.value())
+    }
+
+    fn instance_variable_get(&self, variable: &str) -> AnyObject {
+        let result = instance_variable_get(self.value(), variable);
+
+        AnyObject::from(result)
+    }
+
+    fn instance_variable_set<T: Object>(&mut self, variable: &str, value: T) -> AnyObject {
+        let result = instance_variable_set(self.value(), variable, value.value());
+
+        AnyObject::from(result)
     }
 }
