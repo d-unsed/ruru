@@ -35,25 +35,25 @@ impl Class {
         AnyObject::from(instance)
     }
 
-    pub fn define<F: Fn(&Self)>(&self, f: F) -> &Self {
-        f(&self);
+    pub fn define<F: Fn(&mut Self)>(&mut self, f: F) -> &Self {
+        f(self);
 
         self
     }
 
-    pub fn define_method<T: Object>(&self, name: &str, callback: Callback<T>) {
+    pub fn define_method<T: Object>(&mut self, name: &str, callback: Callback<T>) {
         define_method::<T>(self.value, name, callback);
     }
 
-    pub fn define_singleton_method<T: Object>(&self, name: &str, callback: Callback<T>) {
+    pub fn define_singleton_method<T: Object>(&mut self, name: &str, callback: Callback<T>) {
         define_singleton_method(self.value, name, callback);
     }
 
-    pub fn def<T: Object>(&self, name: &str, callback: Callback<T>) {
+    pub fn def<T: Object>(&mut self, name: &str, callback: Callback<T>) {
         self.define_method(name, callback);
     }
 
-    pub fn def_self<T: Object>(&self, name: &str, callback: Callback<T>) {
+    pub fn def_self<T: Object>(&mut self, name: &str, callback: Callback<T>) {
         self.define_singleton_method(name, callback);
     }
 }
