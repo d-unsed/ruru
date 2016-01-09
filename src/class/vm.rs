@@ -16,8 +16,4 @@ impl VM {
             slice::from_raw_parts(arguments, argc as usize).to_vec()
         }
     }
-
-    pub fn parse_itself(itself: Value) -> AnyObject {
-        AnyObject::from(itself)
-    }
 }
