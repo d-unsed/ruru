@@ -13,5 +13,5 @@ pub type Id = libc::uintptr_t;
 
 pub type Argc = libc::c_int;
 
-pub type Callback<T: Object> = extern fn(Argc, *const AnyObject, AnyObject) -> T;
+pub type Callback<I: Object, O: Object> = extern fn(Argc, *const AnyObject, I) -> O;
 pub type CallbackPtr = *const c_void;

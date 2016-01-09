@@ -29,13 +29,13 @@ pub fn new_instance(klass: Value, argc: Argc, argv: *const Value) -> Value {
     }
 }
 
-pub fn define_method<T: Object>(klass: Value, name: &str, callback: Callback<T>) {
+pub fn define_method<I: Object, O: Object>(klass: Value, name: &str, callback: Callback<I, O>) {
     unsafe {
         rb_define_method(klass, str_as_ptr(name), callback as CallbackPtr, -1);
     }
 }
 
-pub fn define_singleton_method<T: Object>(klass: Value, name: &str, callback: Callback<T>) {
+pub fn define_singleton_method<I: Object, O: Object>(klass: Value, name: &str, callback: Callback<I, O>) {
     unsafe {
         rb_define_singleton_method(klass, str_as_ptr(name), callback as CallbackPtr, -1);
     }

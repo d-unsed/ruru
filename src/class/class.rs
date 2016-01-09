@@ -41,19 +41,19 @@ impl Class {
         self
     }
 
-    pub fn define_method<T: Object>(&mut self, name: &str, callback: Callback<T>) {
-        define_method::<T>(self.value, name, callback);
+    pub fn define_method<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
+        define_method(self.value, name, callback);
     }
 
-    pub fn define_singleton_method<T: Object>(&mut self, name: &str, callback: Callback<T>) {
+    pub fn define_singleton_method<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
         define_singleton_method(self.value, name, callback);
     }
 
-    pub fn def<T: Object>(&mut self, name: &str, callback: Callback<T>) {
+    pub fn def<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
         self.define_method(name, callback);
     }
 
-    pub fn def_self<T: Object>(&mut self, name: &str, callback: Callback<T>) {
+    pub fn def_self<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
         self.define_singleton_method(name, callback);
     }
 }
