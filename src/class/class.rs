@@ -42,6 +42,14 @@ impl Class {
     pub fn define_singleton_method<T: Object>(&self, name: &str, callback: Callback<T>) {
         define_singleton_method(self.value, name, callback);
     }
+
+    pub fn def<T: Object>(&self, name: &str, callback: Callback<T>) {
+        self.define_method(name, callback);
+    }
+
+    pub fn def_self<T: Object>(&self, name: &str, callback: Callback<T>) {
+        self.define_singleton_method(name, callback);
+    }
 }
 
 impl From<Value> for Class {
