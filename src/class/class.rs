@@ -35,6 +35,12 @@ impl Class {
         AnyObject::from(instance)
     }
 
+    pub fn define<F: Fn(&Self)>(&self, f: F) -> &Self {
+        f(&self);
+
+        self
+    }
+
     pub fn define_method<T: Object>(&self, name: &str, callback: Callback<T>) {
         define_method::<T>(self.value, name, callback);
     }
