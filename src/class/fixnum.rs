@@ -5,6 +5,7 @@ use binding::fixnum::{int_to_num, num_to_int};
 
 use super::traits::Object;
 
+#[derive(Debug, PartialEq)]
 pub struct Fixnum {
     value: Value
 }
