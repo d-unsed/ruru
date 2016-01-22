@@ -33,7 +33,6 @@ impl Class {
     ///
     /// ```ruby
     /// class Hello
-    ///
     /// end
     ///
     /// # or
@@ -81,9 +80,8 @@ impl Class {
     /// # Examples
     ///
     /// ```no_run
-    /// # use ruru::{Class, Fixnum, VM};
+    /// # use ruru::{Class, Fixnum};
     /// # use ruru::traits::Object;
-    /// # VM::init();
     /// // No arguments
     /// Class::from_existing("Hello").new_instance(vec![]);
     ///
@@ -119,7 +117,6 @@ impl Class {
     /// ```no_run
     /// use ruru::types::Argc;
     /// use ruru::{AnyObject, Class, Fixnum, RString};
-    /// # use ruru::VM;
     ///
     /// #[no_mangle]
     /// pub extern fn greeting(_: Argc, _: *const AnyObject, _: AnyObject) -> RString {
@@ -132,7 +129,6 @@ impl Class {
     /// }
     ///
     /// fn main() {
-    ///     # VM::init();
     ///     Class::new("Hello").define(|itself| {
     ///         itself.def_self("greeting", many_greetings);
     ///         itself.def("many_greetings", greeting);
@@ -161,12 +157,44 @@ impl Class {
 
     /// Defines an instance method for given class
     ///
+    /// # Arguments
+    ///
+    /// - `name` is name of the Ruby method
+    ///
+    /// - `callback` is the function which will be called by MRI when the method is called inside
+    ///    Ruby
+    ///
+    /// ## Callback
+    ///
+    /// `callback` must have the signature the following signature
+    ///
+    /// `pub type Callback<I: Object, O: Object> = extern fn(Argc, *const AnyObject, I) -> O;`
+    ///
+    /// - First argument `argc: Argc` will receive the number of arguments passed to method
+    ///
+    /// - Second argument `argv: *const AnyObject` will receive the arguments passed to the method
+    ///   as `AnyObject`s
+    ///
+    /// - Third value `itself: I` will receive the object which got the method call (Ruby `self`).
+    ///   Can be any type which implements `Object` trait
+    ///
+    /// - Return type can be any type which implements `Object` trait
+    ///
+    /// If you need to receive and use arguments which are passed to the method, you can use
+    /// `VM::parse_arguments()` function which processes a pointer to array (`*const AnyObject`)
+    /// to a vector of `AnyObject`s (`Vec<AnyObject>`), see examples
+    ///
     /// # Examples
+    ///
+    /// ## Method receives no arguments
+    ///
+    /// In this case `argc` and `argv` can be ignored
+    ///
+    /// Famous `String#blank?` example
     ///
     /// ```no_run
     /// use ruru::types::Argc;
     /// use ruru::{AnyObject, Boolean, Class, RString};
-    /// # use ruru::VM;
     ///
     /// use ruru::traits::Object;
     ///
@@ -176,17 +204,91 @@ impl Class {
     /// }
     ///
     /// fn main() {
-    ///     # VM::init();
     ///     Class::from_existing("String").define_method("blank?", string_blank);
-    ///
-    ///     assert!(RString::new("").send("blank?", vec![]).as_boolean().to_bool());
     /// }
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class String
+    ///   def blank?
+    ///     # simplified
+    ///     self.chars.all? { |c| c == ' ' }
+    ///   end
+    /// end
+    /// ```
+    ///
+    /// ## Method reveives arguments
+    ///
+    /// Arguments should be processed to vector using `VM::parse_arguments()`
+    ///
+    /// ```no_run
+    /// use ruru::types::Argc;
+    /// use ruru::{AnyObject, Boolean, Class, RString, VM};
+    ///
+    /// #[no_mangle]
+    /// pub extern fn string_eq(argc: Argc, argv: *const AnyObject, itself: RString) -> Boolean {
+    ///     let argv = VM::parse_arguments(argc, argv);
+    ///     let other_string = argv[0].as_string();
+    ///
+    ///     Boolean::new(itself.to_string() == other_string.to_string())
+    /// }
+    ///
+    /// fn main() {
+    ///     Class::from_existing("String").define_method("==", string_eq);
+    /// }
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class String
+    ///   def ==(other_string)
+    ///     # simplified
+    ///     self.chars == other_string.chars
+    ///   end
+    /// end
     /// ```
     pub fn define_method<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
         define_method(self.value, name, callback);
     }
 
     /// Defines a class method for given class
+    ///
+    /// Function has the same requirements as `define_method`.
+    /// Also the same rules are applied for `callback` (see above).
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use ruru::types::Argc;
+    /// use ruru::{AnyObject, Class, Symbol, VM};
+    ///
+    /// #[no_mangle]
+    /// pub extern fn symbol_from_string(argc: Argc, argv: *const AnyObject, itself: Class) -> Symbol {
+    ///     let argv = VM::parse_arguments(argc, argv);
+    ///     let string = argv[0].as_string();
+    ///
+    ///     Symbol::new(&string.to_string())
+    /// }
+    ///
+    /// fn main() {
+    ///     Class::from_existing("Symbol")
+    ///         .define_singleton_method("from_string", symbol_from_string);
+    /// }
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class Symbol
+    ///   def self.from_string(string)
+    ///     # simplified
+    ///     string.to_sym
+    ///   end
+    /// end
+    /// ```
     pub fn define_singleton_method<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
         define_singleton_method(self.value, name, callback);
     }
