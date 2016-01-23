@@ -6,6 +6,7 @@ use types::Value;
 
 use super::traits::Object;
 
+#[derive(Debug, PartialEq)]
 pub struct Symbol {
     value: Value
 }
