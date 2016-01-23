@@ -19,8 +19,9 @@ impl Array {
     /// # Examples
     ///
     /// ```
-    /// # use ruru::{Array, VM};
+    /// use ruru::{Array, VM};
     /// # VM::init();
+    ///
     /// Array::new();
     /// ```
     pub fn new() -> Self {
@@ -34,8 +35,9 @@ impl Array {
     /// # Examples
     ///
     /// ```
-    /// # use ruru::{Array, Fixnum, VM};
+    /// use ruru::{Array, Fixnum, VM};
     /// # VM::init();
+    ///
     /// let array = Array::new().push(Fixnum::new(1));
     ///
     /// assert_eq!(array.at(0).as_fixnum(), Fixnum::new(1));
@@ -51,8 +53,9 @@ impl Array {
     /// # Examples
     ///
     /// ```
-    /// # use ruru::{Array, RString, VM};
+    /// use ruru::{Array, RString, VM};
     /// # VM::init();
+    ///
     /// let array =
     ///     Array::new()
     ///         .push(RString::new("Hello"))
@@ -72,8 +75,9 @@ impl Array {
     /// # Examples
     ///
     /// ```
-    /// # use ruru::{Array, Fixnum, VM};
+    /// use ruru::{Array, Fixnum, VM};
     /// # VM::init();
+    ///
     /// let mut array = Array::new();
     ///
     /// array.push(Fixnum::new(1));
@@ -91,8 +95,9 @@ impl Array {
     /// # Examples
     ///
     /// ```
-    /// # use ruru::{Array, Fixnum, VM};
+    /// use ruru::{Array, Fixnum, VM};
     /// # VM::init();
+    ///
     /// let mut array = Array::new().push(Fixnum::new(1));
     ///
     /// array.store(0, Fixnum::new(2));

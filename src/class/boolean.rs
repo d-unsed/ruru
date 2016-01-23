@@ -16,8 +16,9 @@ impl Boolean {
     /// # Examples
     ///
     /// ```
-    /// # use ruru::{Boolean, VM};
+    /// use ruru::{Boolean, VM};
     /// # VM::init();
+    ///
     /// assert_eq!(Boolean::new(true).to_bool(), true);
     /// ```
     pub fn new(state: bool) -> Self {
@@ -31,8 +32,9 @@ impl Boolean {
     /// # Examples
     ///
     /// ```
-    /// # use ruru::{Boolean, VM};
+    /// use ruru::{Boolean, VM};
     /// # VM::init();
+    ///
     /// assert_eq!(Boolean::new(true).to_bool(), true);
     /// ```
     pub fn to_bool(&self) -> bool {

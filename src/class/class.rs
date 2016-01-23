@@ -22,8 +22,9 @@ impl Class {
     /// # Examples
     ///
     /// ```
-    /// # use ruru::{Class, VM};
+    /// use ruru::{Class, VM};
     /// # VM::init();
+    ///
     /// let class = Class::new("Hello");
     ///
     /// assert_eq!(class, Class::from_existing("Hello"));
@@ -51,8 +52,9 @@ impl Class {
     /// # Examples
     ///
     /// ```
-    /// # use ruru::{Class, VM};
+    /// use ruru::{Class, VM};
     /// # VM::init();
+    ///
     /// let class = Class::new("Hello");
     ///
     /// assert_eq!(class, Class::from_existing("Hello"));
@@ -80,12 +82,13 @@ impl Class {
     /// # Examples
     ///
     /// ```no_run
-    /// # use ruru::{Class, Fixnum};
-    /// # use ruru::traits::Object;
-    /// // No arguments
+    /// use ruru::{Class, Fixnum};
+    /// use ruru::traits::Object;
+    ///
+    /// // Without arguments
     /// Class::from_existing("Hello").new_instance(vec![]);
     ///
-    /// // Passing arguments to constructor
+    /// // With arguments passing arguments to constructor
     /// let arguments = vec![
     ///     Fixnum::new(1).as_any_object(),
     ///     Fixnum::new(2).as_any_object()
@@ -166,9 +169,11 @@ impl Class {
     ///
     /// ## Callback
     ///
-    /// `callback` must have the signature the following signature
+    /// `callback` must have the following signature
     ///
     /// `pub type Callback<I: Object, O: Object> = extern fn(Argc, *const AnyObject, I) -> O;`
+    ///
+    /// The function must also have `#[no_mangle]` attribute
     ///
     /// - First argument `argc: Argc` will receive the number of arguments passed to method
     ///
