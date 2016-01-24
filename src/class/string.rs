@@ -5,17 +5,42 @@ use types::Value;
 
 use super::traits::Object;
 
+/// `String`
 pub struct RString {
     value: Value
 }
 
 impl RString {
+    /// Creates a new instance of Ruby `String` containing given `string`
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{RString, VM};
+    /// # VM::init();
+    ///
+    /// let string = RString::new("Hello, World!");
+    ///
+    /// assert_eq!(string.to_string(), "Hello, World!".to_string());
+    /// ```
     pub fn new(string: &str) -> Self {
         RString {
             value: new(string)
         }
     }
 
+    /// Retrieves underlying Rust `String` from Ruby `String` object
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{RString, VM};
+    /// # VM::init();
+    ///
+    /// let string = RString::new("Hello, World!");
+    ///
+    /// assert_eq!(string.to_string(), "Hello, World!".to_string());
+    /// ```
     pub fn to_string(&self) -> String {
         from_value(self.value)
     }
