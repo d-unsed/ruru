@@ -6,18 +6,41 @@ use types::Value;
 
 use super::traits::Object;
 
+/// `Symbol`
 #[derive(Debug, PartialEq)]
 pub struct Symbol {
     value: Value
 }
 
 impl Symbol {
+    /// Creates a new instance of Ruby `Symbol`
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use ruru::{Symbol, VM};
+    /// # VM::init();
+    ///
+    /// let symbol = Symbol::new("hello");
+    ///
+    /// assert_eq!(symbol.to_string(), "hello");
     pub fn new(string: &str) -> Self {
         Symbol {
             value: id_to_sym(internal_id(string))
         }
     }
 
+    /// Retrieves the Rust `String` corresponding to `Symbol` object (Ruby `Symbol#to_s`)
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use ruru::{Symbol, VM};
+    /// # VM::init();
+    ///
+    /// let symbol = Symbol::new("hello");
+    ///
+    /// assert_eq!(symbol.to_string(), "hello");
     pub fn to_string(&self) -> String {
         id_to_name(sym_to_id(self.value()))
     }
