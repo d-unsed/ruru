@@ -11,12 +11,15 @@ impl VM {
     /// Initializes Ruby virtual machine.
     ///
     /// This function should **ONLY** be used if you write a standalone application which calls
-    /// Ruby itself (e.g. Rack web server which is run first and then passes requests
-    /// to middleware).
+    /// Ruby itself, for example:
     ///
-    /// In this case it should be called before any interaction with Ruby.
+    /// - Sidekiq-like background processing
     ///
-    /// If you write a library which is connected to Ruby in runtime (e.g. some gem), this
+    /// - Unicorn-like web server
+    ///
+    /// In these cases it should be called before any interaction with Ruby.
+    ///
+    /// If you write a library which is being connected to Ruby in runtime (e.g. some gem), this
     /// function should not be used.
     ///
     /// # Examples
