@@ -14,7 +14,7 @@ pub struct Array {
 }
 
 impl Array {
-    /// Creates a new instance of empty `Array`
+    /// Creates a new instance of empty `Array`.
     ///
     /// # Examples
     ///
@@ -30,7 +30,7 @@ impl Array {
         }
     }
 
-    /// Retrieves an `AnyObject` from element at `index` position
+    /// Retrieves an `AnyObject` from element at `index` position.
     ///
     /// # Examples
     ///
@@ -48,7 +48,7 @@ impl Array {
         AnyObject::from(value)
     }
 
-    /// Joins all elements of `Array` to Ruby `String`
+    /// Joins all elements of `Array` to Ruby `String`.
     ///
     /// # Examples
     ///
@@ -70,7 +70,7 @@ impl Array {
         RString::from(value)
     }
 
-    /// Pushes an object to `Array`
+    /// Pushes an object to `Array`.
     ///
     /// # Examples
     ///
@@ -90,7 +90,7 @@ impl Array {
         Array::from(value)
     }
 
-    /// Stores an object at `index` position
+    /// Stores an object at `index` position.
     ///
     /// # Examples
     ///

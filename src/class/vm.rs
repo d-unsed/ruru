@@ -8,15 +8,16 @@ use types::{Argc, Value};
 pub struct VM;
 
 impl VM {
-    /// Initializes Ruby virtual machine
+    /// Initializes Ruby virtual machine.
     ///
-    /// This function should **ONLY** be used if you write a standalone application which calls Ruby
-    /// itself (e.g. Rack web server which is run first and then passes requests to middleware).
+    /// This function should **ONLY** be used if you write a standalone application which calls
+    /// Ruby itself (e.g. Rack web server which is run first and then passes requests
+    /// to middleware).
     ///
     /// In this case it should be called before any interaction with Ruby.
     ///
     /// If you write a library which is connected to Ruby in runtime (e.g. some gem), this
-    /// should not be used function
+    /// function should not be used.
     ///
     /// # Examples
     ///
@@ -35,11 +36,11 @@ impl VM {
     }
 
     // TODO: Move to other struct
-    /// Converts a pointer `AnyObject` array to `Vec<AnyObject>`
+    /// Converts a pointer `AnyObject` array to `Vec<AnyObject>`.
     ///
-    /// This function is a helper for callbacks
+    /// This function is a helper for callbacks.
     ///
-    /// Later it will be moved to other struct, because it is not related to VM itself
+    /// Later it will be moved to other struct, because it is not related to VM itself.
     ///
     /// # Examples
     ///

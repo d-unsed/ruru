@@ -11,7 +11,7 @@ pub struct RString {
 }
 
 impl RString {
-    /// Creates a new instance of Ruby `String` containing given `string`
+    /// Creates a new instance of Ruby `String` containing given `string`.
     ///
     /// # Examples
     ///
@@ -29,7 +29,7 @@ impl RString {
         }
     }
 
-    /// Retrieves underlying Rust `String` from Ruby `String` object
+    /// Retrieves underlying Rust `String` from Ruby `String` object.
     ///
     /// # Examples
     ///

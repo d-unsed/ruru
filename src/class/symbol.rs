@@ -13,7 +13,7 @@ pub struct Symbol {
 }
 
 impl Symbol {
-    /// Creates a new instance of Ruby `Symbol`
+    /// Creates a new instance of Ruby `Symbol`.
     ///
     /// # Examples
     ///
@@ -30,7 +30,7 @@ impl Symbol {
         }
     }
 
-    /// Retrieves the Rust `String` corresponding to `Symbol` object (Ruby `Symbol#to_s`)
+    /// Retrieves the Rust `String` corresponding to `Symbol` object (Ruby `Symbol#to_s`).
     ///
     /// # Examples
     ///

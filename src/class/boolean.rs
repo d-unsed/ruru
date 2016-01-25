@@ -11,7 +11,7 @@ pub struct Boolean {
 }
 
 impl Boolean {
-    /// Creates a new instance boolean value from `bool`
+    /// Creates a new instance boolean value from `bool`.
     ///
     /// # Examples
     ///
@@ -27,7 +27,7 @@ impl Boolean {
         }
     }
 
-    /// Retrieves a `bool` value from `Boolean`
+    /// Retrieves a `bool` value from `Boolean`.
     ///
     /// # Examples
     ///

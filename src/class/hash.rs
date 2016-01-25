@@ -12,7 +12,7 @@ pub struct Hash {
 }
 
 impl Hash {
-    /// Creates a new instance of empty `Hash`
+    /// Creates a new instance of empty `Hash`.
     ///
     /// # Examples
     ///
@@ -28,7 +28,7 @@ impl Hash {
         }
     }
 
-    /// Retrieves an `AnyObject` from element stored at `key` key
+    /// Retrieves an `AnyObject` from element stored at `key` key.
     ///
     /// # Examples
     ///
@@ -57,9 +57,9 @@ impl Hash {
         AnyObject::from(value)
     }
 
-    /// Associates the `value` with the `key`
+    /// Associates the `value` with the `key`.
     ///
-    /// Both `key` and `value` must be types which implement `Object` trait
+    /// Both `key` and `value` must be types which implement `Object` trait.
     ///
     /// # Examples
     ///

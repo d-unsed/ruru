@@ -12,7 +12,7 @@ pub struct Fixnum {
 }
 
 impl Fixnum {
-    /// Creates a new `Fixnum`
+    /// Creates a new `Fixnum`.
     ///
     /// # Examples
     ///
@@ -30,7 +30,7 @@ impl Fixnum {
         }
     }
 
-    /// Retrieves an `i64` value from `Fixnum`
+    /// Retrieves an `i64` value from `Fixnum`.
     ///
     /// # Examples
     ///

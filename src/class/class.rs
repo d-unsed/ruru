@@ -17,7 +17,7 @@ pub struct Class {
 
 impl Class {
     // TODO: replace rb_cObject with optional superclass
-    /// Creates a new `Class` inheriting from `Object` class
+    /// Creates a new `Class`.
     ///
     /// # Examples
     ///
@@ -47,7 +47,7 @@ impl Class {
     }
 
     // TODO: replace rb_cObject with optional class
-    /// Retrieves an existing `Class` object
+    /// Retrieves an existing `Class` object.
     ///
     /// # Examples
     ///
@@ -77,7 +77,7 @@ impl Class {
 
     /// Creates a new instance of `Class`
     ///
-    /// Arguments must be passed as a vector of `AnyObject` (see example)
+    /// Arguments must be passed as a vector of `AnyObject` (see example).
     ///
     /// # Examples
     ///
@@ -113,7 +113,7 @@ impl Class {
 
     /// Wraps calls to a class.
     ///
-    /// Mostly used to have Ruby-like class definitions
+    /// Mostly used to have Ruby-like class definitions.
     ///
     /// # Examples
     ///
@@ -158,7 +158,7 @@ impl Class {
         self
     }
 
-    /// Defines an instance method for given class
+    /// Defines an instance method for given class.
     ///
     /// # Arguments
     ///
@@ -169,11 +169,11 @@ impl Class {
     ///
     /// ## Callback
     ///
-    /// `callback` must have the following signature
+    /// `callback` must have the following signature:
     ///
     /// `pub type Callback<I: Object, O: Object> = extern fn(Argc, *const AnyObject, I) -> O;`
     ///
-    /// The function must also have `#[no_mangle]` attribute
+    /// The function must also have `#[no_mangle]` attribute.
     ///
     /// - First argument `argc: Argc` will receive the number of arguments passed to method
     ///
@@ -187,13 +187,13 @@ impl Class {
     ///
     /// If you need to receive and use arguments which are passed to the method, you can use
     /// `VM::parse_arguments()` function which processes a pointer to array (`*const AnyObject`)
-    /// to a vector of `AnyObject`s (`Vec<AnyObject>`), see examples
+    /// to a vector of `AnyObject`s (`Vec<AnyObject>`), see examples.
     ///
     /// # Examples
     ///
     /// ## Method receives no arguments
     ///
-    /// In this case `argc` and `argv` can be ignored
+    /// In this case `argc` and `argv` can be ignored.
     ///
     /// Famous `String#blank?` example
     ///
@@ -226,7 +226,7 @@ impl Class {
     ///
     /// ## Method reveives arguments
     ///
-    /// Arguments should be processed to vector using `VM::parse_arguments()`
+    /// Arguments should be processed to vector using `VM::parse_arguments()`.
     ///
     /// ```no_run
     /// use ruru::types::Argc;
@@ -259,7 +259,7 @@ impl Class {
         define_method(self.value, name, callback);
     }
 
-    /// Defines a class method for given class
+    /// Defines a class method for given class.
     ///
     /// Function has the same requirements as `define_method`.
     /// Also the same rules are applied for `callback` (see above).
@@ -298,12 +298,12 @@ impl Class {
         define_singleton_method(self.value, name, callback);
     }
 
-    /// An alias for `define_method` (similar to Ruby syntax `def some_method`)
+    /// An alias for `define_method` (similar to Ruby syntax `def some_method`).
     pub fn def<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
         self.define_method(name, callback);
     }
 
-    /// An alias for `define_singleton_method` (similar to Ruby `def self.some_method`)
+    /// An alias for `define_singleton_method` (similar to Ruby `def self.some_method`).
     pub fn def_self<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
         self.define_singleton_method(name, callback);
     }
