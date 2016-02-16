@@ -64,6 +64,7 @@ impl Array {
     /// let joined_string = array.join(RString::new(", ")).to_string();
     ///
     /// assert_eq!(joined_string, "Hello, World!".to_string());
+    /// ```
     pub fn join(&self, separator: RString) -> RString {
         let value = join(self.value(), separator.value());
 
@@ -103,6 +104,7 @@ impl Array {
     /// array.store(0, Fixnum::new(2));
     ///
     /// assert_eq!(array.at(0).as_fixnum(), Fixnum::new(2));
+    /// ```
     pub fn store<T: Object>(&mut self, index: i64, item: T) -> AnyObject {
         let value = store(self.value(), index, item.value());
 
