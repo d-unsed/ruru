@@ -224,7 +224,7 @@ impl Class {
     /// end
     /// ```
     ///
-    /// ## Method reveives arguments
+    /// ## Method receives arguments
     ///
     /// Arguments should be processed to vector using `VM::parse_arguments()`.
     ///
