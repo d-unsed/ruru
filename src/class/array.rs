@@ -24,6 +24,12 @@ impl Array {
     ///
     /// Array::new();
     /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// []
+    /// ```
     pub fn new() -> Self {
         Array {
             value: new()
@@ -41,6 +47,14 @@ impl Array {
     /// let array = Array::new().push(Fixnum::new(1));
     ///
     /// assert_eq!(array.at(0).as_fixnum(), Fixnum::new(1));
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// array = [1]
+    ///
+    /// array[0] == 1
     /// ```
     pub fn at(&self, index: i64) -> AnyObject {
         let value = entry(self.value(), index);
@@ -65,6 +79,14 @@ impl Array {
     ///
     /// assert_eq!(joined_string, "Hello, World!".to_string());
     /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// array = ['Hello', 'World!']
+    ///
+    /// array.join(', ') == 'Hello, World!'
+    /// ```
     pub fn join(&self, separator: RString) -> RString {
         let value = join(self.value(), separator.value());
 
@@ -85,6 +107,15 @@ impl Array {
     ///
     /// assert_eq!(array.at(0).as_fixnum(), Fixnum::new(1));
     /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// array = []
+    /// array << 1
+    ///
+    /// array[0] == 1
+    /// ```
     pub fn push<T: Object>(&mut self, item: T) -> Self {
         let value = push(self.value(), item.value());
 
@@ -104,6 +135,15 @@ impl Array {
     /// array.store(0, Fixnum::new(2));
     ///
     /// assert_eq!(array.at(0).as_fixnum(), Fixnum::new(2));
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// array = [1]
+    /// array[0] = 2
+    ///
+    /// array[0] == 2
     /// ```
     pub fn store<T: Object>(&mut self, index: i64, item: T) -> AnyObject {
         let value = store(self.value(), index, item.value());
