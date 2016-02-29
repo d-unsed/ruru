@@ -21,6 +21,12 @@ impl Boolean {
     ///
     /// assert_eq!(Boolean::new(true).to_bool(), true);
     /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// true == true
+    /// ```
     pub fn new(state: bool) -> Self {
         Boolean {
             value: bool_to_value(state)
@@ -36,6 +42,12 @@ impl Boolean {
     /// # VM::init();
     ///
     /// assert_eq!(Boolean::new(true).to_bool(), true);
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// true == true
     /// ```
     pub fn to_bool(&self) -> bool {
         value_to_bool(self.value)
