@@ -24,6 +24,12 @@ impl Fixnum {
     ///
     /// assert_eq!(fixnum.to_i64(), 1);
     /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// 1 == 1
+    /// ```
     pub fn new(num: i64) -> Self {
         Fixnum {
             value: int_to_num(num)
@@ -41,6 +47,12 @@ impl Fixnum {
     /// let fixnum = Fixnum::new(1);
     ///
     /// assert_eq!(fixnum.to_i64(), 1);
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// 1 == 1
     /// ```
     pub fn to_i64(&self) -> i64 {
         num_to_int(self.value)
