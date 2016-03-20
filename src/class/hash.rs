@@ -22,6 +22,12 @@ impl Hash {
     ///
     /// Hash::new();
     /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// {}
+    /// ```
     pub fn new() -> Self {
         Hash {
             value: new()
