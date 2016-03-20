@@ -23,6 +23,14 @@ impl RString {
     ///
     /// assert_eq!(string.to_string(), "Hello, World!".to_string());
     /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// str = 'Hello, World!'
+    ///
+    /// str == 'Hello, World!'
+    /// ```
     pub fn new(string: &str) -> Self {
         RString {
             value: new(string)
@@ -40,6 +48,14 @@ impl RString {
     /// let string = RString::new("Hello, World!");
     ///
     /// assert_eq!(string.to_string(), "Hello, World!".to_string());
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// str = 'Hello, World!'
+    ///
+    /// str == 'Hello, World!'
     /// ```
     pub fn to_string(&self) -> String {
         from_value(self.value)
