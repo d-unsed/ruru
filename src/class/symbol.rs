@@ -24,6 +24,15 @@ impl Symbol {
     /// let symbol = Symbol::new("hello");
     ///
     /// assert_eq!(symbol.to_string(), "hello");
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// sym = :hello
+    ///
+    /// sym.to_s == 'hello'
+    /// ```
     pub fn new(string: &str) -> Self {
         Symbol {
             value: id_to_sym(internal_id(string))
@@ -41,6 +50,15 @@ impl Symbol {
     /// let symbol = Symbol::new("hello");
     ///
     /// assert_eq!(symbol.to_string(), "hello");
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// sym = :hello
+    ///
+    /// sym.to_s == 'hello'
+    /// ```
     pub fn to_string(&self) -> String {
         id_to_name(sym_to_id(self.value()))
     }
