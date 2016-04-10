@@ -33,5 +33,6 @@ class Calculator
     end
   end
 end
+```
 
 ## How to use?
