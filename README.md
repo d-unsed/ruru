@@ -33,6 +33,31 @@ class Calculator
     end
   end
 end
+# ... somewhere in the application ...
+Calculator.new.pow_3(5) #=> { 1 => 1, 2 => 8, 3 => 27, 4 => 64, 5 => 125 }
+```
+
+You found it's very slow to call `pow_3` for big number and decided to replace the whole class
+with Rust.
+
+```rust
+#[no_mangle]
+pub extern fn pow_3(argc: Argc, argv: *const AnyObject, itself: Fixnum) -> Hash {
+    let argv = VM::parse_arguments(argc, argv);
+    let num = argv[0].as_fixnum().to_i64();
+
+    let mut hash = Hash::new();
+
+    for i in (1..num + 1) {
+        hash.store(Fixnum::new(i), Fixnum::new(i.pow(4)));
+    }
+
+    hash
+}
+
+Class::new("Calculator").define(|itself| {
+    itself.def("pow_3", pow_3);
+});
 ```
 
 ## How to use?
