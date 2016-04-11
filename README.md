@@ -60,4 +60,15 @@ Class::new("Calculator").define(|itself| {
 });
 ```
 
+Ruby:
+
+```ruby
+# No Calculator class in Ruby anymore
+
+# ... somewhere in the application ...
+Calculator.new.pow_3(5) #=> { 1 => 1, 2 => 8, 3 => 27, 4 => 64, 5 => 125 }
+```
+
+So nothing has changed in the API of class thus no need to change code elsewhere in the app.
+
 ## How to use?
