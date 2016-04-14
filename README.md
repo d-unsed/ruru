@@ -71,6 +71,37 @@ Calculator.new.pow_3(5) #=> { 1 => 1, 2 => 8, 3 => 27, 4 => 64, 5 => 125 }
 
 So nothing has changed in the API of class thus no need to change code elsewhere in the app.
 
+### Calling Ruby code from Rust
+
+Getting an account balance of some `User` whose name is John and who is 18 or 19 years old.
+
+```ruby
+User
+  .find_by(age: [18, 19], name: 'John')
+  .account_balance
+```
+
+```rust
+let mut conditions = Hash::new();
+
+conditions.store(
+    Symbol::new("age"),
+    Array::new().push(Fixnum::new(18)).push(Fixnum::new(19))
+);
+
+conditions.store(
+    Symbol::new("name"),
+    RString::new("John")
+);
+
+let account_balance =
+  Class::from_existing("User")
+        .send("find_by", vec![conditions.as_any_object()])
+        .send("account_balance")
+        .as_fixnum()
+        .to_i64();
+```
+
 ## ... and why **FFI** is not enough?
 
  - No support of native Ruby types;
