@@ -71,4 +71,12 @@ Calculator.new.pow_3(5) #=> { 1 => 1, 2 => 8, 3 => 27, 4 => 64, 5 => 125 }
 
 So nothing has changed in the API of class thus no need to change code elsewhere in the app.
 
+## ... and why **FFI** is not enough?
+
+ - No support of native Ruby types;
+
+ - No way to create a standalone application to run Ruby VM separately;
+
+ - No way to call your Ruby code from Rust;
+
 ## How to use?
