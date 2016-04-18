@@ -71,6 +71,17 @@ Calculator.new.pow_3(5) #=> { 1 => 1, 2 => 8, 3 => 27, 4 => 64, 5 => 125 }
 
 So nothing has changed in the API of class thus no need to change code elsewhere in the app.
 
+### Replacing only several methods instead of the whole class
+
+If the `Calculator` class from the example above has more methods Ruby methods, but we want to
+replace only `pow_3`, use `Class::from_existing()`
+
+```rust
+Class::from_existing("Calculator").define(|itself| {
+    itself.def("pow_3", pow_3);
+});
+```
+
 ### Calling Ruby code from Rust
 
 Getting an account balance of some `User` whose name is John and who is 18 or 19 years old.
