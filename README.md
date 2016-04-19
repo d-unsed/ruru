@@ -2,7 +2,12 @@
 
 ## Native Ruby extensions in Rust
 
-Have you ever considered rewriting some parts of your slow Ruby application?
+Have you ever considered rewriting some parts of your ~~slow~~ Ruby application?
+
+Just rewrite your Ruby application with Rust method by method, class by class. It does not require
+to change interface of your classes or to change any other Ruby code.
+
+As simple as Ruby, as efficient as Rust.
 
 ## Examples
 
