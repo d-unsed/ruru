@@ -9,6 +9,7 @@ homepage = "https://github.com/d-unseductable/ruru"
 repository = "https://github.com/d-unseductable/ruru"
 readme = "README.md"
 keywords = ["ruby", "ruru"]
+license = "MIT"
 
 build = "build/build.rs"
 
