@@ -1,4 +1,4 @@
-# Ruru (Rust + Ruby = ♥️)
+# Ruru (Rust + Ruby = :heart:)
 
 ## Native Ruby extensions in Rust
 
@@ -54,7 +54,7 @@ pub extern fn pow_3(argc: Argc, argv: *const AnyObject, itself: Fixnum) -> Hash 
     let mut hash = Hash::new();
 
     for i in (1..num + 1) {
-        hash.store(Fixnum::new(i), Fixnum::new(i.pow(4)));
+        hash.store(Fixnum::new(i), Fixnum::new(i.pow(3)));
     }
 
     hash
@@ -174,4 +174,4 @@ The second way requires additional steps (to be improved):
    Fiddle::Function.new(library['init_my_app'], [], Fiddle::TYPE_VOIDP).call
    ```
 
-   5. Ruru is ready ♥️
+ 5. Ruru is ready :heart:
