@@ -2,6 +2,8 @@
 
 ## Native Ruby extensions in Rust
 
+[![](http://meritbadge.herokuapp.com/ruru)](https://crates.io/crates/ruru)
+
 **[Documentation](http://d-unseductable.github.io/ruru/ruru/index.html)**
 
 Have you ever considered rewriting some parts of your ~~slow~~ Ruby application?
