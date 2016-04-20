@@ -127,3 +127,51 @@ let account_balance =
  - No way to call your Ruby code from Rust;
 
 ## How to use?
+
+Ruru requires `rbenv` to be installed. Building and linking process is automatic.
+
+There are two ways of using Ruru:
+
+ - Standalone application - Rust is run first as a compiled executable file and then it calls Ruby
+   code (see docs for `VM::init()`)
+
+ - Running Rust code from Ruby application
+
+The second way requires additional steps (to be improved):
+
+ 1. Add Ruru to `Cargo.toml`
+
+   ```toml
+   [dependencies]
+   ruru = ">= 0.5.0"
+   ```
+
+ 2. Compile your library as `dylib`
+
+   ```toml
+   [lib]
+   crate-type = ["dylib"]
+   ```
+
+ 3. Create a function which will initialize
+
+   ```rust
+   #[no_mangle]
+   pub extern fn initialize_my_app() {
+       Class::new("SomeClass");
+
+       /// ... etc
+   }
+   ```
+
+ 4. Open the library and call function from Ruby
+
+   ```ruby
+   require 'fiddle'
+
+   library = Fiddle::dlopen('libmy_library.dylib')
+
+   Fiddle::Function.new(library['init_my_app'], [], Fiddle::TYPE_VOIDP).call
+   ```
+
+   5. Ruru is ready ♥️
