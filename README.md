@@ -2,6 +2,8 @@
 
 ## Native Ruby extensions in Rust
 
+**[Documentation](http://d-unseductable.github.io/ruru/ruru/index.html)**
+
 Have you ever considered rewriting some parts of your ~~slow~~ Ruby application?
 
 Just rewrite your Ruby application with Rust method by method, class by class. It does not require
@@ -117,6 +119,9 @@ let account_balance =
         .as_fixnum()
         .to_i64();
 ```
+
+Check out **[Documentation](http://d-unseductable.github.io/ruru/ruru/index.html)** for more
+examples!
 
 ## ... and why **FFI** is not enough?
 
