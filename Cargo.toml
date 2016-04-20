@@ -3,6 +3,13 @@ name = "ruru"
 version = "0.5.0"
 authors = ["Dmitry Gritsay <unseductable@gmail.com>"]
 
+description = "Native Ruby extensions in Rust"
+documentation = "http://d-unseductable.github.io/ruru/ruru/index.html"
+homepage = "https://github.com/d-unseductable/ruru"
+repository = "https://github.com/d-unseductable/ruru"
+readme = "README.md"
+keywords = ["ruby", "ruru"]
+
 build = "build/build.rs"
 
 [lib]
