@@ -135,52 +135,60 @@ examples!
 
 ## How to use?
 
-Ruru requires `rbenv` to be installed. Building and linking process is automatic.
+Warning! The crate is WIP.
+
+Ruru requires `rbenv` to be installed.
 
 There are two ways of using Ruru:
 
- - Standalone application - Rust is run first as a compiled executable file and then it calls Ruby
-   code (see docs for `VM::init()`)
+ - Standalone application - Rust is run first as a compiled executable file and
+   then it calls Ruby code (see docs for `VM::init()`)
 
  - Running Rust code from Ruby application
 
 The second way requires additional steps (to be improved):
 
- 1. Add Ruru to `Cargo.toml`
+1. Your local MRI copy has to be build with `--enable-shared` option
 
-   ```toml
-   [dependencies]
-   ruru = ">= 0.5.0"
-   ```
+  ```bash
+  CONFIGURE_OPTS=--enable-shared rbenv install 2.3.0
+  ```
 
- 2. Compile your library as `dylib`
+2. Add Ruru to `Cargo.toml`
 
-   ```toml
-   [lib]
-   crate-type = ["dylib"]
-   ```
+  ```toml
+  [dependencies]
+  ruru = ">= 0.5.0"
+  ```
 
- 3. Create a function which will initialize
+3. Compile your library as `dylib`
 
-   ```rust
-   #[no_mangle]
-   pub extern fn initialize_my_app() {
-       Class::new("SomeClass");
+  ```toml
+  [lib]
+  crate-type = ["dylib"]
+  ```
 
-       /// ... etc
-   }
-   ```
+4. Create a function which will initialize the extension
 
- 4. Open the library and call function from Ruby
+  ```rust
+  #[no_mangle]
+  pub extern fn initialize_my_app() {
+      Class::new("SomeClass");
 
-   ```ruby
-   require 'fiddle'
+      /// ... etc
+  }
+  ```
 
-   library = Fiddle::dlopen('libmy_library.dylib')
+5. Open the library and call function from Ruby
 
-   Fiddle::Function.new(library['init_my_app'], [], Fiddle::TYPE_VOIDP).call
-   ```
+  ```ruby
+  require 'fiddle'
 
- 5. Ruru is ready :heart:
+  library = Fiddle::dlopen('libmy_library.dylib')
+
+  Fiddle::Function.new(library['init_my_app'], [], Fiddle::TYPE_VOIDP).call
+  ```
+
+6. Ruru is ready :heart:
 
 # Contributors are welcome!
