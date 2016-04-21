@@ -182,3 +182,5 @@ The second way requires additional steps (to be improved):
    ```
 
  5. Ruru is ready :heart:
+
+# Contributors are welcome!
