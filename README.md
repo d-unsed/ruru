@@ -117,7 +117,7 @@ conditions.store(
 let account_balance =
   Class::from_existing("User")
         .send("find_by", vec![conditions.as_any_object()])
-        .send("account_balance")
+        .send("account_balance", vec![])
         .as_fixnum()
         .to_i64();
 ```
