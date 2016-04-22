@@ -137,8 +137,6 @@ examples!
 
 Warning! The crate is WIP.
 
-Ruru requires `rbenv` to be installed.
-
 There are two ways of using Ruru:
 
  - Standalone application - Rust is run first as a compiled executable file and
@@ -148,7 +146,8 @@ There are two ways of using Ruru:
 
 The second way requires additional steps (to be improved):
 
-1. Your local MRI copy has to be build with `--enable-shared` option
+1. Your local MRI copy has to be built with the `--enable-shared` option. For
+   example, using rbenv:
 
   ```bash
   CONFIGURE_OPTS=--enable-shared rbenv install 2.3.0
