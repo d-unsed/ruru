@@ -1,6 +1,5 @@
 use types::{Argc, c_char, c_int, CallbackPtr, Id, Value};
 
-#[link(name = "ruby")]
 extern "C" {
     pub fn rb_class_new_instance(argc: Argc, argv: *const Value, klass: Value) -> Value;
     pub fn rb_define_class(name: *const c_char, superclass: Value) -> Value;

@@ -9,5 +9,5 @@ fn main() {
 
     let ruby_libdir = String::from_utf8_lossy(&ruby.stdout);
 
-    println!("cargo:rustc-flags=-L {}", ruby_libdir.trim());
+    println!("cargo:rustc-link-search={}", ruby_libdir.trim());
 }
