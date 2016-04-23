@@ -1,12 +1,13 @@
 use std::process::Command;
 
 fn main() {
-    let rbenv = Command::new("rbenv")
-                        .arg("prefix")
-                        .output()
-                        .unwrap_or_else(|e| panic!("Rbenv not found: {}", e));
+    let ruby = Command::new("ruby")
+                   .arg("-e")
+                   .arg("puts File.join(File.dirname(File.dirname(RbConfig.ruby)), 'lib')")
+                   .output()
+                   .unwrap_or_else(|e| panic!("ruby not found: {}", e));
 
-    let ruby_path =  String::from_utf8_lossy(&rbenv.stdout);
+    let ruby_libdir = String::from_utf8_lossy(&ruby.stdout);
 
-    println!("cargo:rustc-flags=-L {}/lib", ruby_path.trim());
+    println!("cargo:rustc-flags=-L {}", ruby_libdir.trim());
 }
