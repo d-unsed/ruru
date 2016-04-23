@@ -1,6 +1,5 @@
 use types::{c_long, Value};
 
-#[link(name = "ruby")]
 extern "C" {
     pub fn rb_ary_entry(array: Value, offset: c_long) -> Value;
     pub fn rb_ary_join(array: Value, separator: Value) -> Value;

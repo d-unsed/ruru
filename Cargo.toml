@@ -12,10 +12,7 @@ keywords = ["ruby", "ruru"]
 license = "MIT"
 
 build = "build/build.rs"
-
-[lib]
-name = "ruru"
-crate-type = ["dylib"]
+links = "ruby"
 
 [dependencies]
 libc = "0.1.12"
