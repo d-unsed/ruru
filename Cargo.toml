@@ -15,4 +15,4 @@ build = "build/build.rs"
 links = "ruby"
 
 [dependencies]
-libc = "0.1.12"
+libc = "0.2.10"

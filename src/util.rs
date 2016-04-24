@@ -6,10 +6,6 @@ use types::{c_char, c_int, Value};
 
 use class::traits::Object;
 
-pub fn str_as_ptr(str: &str) -> *const c_char {
-    CString::new(str).unwrap().as_ptr()
-}
-
 pub fn cstr_as_string(str: *const c_char) -> String {
     unsafe {
         CStr::from_ptr(str).to_string_lossy().into_owned()
