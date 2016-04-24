@@ -42,7 +42,8 @@ class Calculator
     end
   end
 end
-# ... somewhere in the application ...
+
+# ... somewhere in the application code ...
 Calculator.new.pow_3(5) #=> { 1 => 1, 2 => 8, 3 => 27, 4 => 64, 5 => 125 }
 ```
 
