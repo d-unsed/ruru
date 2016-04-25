@@ -1,7 +1,7 @@
 use binding::util::internal_id;
 use types::{Argc, Callback, CallbackPtr, Value};
 use ruby_sys::class::{rb_class_new_instance, rb_define_class, rb_define_method,
-                            rb_define_module, rb_ivar_get, rb_ivar_set, rb_define_singleton_method,
+                            rb_ivar_get, rb_ivar_set, rb_define_singleton_method,
                             rb_obj_class};
 use class::traits::Object;
 use std::ffi::CString;
@@ -10,13 +10,6 @@ pub fn define_class(name: &str, superclass: Value) -> Value {
     let string = CString::new(name).unwrap();
     unsafe {
         rb_define_class(string.as_ptr(), superclass)
-    }
-}
-
-pub fn define_module(name: &str) -> Value {
-    let string = CString::new(name).unwrap();
-    unsafe {
-        rb_define_module(string.as_ptr())
     }
 }
 
