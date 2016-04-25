@@ -61,7 +61,7 @@ pub trait Object : From<Value> {
     ///
     /// # Examples
     ///
-    /// ```no_run
+    /// ```
     /// use ruru::{Array, Fixnum, RString, VM};
     /// use ruru::traits::Object;
     /// # VM::init();
@@ -89,7 +89,7 @@ pub trait Object : From<Value> {
     ///
     /// # Examples
     ///
-    /// ```no_run
+    /// ```
     /// use ruru::{Array, Fixnum, VM};
     /// use ruru::traits::Object;
     /// # VM::init();
@@ -112,7 +112,7 @@ pub trait Object : From<Value> {
     ///
     /// # Examples
     ///
-    /// ```no_run
+    /// ```
     /// use ruru::{AnyObject, Class, Fixnum, VM};
     /// use ruru::types::Argc;
     /// use ruru::traits::Object;
@@ -159,7 +159,7 @@ pub trait Object : From<Value> {
     ///
     /// # Examples
     ///
-    /// ```no_run
+    /// ```
     /// use ruru::{AnyObject, Class, Fixnum, VM};
     /// use ruru::types::Argc;
     /// use ruru::traits::Object;

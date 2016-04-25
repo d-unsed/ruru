@@ -44,7 +44,7 @@ use super::traits::Object;
 ///
 /// ## Retrieving an object from `Hash`
 ///
-/// ```no_run
+/// ```
 /// use ruru::{Fixnum, Hash, Symbol, VM};
 /// # VM::init();
 ///
