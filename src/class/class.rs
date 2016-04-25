@@ -106,7 +106,7 @@ impl Class {
     /// ```
     pub fn new_instance(&self, arguments: Vec<AnyObject>) -> AnyObject {
         let (argc, argv) = create_arguments(arguments);
-        let instance = new_instance(self.value(), argc, argv);
+        let instance = new_instance(self.value(), argc, argv.as_ptr());
 
         AnyObject::from(instance)
     }

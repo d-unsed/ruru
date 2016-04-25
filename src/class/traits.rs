@@ -78,7 +78,7 @@ pub trait Object : From<Value> {
     fn send(&self, method: &str, arguments: Vec<AnyObject>) -> AnyObject {
         let (argc, argv) = create_arguments(arguments);
 
-        let result = call_method(self.value(), method, argc, argv);
+        let result = call_method(self.value(), method, argc, argv.as_ptr());
 
         AnyObject::from(result)
     }

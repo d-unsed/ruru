@@ -29,14 +29,13 @@ pub fn value_to_bool(value: Value) -> bool {
     }
 }
 
-pub fn create_arguments(arguments: Vec<AnyObject>) -> (c_int, *const Value) {
-    (arguments.len() as c_int, arguments_as_ptr(arguments))
+pub fn create_arguments(arguments: Vec<AnyObject>) -> (c_int, Vec<Value>) {
+    (arguments.len() as c_int, arguments_to_values(arguments))
 }
 
-fn arguments_as_ptr(arguments: Vec<AnyObject>) -> *const Value {
+fn arguments_to_values(arguments: Vec<AnyObject>) -> Vec<Value> {
     arguments
         .iter()
         .map(|object| object.value())
         .collect::<Vec<Value>>()
-        .as_ptr()
 }
