@@ -3,6 +3,7 @@ extern crate libc;
 pub mod types;
 pub mod hash;
 pub mod string;
+pub mod symbol;
 pub mod vm;
 
 use types::Value;

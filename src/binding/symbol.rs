@@ -1,5 +1,5 @@
 use types::{Id, Value};
-use unsafe_binding::symbol::{rb_id2name, rb_id2sym, rb_sym2id};
+use ruby_sys::symbol::{rb_id2name, rb_id2sym, rb_sym2id};
 use util::cstr_as_string;
 
 pub fn id_to_sym(id: Id) -> Value {
