@@ -1,5 +1,5 @@
 use types::Value;
-use unsafe_binding::string::{rb_str_new_cstr, rb_string_value_cstr};
+use ruby_sys::string::{rb_str_new_cstr, rb_string_value_cstr};
 use util::cstr_as_string;
 use std::ffi::CString;
 
