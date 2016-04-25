@@ -1,6 +1,5 @@
 pub use libc::{c_char, c_int, c_long};
 
-use libc::c_void;
 use libc::uintptr_t;
 use libc::intptr_t;
 
