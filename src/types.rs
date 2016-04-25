@@ -10,5 +10,5 @@ pub type Id = types::Id;
 
 pub type Argc = types::Argc;
 
-pub type Callback<I, O> = extern fn(Argc, *const AnyObject, I) -> O;
+pub type Callback<I, O> = extern "C" fn(Argc, *const AnyObject, I) -> O;
 pub type CallbackPtr = types::CallbackPtr;

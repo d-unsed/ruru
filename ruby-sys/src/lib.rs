@@ -15,4 +15,3 @@ use types::Value;
 extern "C" {
     pub static rb_cObject: Value;
 }
-

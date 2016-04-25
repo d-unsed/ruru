@@ -8,7 +8,7 @@ use super::traits::Object;
 
 /// `Hash`
 pub struct Hash {
-    value: Value
+    value: Value,
 }
 
 impl Hash {
@@ -29,9 +29,7 @@ impl Hash {
     /// {}
     /// ```
     pub fn new() -> Self {
-        Hash {
-            value: new()
-        }
+        Hash { value: new() }
     }
 
     /// Retrieves an `AnyObject` from element stored at `key` key.
@@ -97,9 +95,7 @@ impl Hash {
 
 impl From<Value> for Hash {
     fn from(value: Value) -> Self {
-        Hash {
-            value: value
-        }
+        Hash { value: value }
     }
 }
 

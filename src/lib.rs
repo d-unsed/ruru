@@ -21,5 +21,4 @@ pub use class::vm::VM;
 pub use class::traits;
 
 #[test]
-fn it_works() {
-}
+fn it_works() {}

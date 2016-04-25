@@ -9,7 +9,7 @@ use super::traits::Object;
 /// `Symbol`
 #[derive(Debug, PartialEq)]
 pub struct Symbol {
-    value: Value
+    value: Value,
 }
 
 impl Symbol {
@@ -34,9 +34,7 @@ impl Symbol {
     /// sym.to_s == 'hello'
     /// ```
     pub fn new(string: &str) -> Self {
-        Symbol {
-            value: id_to_sym(internal_id(string))
-        }
+        Symbol { value: id_to_sym(internal_id(string)) }
     }
 
     /// Retrieves the Rust `String` corresponding to `Symbol` object (Ruby `Symbol#to_s`).
@@ -66,9 +64,7 @@ impl Symbol {
 
 impl From<Value> for Symbol {
     fn from(value: Value) -> Self {
-        Symbol {
-            value: value
-        }
+        Symbol { value: value }
     }
 }
 

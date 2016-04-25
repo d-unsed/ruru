@@ -7,15 +7,13 @@ use types::{c_char, c_int, Value};
 use class::traits::Object;
 
 pub fn cstr_as_string(str: *const c_char) -> String {
-    unsafe {
-        CStr::from_ptr(str).to_string_lossy().into_owned()
-    }
+    unsafe { CStr::from_ptr(str).to_string_lossy().into_owned() }
 }
 
 pub fn bool_to_value(state: bool) -> Value {
     let value = match state {
         false => RubySpecialConsts::False,
-        true => RubySpecialConsts::True
+        true => RubySpecialConsts::True,
     };
 
     value as Value

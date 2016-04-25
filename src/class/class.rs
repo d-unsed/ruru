@@ -12,7 +12,7 @@ use super::traits::Object;
 /// `Class`
 #[derive(Debug, PartialEq)]
 pub struct Class {
-    value: Value
+    value: Value,
 }
 
 impl Class {
@@ -41,9 +41,7 @@ impl Class {
     /// Hello = Class.new
     /// ```
     pub fn new(name: &str) -> Self {
-        Class {
-            value: define_class(name, rb_cObject)
-        }
+        Class { value: define_class(name, rb_cObject) }
     }
 
     // TODO: replace rb_cObject with optional class
@@ -70,9 +68,7 @@ impl Class {
     /// Object.const_get('Hello')
     /// ```
     pub fn from_existing(name: &str) -> Self {
-        Class {
-            value: get_constant(name, rb_cObject)
-        }
+        Class { value: get_constant(name, rb_cObject) }
     }
 
     /// Creates a new instance of `Class`
@@ -271,7 +267,9 @@ impl Class {
     /// use ruru::{AnyObject, Class, Symbol, VM};
     ///
     /// #[no_mangle]
-    /// pub extern fn symbol_from_string(argc: Argc, argv: *const AnyObject, itself: Class) -> Symbol {
+    /// pub extern fn symbol_from_string(argc: Argc,
+    ///                                  argv: *const AnyObject,
+    ///                                  itself: Class) -> Symbol {
     ///     let argv = VM::parse_arguments(argc, argv);
     ///     let string = argv[0].as_string();
     ///
@@ -294,7 +292,9 @@ impl Class {
     ///   end
     /// end
     /// ```
-    pub fn define_singleton_method<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
+    pub fn define_singleton_method<I: Object, O: Object>(&mut self,
+                                                         name: &str,
+                                                         callback: Callback<I, O>) {
         define_singleton_method(self.value, name, callback);
     }
 
@@ -311,9 +311,7 @@ impl Class {
 
 impl From<Value> for Class {
     fn from(value: Value) -> Self {
-        Class {
-            value: value
-        }
+        Class { value: value }
     }
 }
 

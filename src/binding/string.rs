@@ -6,9 +6,7 @@ use std::ffi::CString;
 pub fn new(string: &str) -> Value {
     let string = CString::new(string).unwrap();
 
-    unsafe {
-        rb_str_new_cstr(string.as_ptr())
-    }
+    unsafe { rb_str_new_cstr(string.as_ptr()) }
 }
 
 pub fn from_value(value: Value) -> String {
