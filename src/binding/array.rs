@@ -1,5 +1,5 @@
 use types::{c_long, Value};
-use unsafe_binding::array::{rb_ary_new, rb_ary_entry, rb_ary_join, rb_ary_push, rb_ary_store};
+use ruby_sys::array::{rb_ary_new, rb_ary_entry, rb_ary_join, rb_ary_push, rb_ary_store};
 
 pub fn new() -> Value {
     unsafe {

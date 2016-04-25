@@ -1,5 +1,8 @@
 extern crate libc;
 
+pub mod array;
+pub mod class;
+pub mod fixnum;
 pub mod types;
 pub mod hash;
 pub mod string;

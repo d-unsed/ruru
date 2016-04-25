@@ -1,5 +1,5 @@
 use types::{SignedValue, Value};
-use unsafe_binding::fixnum::{rb_int2inum, rb_num2int};
+use ruby_sys::fixnum::{rb_int2inum, rb_num2int};
 
 pub fn int_to_num(num: i64) -> Value {
     unsafe {

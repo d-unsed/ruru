@@ -4,7 +4,6 @@ extern crate ruby_sys;
 
 mod binding;
 mod class;
-mod unsafe_binding;
 mod util;
 
 pub mod types;
