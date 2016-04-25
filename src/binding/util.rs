@@ -1,6 +1,6 @@
 use binding::global::rb_cObject;
 use types::{Argc, Id, Value};
-use unsafe_binding::util::{rb_const_get, rb_funcallv, rb_intern};
+use ruby_sys::util::{rb_const_get, rb_funcallv, rb_intern};
 use std::ffi::CString;
 
 pub fn get_constant(name: &str, _parent_object: Value) -> Value {
