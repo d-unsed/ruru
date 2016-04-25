@@ -1,5 +1,5 @@
 use types::Value;
-use unsafe_binding::hash::{rb_hash_aref, rb_hash_aset, rb_hash_new};
+use ruby_sys::hash::{rb_hash_aref, rb_hash_aset, rb_hash_new};
 
 pub fn new() -> Value {
     unsafe {
