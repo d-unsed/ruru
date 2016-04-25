@@ -1,5 +1,5 @@
 use binding::util::internal_id;
-use types::{Argc, Callback, CallbackPtr, Id, Value};
+use types::{Argc, Callback, CallbackPtr, Value};
 use unsafe_binding::class::{rb_class_new_instance, rb_define_class, rb_define_method,
                             rb_define_module, rb_ivar_get, rb_ivar_set, rb_define_singleton_method,
                             rb_obj_class};

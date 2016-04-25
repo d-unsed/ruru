@@ -3,7 +3,7 @@ use types::{Argc, Id, Value};
 use unsafe_binding::util::{rb_const_get, rb_funcallv, rb_intern};
 use std::ffi::CString;
 
-pub fn get_constant(name: &str, parent_object: Value) -> Value {
+pub fn get_constant(name: &str, _parent_object: Value) -> Value {
     let constant_id = internal_id(name);
 
     unsafe {

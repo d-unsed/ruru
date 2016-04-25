@@ -1,4 +1,4 @@
-use types::{Argc, c_char, c_int, CallbackPtr, Id, Value};
+use types::{Argc, c_char, CallbackPtr, Id, Value};
 
 extern "C" {
     pub fn rb_class_new_instance(argc: Argc, argv: *const Value, klass: Value) -> Value;
