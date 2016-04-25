@@ -3,6 +3,12 @@ name = "ruby-sys"
 version = "0.1.0"
 authors = ["Steve Klabnik <steve@steveklabnik.com>",
            "Dmitry Gritsay <unseductable@gmail.com>"]
+description = "Low level bindings to MIR"
+documentation = "http://d-unseductable.github.io/ruru/ruru/index.html"
+homepage = "https://github.com/d-unseductable/ruru/ruby-sys"
+repository = "https://github.com/d-unseductable/ruru/ruby-sys"
+keywords = ["ruby"]
+license = "MIT"
 
 build = "build.rs"
 links = "ruby"
