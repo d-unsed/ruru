@@ -16,3 +16,4 @@ links = "ruby"
 
 [dependencies]
 libc = "0.2.10"
+ruby-sys = { path = "./ruby-sys" }

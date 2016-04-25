@@ -1,5 +1,7 @@
 extern crate libc;
 
+extern crate ruby_sys;
+
 mod binding;
 mod class;
 mod unsafe_binding;
