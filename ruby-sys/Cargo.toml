@@ -1,7 +1,8 @@
 [package]
 name = "ruby-sys"
 version = "0.1.0"
-authors = ["Steve Klabnik <steve@steveklabnik.com>"]
+authors = ["Steve Klabnik <steve@steveklabnik.com>",
+           "Dmitry Gritsay <unseductable@gmail.com>"]
 
 build = "build.rs"
 links = "ruby"
