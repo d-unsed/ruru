@@ -47,7 +47,7 @@ impl VM {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```no_run
     /// use ruru::types::Argc;
     /// use ruru::{AnyObject, Boolean, Class, RString, VM};
     ///
@@ -60,7 +60,6 @@ impl VM {
     /// }
     ///
     /// fn main() {
-    ///     # VM::init();
     ///     Class::from_existing("String").define_method("==", string_eq);
     /// }
     /// ```

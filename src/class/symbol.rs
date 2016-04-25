@@ -17,7 +17,7 @@ impl Symbol {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```no_run
     /// use ruru::{Symbol, VM};
     /// # VM::init();
     ///
@@ -43,7 +43,7 @@ impl Symbol {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```no_run
     /// use ruru::{Symbol, VM};
     /// # VM::init();
     ///

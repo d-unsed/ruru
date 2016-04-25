@@ -117,9 +117,9 @@ impl Class {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```no_run
     /// use ruru::types::Argc;
-    /// use ruru::{AnyObject, Class, Fixnum, RString, VM};
+    /// use ruru::{AnyObject, Class, Fixnum, RString};
     ///
     /// #[no_mangle]
     /// pub extern fn greeting(_: Argc, _: *const AnyObject, _: AnyObject) -> RString {
@@ -132,7 +132,6 @@ impl Class {
     /// }
     ///
     /// fn main() {
-    ///     # VM::init();
     ///     Class::new("Hello").define(|itself| {
     ///         itself.def_self("greeting", many_greetings);
     ///         itself.def("many_greetings", greeting);
@@ -198,9 +197,9 @@ impl Class {
     ///
     /// Famous `String#blank?` example
     ///
-    /// ```
+    /// ```no_run
     /// use ruru::types::Argc;
-    /// use ruru::{AnyObject, Boolean, Class, RString, VM};
+    /// use ruru::{AnyObject, Boolean, Class, RString};
     ///
     /// use ruru::traits::Object;
     ///
@@ -210,7 +209,6 @@ impl Class {
     /// }
     ///
     /// fn main() {
-    ///     # VM::init();
     ///     Class::from_existing("String").define_method("blank?", string_blank);
     /// }
     /// ```
@@ -230,7 +228,7 @@ impl Class {
     ///
     /// Arguments should be processed to vector using `VM::parse_arguments()`.
     ///
-    /// ```
+    /// ```no_run
     /// use ruru::types::Argc;
     /// use ruru::{AnyObject, Boolean, Class, RString, VM};
     ///
@@ -243,7 +241,6 @@ impl Class {
     /// }
     ///
     /// fn main() {
-    ///     # VM::init();
     ///     Class::from_existing("String").define_method("==", string_eq);
     /// }
     /// ```
@@ -269,7 +266,7 @@ impl Class {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```no_run
     /// use ruru::types::Argc;
     /// use ruru::{AnyObject, Class, Symbol, VM};
     ///
@@ -282,7 +279,6 @@ impl Class {
     /// }
     ///
     /// fn main() {
-    ///     # VM::init();
     ///     Class::from_existing("Symbol")
     ///         .define_singleton_method("from_string", symbol_from_string);
     /// }
