@@ -2,7 +2,7 @@ use std::slice;
 
 use binding::vm::init;
 use class::any_object::AnyObject;
-use types::{Argc, Value};
+use types::Argc;
 
 /// Virtual Machine and helpers
 pub struct VM;

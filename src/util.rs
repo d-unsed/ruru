@@ -1,4 +1,4 @@
-use std::ffi::{CStr, CString};
+use std::ffi::CStr;
 
 use binding::global::RubySpecialConsts;
 use class::any_object::AnyObject;
