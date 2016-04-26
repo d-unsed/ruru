@@ -3,8 +3,8 @@ name = "ruby-sys"
 version = "0.1.1"
 authors = ["Steve Klabnik <steve@steveklabnik.com>",
            "Dmitry Gritsay <unseductable@gmail.com>"]
-description = "Low level bindings to MIR"
-documentation = "http://d-unseductable.github.io/ruru/ruru/index.html"
+description = "Low level bindings to MRI, Matz's Ruby Interpreter."
+documentation = "http://d-unseductable.github.io/ruru/ruby-sys/index.html"
 homepage = "https://github.com/d-unseductable/ruru/ruby-sys"
 repository = "https://github.com/d-unseductable/ruru/ruby-sys"
 keywords = ["ruby"]
