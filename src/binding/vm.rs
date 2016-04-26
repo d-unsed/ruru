@@ -1,4 +1,4 @@
-use unsafe_binding::vm::ruby_init;
+use ruby_sys::vm::ruby_init;
 
 pub fn init() {
     unsafe {

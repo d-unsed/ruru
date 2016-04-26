@@ -7,7 +7,7 @@ use super::traits::Object;
 
 /// `String`
 pub struct RString {
-    value: Value
+    value: Value,
 }
 
 impl RString {
@@ -32,9 +32,7 @@ impl RString {
     /// str == 'Hello, World!'
     /// ```
     pub fn new(string: &str) -> Self {
-        RString {
-            value: new(string)
-        }
+        RString { value: new(string) }
     }
 
     /// Retrieves underlying Rust `String` from Ruby `String` object.
@@ -64,9 +62,7 @@ impl RString {
 
 impl From<Value> for RString {
     fn from(value: Value) -> Self {
-        RString {
-            value: value
-        }
+        RString { value: value }
     }
 }
 

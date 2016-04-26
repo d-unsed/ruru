@@ -11,8 +11,6 @@ readme = "README.md"
 keywords = ["ruby", "ruru"]
 license = "MIT"
 
-build = "build/build.rs"
-links = "ruby"
-
 [dependencies]
 libc = "0.2.10"
+ruby-sys = { path = "./ruby-sys" }

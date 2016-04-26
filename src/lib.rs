@@ -1,8 +1,9 @@
 extern crate libc;
 
+extern crate ruby_sys;
+
 mod binding;
 mod class;
-mod unsafe_binding;
 mod util;
 
 pub mod types;
@@ -20,5 +21,4 @@ pub use class::vm::VM;
 pub use class::traits;
 
 #[test]
-fn it_works() {
-}
+fn it_works() {}

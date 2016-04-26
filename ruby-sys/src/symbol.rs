@@ -1,6 +1,5 @@
 use types::{c_char, Id, Value};
 
-#[link(name = "ruby")]
 extern "C" {
     pub fn rb_id2sym(id: Id) -> Value;
     pub fn rb_id2name(id: Id) -> *const c_char;

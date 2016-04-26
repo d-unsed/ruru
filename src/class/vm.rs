@@ -64,8 +64,6 @@ impl VM {
     /// }
     /// ```
     pub fn parse_arguments(argc: Argc, arguments: *const AnyObject) -> Vec<AnyObject> {
-        unsafe {
-            slice::from_raw_parts(arguments, argc as usize).to_vec()
-        }
+        unsafe { slice::from_raw_parts(arguments, argc as usize).to_vec() }
     }
 }

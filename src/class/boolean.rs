@@ -7,7 +7,7 @@ use super::traits::Object;
 
 /// `TrueClass` and `FalseClass`
 pub struct Boolean {
-    value: Value
+    value: Value,
 }
 
 impl Boolean {
@@ -28,9 +28,7 @@ impl Boolean {
     /// true == true
     /// ```
     pub fn new(state: bool) -> Self {
-        Boolean {
-            value: bool_to_value(state)
-        }
+        Boolean { value: bool_to_value(state) }
     }
 
     /// Retrieves a `bool` value from `Boolean`.
@@ -56,9 +54,7 @@ impl Boolean {
 
 impl From<Value> for Boolean {
     fn from(value: Value) -> Self {
-        Boolean {
-            value: value
-        }
+        Boolean { value: value }
     }
 }
 

@@ -10,7 +10,7 @@ use super::traits::Object;
 
 /// `Array`
 pub struct Array {
-    value: Value
+    value: Value,
 }
 
 impl Array {
@@ -31,9 +31,7 @@ impl Array {
     /// []
     /// ```
     pub fn new() -> Self {
-        Array {
-            value: new()
-        }
+        Array { value: new() }
     }
 
     /// Retrieves an `AnyObject` from element at `index` position.
@@ -154,9 +152,7 @@ impl Array {
 
 impl From<Value> for Array {
     fn from(value: Value) -> Self {
-        Array {
-            value: value
-        }
+        Array { value: value }
     }
 }
 

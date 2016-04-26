@@ -12,7 +12,7 @@ use super::class::Class;
 ///
 /// Trait consists methods of Ruby `Object` class. Every struct like `Array`, `Hash` etc implements
 /// this trait.
-pub trait Object : From<Value> {
+pub trait Object: From<Value> {
     /// Usually this function just returns a `value` of current object.
     ///
     /// # Examples
@@ -118,12 +118,16 @@ pub trait Object : From<Value> {
     /// use ruru::traits::Object;
     ///
     /// #[no_mangle]
-    /// pub extern fn counter_initialize(_: Argc, _: *const AnyObject, mut itself: AnyObject) -> AnyObject {
+    /// pub extern fn counter_initialize(_: Argc,
+    ///                                  _: *const AnyObject,
+    ///                                  mut itself: AnyObject) -> AnyObject {
     ///     itself.instance_variable_set("@state", Fixnum::new(0))
     /// }
     ///
     /// #[no_mangle]
-    /// pub extern fn counter_increment(_: Argc, _: *const AnyObject, mut itself: AnyObject) -> AnyObject {
+    /// pub extern fn counter_increment(_: Argc,
+    ///                                 _: *const AnyObject,
+    ///                                 mut itself: AnyObject) -> AnyObject {
     ///     let state = itself.instance_variable_get("@state").as_fixnum().to_i64();
     ///
     ///     itself.instance_variable_set("@state", Fixnum::new(state + 1))
@@ -165,12 +169,16 @@ pub trait Object : From<Value> {
     /// use ruru::traits::Object;
     ///
     /// #[no_mangle]
-    /// pub extern fn counter_initialize(_: Argc, _: *const AnyObject, mut itself: AnyObject) -> AnyObject {
+    /// pub extern fn counter_initialize(_: Argc,
+    ///                                  _: *const AnyObject,
+    ///                                  mut itself: AnyObject) -> AnyObject {
     ///     itself.instance_variable_set("@state", Fixnum::new(0))
     /// }
     ///
     /// #[no_mangle]
-    /// pub extern fn counter_increment(_: Argc, _: *const AnyObject, mut itself: AnyObject) -> AnyObject {
+    /// pub extern fn counter_increment(_: Argc,
+    ///                                 _: *const AnyObject,
+    ///                                 mut itself: AnyObject) -> AnyObject {
     ///     let state = itself.instance_variable_get("@state").as_fixnum().to_i64();
     ///
     ///     itself.instance_variable_set("@state", Fixnum::new(state + 1))

@@ -79,7 +79,7 @@ use super::traits::Object;
 /// ```
 #[derive(Clone)]
 pub struct AnyObject {
-    value: Value
+    value: Value,
 }
 
 impl AnyObject {
@@ -121,9 +121,7 @@ impl AnyObject {
 
 impl From<Value> for AnyObject {
     fn from(value: Value) -> Self {
-        AnyObject {
-            value: value
-        }
+        AnyObject { value: value }
     }
 }
 
