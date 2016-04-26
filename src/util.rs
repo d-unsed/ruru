@@ -1,4 +1,4 @@
-use std::ffi::CStr;
+use std::ffi::{CStr, CString};
 
 use binding::global::RubySpecialConsts;
 use class::any_object::AnyObject;
@@ -8,6 +8,10 @@ use class::traits::Object;
 
 pub fn cstr_as_string(str: *const c_char) -> String {
     unsafe { CStr::from_ptr(str).to_string_lossy().into_owned() }
+}
+
+pub fn str_to_cstring(str: &str) -> CString {
+    CString::new(str).unwrap()
 }
 
 pub fn bool_to_value(state: bool) -> Value {
