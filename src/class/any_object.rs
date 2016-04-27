@@ -1,13 +1,5 @@
 use types::Value;
 
-use super::array::Array;
-use super::boolean::Boolean;
-use super::class::Class;
-use super::fixnum::Fixnum;
-use super::hash::Hash;
-use super::string::RString;
-use super::symbol::Symbol;
-
 use super::traits::Object;
 
 /// Representation of any Ruby object while its type is unknown
