@@ -6,6 +6,8 @@ mod binding;
 mod class;
 mod util;
 
+#[macro_use]
+pub mod dsl;
 pub mod types;
 
 pub use class::any_object::AnyObject;
