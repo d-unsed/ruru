@@ -1,4 +1,74 @@
+/// Creates Rust structure for new Ruby class
+///
+/// # Examples
+///
+/// ```no_run
+/// #[macro_use]
+/// extern crate ruru;
+///
+/// use ruru::{AnyObject, Class, RString, VM};
+/// use ruru::types::{Argc, Value};
+/// use ruru::traits::Object;
+///
+/// class!(Greeter);
+///
+/// methods!(
+///     Greeter,
+///     itself,
+///
+///     anonymous_greeting() -> RString {
+///         RString::new("Hello stranger!")
+///     }
+///
+///     friendly_greeting(name: RString) -> RString {
+///         let greeting = format!("Hello dear {}!", name.to_string());
+///
+///         RString::new(&greeting)
+///     }
+/// );
+///
+/// fn main() {
+///     # VM::init();
+///     Class::new("Greeter").define(|itself| {
+///         itself.def("anonymous_greeting", anonymous_greeting);
+///         itself.def("friendly_greeting", friendly_greeting);
+///     });
+/// }
+/// ```
+///
+/// Ruby:
+///
+/// ```ruby
+/// class Greeter
+///   def anonymous_greeting
+///     'Hello stranger!'
+///   end
+///
+///   def friendly_greeting(name)
+///     "Hello dear #{name}"
+///   end
+/// end
+/// ```
 #[macro_export]
+macro_rules! class {
+    ($class: ident) => {
+        pub struct $class {
+            value: Value,
+        }
+
+        impl From<Value> for $class {
+            fn from(value: Value) -> Self {
+                $class { value: value }
+            }
+        }
+
+        impl Object for $class {
+            fn value(&self) -> Value {
+                self.value
+            }
+        }
+    }
+}
 
 /// Creates callbacks for Ruby methods
 ///
@@ -50,6 +120,7 @@
 ///   end
 /// end
 /// ```
+#[macro_export]
 macro_rules! methods {
     (
         $itself_class: ty,
