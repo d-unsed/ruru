@@ -92,7 +92,7 @@ impl AnyObject {
     /// use ruru::traits::Object;
     /// # VM::init();
     ///
-    /// let fixnum_as_any_object = Fixnum::new(1).as_any_object();
+    /// let fixnum_as_any_object = Fixnum::new(1).to_any_object();
     ///
     /// let fixnum = fixnum_as_any_object.to::<Fixnum>();
     ///

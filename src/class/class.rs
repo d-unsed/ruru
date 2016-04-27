@@ -86,8 +86,8 @@ impl Class {
     ///
     /// // With arguments passing arguments to constructor
     /// let arguments = vec![
-    ///     Fixnum::new(1).as_any_object(),
-    ///     Fixnum::new(2).as_any_object()
+    ///     Fixnum::new(1).to_any_object(),
+    ///     Fixnum::new(2).to_any_object()
     /// ];
     ///
     /// Class::from_existing("Worker").new_instance(arguments);

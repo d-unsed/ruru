@@ -95,7 +95,7 @@ pub trait Object: From<Value> {
     /// # VM::init();
     ///
     /// let array = Array::new().push(Fixnum::new(1));
-    /// let args = vec![Fixnum::new(1).as_any_object()];
+    /// let args = vec![Fixnum::new(1).to_any_object()];
     /// let index =
     ///     array
     ///         .send("find_index", args)
@@ -104,7 +104,7 @@ pub trait Object: From<Value> {
     ///
     /// assert_eq!(index, 0);
     /// ```
-    fn as_any_object(&self) -> AnyObject {
+    fn to_any_object(&self) -> AnyObject {
         AnyObject::from(self.value())
     }
 
