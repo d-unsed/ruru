@@ -18,14 +18,18 @@ As simple as Ruby, as efficient as Rust.
 ### The famous `String#blank?` method
 
 ```rust
-#[no_mangle]
-pub extern fn is_blank(_: Argc, _: *const AnyObject, itself: RString) -> Boolean {
-    Boolean::new(itself.to_string().chars().all(|c| c.is_whitespace()))
-}
+methods!(
+   RString,
+   itself,
+
+   string_is_blank() -> Boolean {
+       Boolean::new(itself.to_string().chars().all(|c| c.is_whitespace()))
+   }
+);
 
 fn main() {
     Class::from_existing("String").define(|itself| {
-        itself.def("blank?", is_blank);
+        itself.def("blank?", string_is_blank);
     });
 }
 ```
@@ -51,23 +55,29 @@ You found it's very slow to call `pow_3` for big number and decided to replace t
 with Rust.
 
 ```rust
-#[no_mangle]
-pub extern fn pow_3(argc: Argc, argv: *const AnyObject, itself: Fixnum) -> Hash {
-    let argv = VM::parse_arguments(argc, argv);
-    let num = argv[0].to::<Fixnum>().to_i64();
+class!(Calculator);
 
-    let mut hash = Hash::new();
+methods!(
+    Calculator,
+    itself,
 
-    for i in (1..num + 1) {
-        hash.store(Fixnum::new(i), Fixnum::new(i.pow(3)));
+    pow_3(num: Fixnum) -> Hash {
+        let mut hash = Hash::new();
+
+        for i in 1..num.to_i64() + 1 {
+            hash.store(Fixnum::new(i), Fixnum::new(i.pow(3)));
+        }
+
+        hash
     }
+);
 
-    hash
+#[no_mangle]
+pub extern fn initialize_my_app() {
+    Class::new("Calculator").define(|itself| {
+        itself.def("pow_3", pow_3);
+    });
 }
-
-Class::new("Calculator").define(|itself| {
-    itself.def("pow_3", pow_3);
-});
 ```
 
 Ruby:
@@ -186,7 +196,7 @@ The second way requires additional steps (to be improved):
 
   library = Fiddle::dlopen('libmy_library.dylib')
 
-  Fiddle::Function.new(library['init_my_app'], [], Fiddle::TYPE_VOIDP).call
+  Fiddle::Function.new(library['initialize_my_app'], [], Fiddle::TYPE_VOIDP).call
   ```
 
 6. Ruru is ready :heart:
