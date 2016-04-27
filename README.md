@@ -102,6 +102,54 @@ Class::from_existing("Calculator").define(|itself| {
 });
 ```
 
+### Rack middleware
+
+Set `X-RUST` header to `Hello from Rust!`
+
+```rust
+class!(RustMiddleware);
+
+methods!(
+    RustMiddleware,
+    itself,
+
+    initialize(app: AnyObject) -> RustMiddleware {
+        itself.instance_variable_set("@app", app);
+
+        itself
+    }
+
+    call(env: Hash) -> Array {
+        let app_call = itself
+            .instance_variable_get("@app")
+            .send("call", vec![env.to_any_object()])
+            .to::<Array>();
+
+        let status = result.at(0);
+        let mut headers = result.at(1).clone().to::<Hash>();
+        let response = result.at(2);
+
+        headers.store(RString::new("X-RUST"), RString::new("Hello from Rust!"));
+
+        Array::new().push(status).push(headers).push(response)
+    }
+);
+
+#[no_mangle]
+pub extern fn initialize_middleware() {
+    Class::new("RustMiddleware").define(|itself| {
+        itself.def("initialize", initialize);
+        itself.def("call", call);
+    });
+}
+```
+
+Ruby:
+
+```
+use RustMiddleware
+```
+
 ### Calling Ruby code from Rust
 
 Getting an account balance of some `User` whose name is John and who is 18 or 19 years old.
@@ -126,7 +174,7 @@ conditions.store(
 );
 
 let account_balance =
-  Class::from_existing("User")
+    Class::from_existing("User")
         .send("find_by", vec![conditions.to_any_object()])
         .send("account_balance", vec![])
         .to::<Fixnum>()
