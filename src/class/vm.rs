@@ -54,7 +54,7 @@ impl VM {
     /// #[no_mangle]
     /// pub extern fn string_eq(argc: Argc, argv: *const AnyObject, itself: RString) -> Boolean {
     ///     let argv = VM::parse_arguments(argc, argv);
-    ///     let other_string = argv[0].as_string();
+    ///     let other_string = argv[0].to::<RString>();
     ///
     ///     Boolean::new(itself.to_string() == other_string.to_string())
     /// }

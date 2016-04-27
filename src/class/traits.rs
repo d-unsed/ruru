@@ -70,7 +70,7 @@ pub trait Object: From<Value> {
     /// let array_to_str =
     ///     array
     ///         .send("to_s", vec![])
-    ///         .as_string()
+    ///         .to::<RString>()
     ///         .to_string();
     ///
     /// assert_eq!(array_to_str, "[1]".to_string());
@@ -99,7 +99,7 @@ pub trait Object: From<Value> {
     /// let index =
     ///     array
     ///         .send("find_index", args)
-    ///         .as_fixnum()
+    ///         .to::<Fixnum>()
     ///         .to_i64();
     ///
     /// assert_eq!(index, 0);
@@ -128,14 +128,14 @@ pub trait Object: From<Value> {
     /// pub extern fn counter_increment(_: Argc,
     ///                                 _: *const AnyObject,
     ///                                 mut itself: AnyObject) -> AnyObject {
-    ///     let state = itself.instance_variable_get("@state").as_fixnum().to_i64();
+    ///     let state = itself.instance_variable_get("@state").to::<Fixnum>().to_i64();
     ///
     ///     itself.instance_variable_set("@state", Fixnum::new(state + 1))
     /// }
     ///
     /// #[no_mangle]
     /// pub extern fn counter_state(_: Argc, _: *const AnyObject, itself: AnyObject) -> Fixnum {
-    ///     itself.instance_variable_get("@state").as_fixnum()
+    ///     itself.instance_variable_get("@state").to::<Fixnum>()
     /// }
     ///
     /// fn main() {
@@ -148,7 +148,7 @@ pub trait Object: From<Value> {
     ///
     ///     counter.send("increment!", vec![]);
     ///
-    ///     let new_state = counter.send("state", vec![]).as_fixnum().to_i64();
+    ///     let new_state = counter.send("state", vec![]).to::<Fixnum>().to_i64();
     ///
     ///     assert_eq!(new_state, 1);
     /// }
@@ -179,14 +179,14 @@ pub trait Object: From<Value> {
     /// pub extern fn counter_increment(_: Argc,
     ///                                 _: *const AnyObject,
     ///                                 mut itself: AnyObject) -> AnyObject {
-    ///     let state = itself.instance_variable_get("@state").as_fixnum().to_i64();
+    ///     let state = itself.instance_variable_get("@state").to::<Fixnum>().to_i64();
     ///
     ///     itself.instance_variable_set("@state", Fixnum::new(state + 1))
     /// }
     ///
     /// #[no_mangle]
     /// pub extern fn counter_state(_: Argc, _: *const AnyObject, itself: AnyObject) -> Fixnum {
-    ///     itself.instance_variable_get("@state").as_fixnum()
+    ///     itself.instance_variable_get("@state").to::<Fixnum>()
     /// }
     ///
     /// fn main() {
@@ -199,7 +199,7 @@ pub trait Object: From<Value> {
     ///
     ///     counter.send("increment!", vec![]);
     ///
-    ///     let new_state = counter.send("state", vec![]).as_fixnum().to_i64();
+    ///     let new_state = counter.send("state", vec![]).to::<Fixnum>().to_i64();
     ///
     ///     assert_eq!(new_state, 1);
     /// }

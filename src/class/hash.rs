@@ -44,7 +44,7 @@ impl Hash {
     ///
     /// hash.store(Symbol::new("key"), Fixnum::new(1));
     ///
-    /// assert_eq!(hash.at(Symbol::new("key")).as_fixnum(), Fixnum::new(1));
+    /// assert_eq!(hash.at(Symbol::new("key")).to::<Fixnum>(), Fixnum::new(1));
     /// ```
     ///
     /// Ruby:
@@ -75,7 +75,7 @@ impl Hash {
     ///
     /// hash.store(Symbol::new("key"), Fixnum::new(1));
     ///
-    /// assert_eq!(hash.at(Symbol::new("key")).as_fixnum(), Fixnum::new(1));
+    /// assert_eq!(hash.at(Symbol::new("key")).to::<Fixnum>(), Fixnum::new(1));
     /// ```
     ///
     /// Ruby:

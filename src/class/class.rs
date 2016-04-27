@@ -231,7 +231,7 @@ impl Class {
     /// #[no_mangle]
     /// pub extern fn string_eq(argc: Argc, argv: *const AnyObject, itself: RString) -> Boolean {
     ///     let argv = VM::parse_arguments(argc, argv);
-    ///     let other_string = argv[0].as_string();
+    ///     let other_string = argv[0].to::<RString>();
     ///
     ///     Boolean::new(itself.to_string() == other_string.to_string())
     /// }
@@ -264,14 +264,14 @@ impl Class {
     ///
     /// ```no_run
     /// use ruru::types::Argc;
-    /// use ruru::{AnyObject, Class, Symbol, VM};
+    /// use ruru::{AnyObject, Class, RString, Symbol, VM};
     ///
     /// #[no_mangle]
     /// pub extern fn symbol_from_string(argc: Argc,
     ///                                  argv: *const AnyObject,
     ///                                  itself: Class) -> Symbol {
     ///     let argv = VM::parse_arguments(argc, argv);
-    ///     let string = argv[0].as_string();
+    ///     let string = argv[0].to::<RString>();
     ///
     ///     Symbol::new(&string.to_string())
     /// }

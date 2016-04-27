@@ -37,7 +37,7 @@ use super::traits::Object;
 /// # VM::init();
 ///
 /// let array = Array::new().push(Fixnum::new(1));
-/// let value = array.at(0).as_fixnum(); // `Array::at()` returns `AnyObject`
+/// let value = array.at(0).to::<Fixnum>(); // `Array::at()` returns `AnyObject`
 ///
 /// assert_eq!(value.to_i64(), 1);
 /// ```
@@ -53,7 +53,7 @@ use super::traits::Object;
 /// hash.store(Symbol::new("key"), Fixnum::new(1));
 ///
 /// // `Hash::at()` returns `AnyObject`
-/// let value = hash.at(Symbol::new("key")).as_fixnum();
+/// let value = hash.at(Symbol::new("key")).to::<Fixnum>();
 ///
 /// assert_eq!(value, Fixnum::new(1));
 /// ```
@@ -68,7 +68,7 @@ use super::traits::Object;
 /// pub extern fn string_eq(argc: Argc, argv: *const AnyObject, itself: RString) -> Boolean {
 ///     // `VM::parse_arguments()` returns `Vec<AnyObject>`
 ///     let argv = VM::parse_arguments(argc, argv);
-///     let other_string = argv[0].as_string();
+///     let other_string = argv[0].to::<RString>();
 ///
 ///     Boolean::new(itself.to_string() == other_string.to_string())
 /// }
@@ -83,39 +83,23 @@ pub struct AnyObject {
 }
 
 impl AnyObject {
-    /// Casts to `Array`.
-    pub fn as_array(&self) -> Array {
-        Array::from(self.value)
-    }
-
-    /// Casts to `Boolean`.
-    pub fn as_boolean(&self) -> Boolean {
-        Boolean::from(self.value)
-    }
-
-    /// Casts to `Class`.
-    pub fn as_class(&self) -> Class {
-        Class::from(self.value)
-    }
-
-    /// Casts to `Fixnum`.
-    pub fn as_fixnum(&self) -> Fixnum {
-        Fixnum::from(self.value)
-    }
-
-    /// Casts to `Hash`.
-    pub fn as_hash(&self) -> Hash {
-        Hash::from(self.value)
-    }
-
-    /// Casts to `String`.
-    pub fn as_string(&self) -> RString {
-        RString::from(self.value)
-    }
-
-    /// Casts to `Symbol`.
-    pub fn as_symbol(&self) -> Symbol {
-        Symbol::from(self.value)
+    /// Casts `AnyObject` to the specified Ruby type
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{AnyObject, Fixnum, VM};
+    /// use ruru::traits::Object;
+    /// # VM::init();
+    ///
+    /// let fixnum_as_any_object = Fixnum::new(1).as_any_object();
+    ///
+    /// let fixnum = fixnum_as_any_object.to::<Fixnum>();
+    ///
+    /// assert_eq!(fixnum.to_i64(), 1);
+    /// ```
+    pub fn to<T: Object>(&self) -> T {
+        T::from(self.value)
     }
 }
 

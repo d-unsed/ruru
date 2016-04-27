@@ -54,7 +54,7 @@ with Rust.
 #[no_mangle]
 pub extern fn pow_3(argc: Argc, argv: *const AnyObject, itself: Fixnum) -> Hash {
     let argv = VM::parse_arguments(argc, argv);
-    let num = argv[0].as_fixnum().to_i64();
+    let num = argv[0].to::<Fixnum>().to_i64();
 
     let mut hash = Hash::new();
 
@@ -119,7 +119,7 @@ let account_balance =
   Class::from_existing("User")
         .send("find_by", vec![conditions.as_any_object()])
         .send("account_balance", vec![])
-        .as_fixnum()
+        .to::<Fixnum>()
         .to_i64();
 ```
 

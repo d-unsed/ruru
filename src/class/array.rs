@@ -44,7 +44,7 @@ impl Array {
     ///
     /// let array = Array::new().push(Fixnum::new(1));
     ///
-    /// assert_eq!(array.at(0).as_fixnum(), Fixnum::new(1));
+    /// assert_eq!(array.at(0).to::<Fixnum>(), Fixnum::new(1));
     /// ```
     ///
     /// Ruby:
@@ -103,7 +103,7 @@ impl Array {
     ///
     /// array.push(Fixnum::new(1));
     ///
-    /// assert_eq!(array.at(0).as_fixnum(), Fixnum::new(1));
+    /// assert_eq!(array.at(0).to::<Fixnum>(), Fixnum::new(1));
     /// ```
     ///
     /// Ruby:
@@ -132,7 +132,7 @@ impl Array {
     ///
     /// array.store(0, Fixnum::new(2));
     ///
-    /// assert_eq!(array.at(0).as_fixnum(), Fixnum::new(2));
+    /// assert_eq!(array.at(0).to::<Fixnum>(), Fixnum::new(2));
     /// ```
     ///
     /// Ruby:
