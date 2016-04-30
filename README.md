@@ -125,9 +125,9 @@ methods!(
             .send("call", vec![env.to_any_object()])
             .to::<Array>();
 
-        let status = result.at(0);
-        let mut headers = result.at(1).clone().to::<Hash>();
-        let response = result.at(2);
+        let status = app_call.at(0);
+        let mut headers = app_call.at(1).clone().to::<Hash>();
+        let response = app_call.at(2);
 
         headers.store(RString::new("X-RUST"), RString::new("Hello from Rust!"));
 
