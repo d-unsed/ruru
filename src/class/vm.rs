@@ -1,6 +1,6 @@
 use std::slice;
 
-use binding::vm::init;
+use binding::vm::{init, require};
 use class::any_object::AnyObject;
 use types::Argc;
 
@@ -36,6 +36,20 @@ impl VM {
     /// ```
     pub fn init() {
         init();
+    }
+
+    /// Requires Ruby source file.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use ruru::VM;
+    /// # VM::init();
+    ///
+    /// VM::require("some_ruby_file");
+    /// ```
+    pub fn require(name: &str) {
+        require(name);
     }
 
     // TODO: Move to other struct
