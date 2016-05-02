@@ -8,8 +8,8 @@
 
 Have you ever considered rewriting some parts of your ~~slow~~ Ruby application?
 
-Just replace your Ruby application with Rust, method by method, class by class. It does not require
-to change interface of your classes or to change any other Ruby code.
+Just replace your Ruby application with Rust, method by method, class by class. It does not require you
+to change the interface of your classes or to change any other Ruby code.
 
 As simple as Ruby, as efficient as Rust.
 
@@ -51,7 +51,7 @@ end
 Calculator.new.pow_3(5) #=> { 1 => 1, 2 => 8, 3 => 27, 4 => 64, 5 => 125 }
 ```
 
-You found it's very slow to call `pow_3` for big number and decided to replace the whole class
+You have found that it's very slow to call `pow_3` for big numbers and decided to replace the whole class
 with Rust.
 
 ```rust
@@ -89,11 +89,11 @@ Ruby:
 Calculator.new.pow_3(5) #=> { 1 => 1, 2 => 8, 3 => 27, 4 => 64, 5 => 125 }
 ```
 
-So nothing has changed in the API of class thus no need to change code elsewhere in the app.
+Nothing has changed in the API of class, thus there is no need to change any code elsewhere in the app.
 
 ### Replacing only several methods instead of the whole class
 
-If the `Calculator` class from the example above has more methods Ruby methods, but we want to
+If the `Calculator` class from the example above has more Ruby methods, but we want to
 replace only `pow_3`, use `Class::from_existing()`
 
 ```rust
@@ -104,7 +104,7 @@ Class::from_existing("Calculator").define(|itself| {
 
 ### Rack middleware
 
-Set `X-RUST` header to `Hello from Rust!`
+Set the `X-RUST` header to `Hello from Rust!`
 
 ```rust
 class!(RustMiddleware);
@@ -184,24 +184,24 @@ let account_balance =
 Check out **[Documentation](http://d-unseductable.github.io/ruru/ruru/index.html)** for more
 examples!
 
-## ... and why **FFI** is not enough?
+## ... and why is **FFI** not enough?
 
  - No support of native Ruby types;
 
- - No way to create a standalone application to run Ruby VM separately;
+ - No way to create a standalone application to run the Ruby VM separately;
 
  - No way to call your Ruby code from Rust;
 
-## How to use?
+## How do I use it?
 
-Warning! The crate is WIP.
+Warning! The crate is a WIP.
 
 There are two ways of using Ruru:
 
  - Standalone application - Rust is run first as a compiled executable file and
    then it calls Ruby code (see docs for `VM::init()`)
 
- - Running Rust code from Ruby application
+ - Running Rust code from a Ruby application
 
 The second way requires additional steps (to be improved):
 
@@ -219,7 +219,7 @@ The second way requires additional steps (to be improved):
   ruru = ">= 0.5.0"
   ```
 
-3. Compile your library as `dylib`
+3. Compile your library as a `dylib`
 
   ```toml
   [lib]
@@ -237,7 +237,7 @@ The second way requires additional steps (to be improved):
   }
   ```
 
-5. Open the library and call function from Ruby
+5. Open the library and call the function from Ruby
 
   ```ruby
   require 'fiddle'
