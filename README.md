@@ -22,7 +22,7 @@ methods!(
    RString,
    itself,
 
-   string_is_blank() -> Boolean {
+   fn string_is_blank() -> Boolean {
        Boolean::new(itself.to_string().chars().all(|c| c.is_whitespace()))
    }
 );
@@ -61,7 +61,7 @@ methods!(
     Calculator,
     itself,
 
-    pow_3(num: Fixnum) -> Hash {
+    fn pow_3(num: Fixnum) -> Hash {
         let mut hash = Hash::new();
 
         for i in 1..num.to_i64() + 1 {
@@ -113,13 +113,13 @@ methods!(
     RustMiddleware,
     itself,
 
-    initialize(app: AnyObject) -> RustMiddleware {
+    fn initialize(app: AnyObject) -> RustMiddleware {
         itself.instance_variable_set("@app", app);
 
         itself
     }
 
-    call(env: Hash) -> Array {
+    fn call(env: Hash) -> Array {
         let app_call = itself
             .instance_variable_get("@app")
             .send("call", vec![env.to_any_object()])
