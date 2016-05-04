@@ -17,6 +17,8 @@ As simple as Ruby, as efficient as Rust.
 
 ### The famous `String#blank?` method
 
+The fast `String#blank?` implementation by Yehuda Katz
+
 ```rust
 methods!(
    RString,
@@ -32,6 +34,58 @@ fn main() {
         itself.def("blank?", string_is_blank);
     });
 }
+```
+
+### Simple Sidekiq-compatible server
+
+[Link to the repository](https://github.com/d-unseductable/rust_sidekiq)
+
+### Rack middleware
+
+Set the `X-RUST` header to `Hello from Rust!`
+
+```rust
+class!(RustMiddleware);
+
+methods!(
+    RustMiddleware,
+    itself,
+
+    fn initialize(app: AnyObject) -> RustMiddleware {
+        itself.instance_variable_set("@app", app);
+
+        itself
+    }
+
+    fn call(env: Hash) -> Array {
+        let app_call = itself
+            .instance_variable_get("@app")
+            .send("call", vec![env.to_any_object()])
+            .to::<Array>();
+
+        let status = app_call.at(0);
+        let mut headers = app_call.at(1).clone().to::<Hash>();
+        let response = app_call.at(2);
+
+        headers.store(RString::new("X-RUST"), RString::new("Hello from Rust!"));
+
+        Array::new().push(status).push(headers).push(response)
+    }
+);
+
+#[no_mangle]
+pub extern fn initialize_middleware() {
+    Class::new("RustMiddleware").define(|itself| {
+        itself.def("initialize", initialize);
+        itself.def("call", call);
+    });
+}
+```
+
+Ruby:
+
+```
+use RustMiddleware
 ```
 
 ### Defining a new class
@@ -100,54 +154,6 @@ replace only `pow_3`, use `Class::from_existing()`
 Class::from_existing("Calculator").define(|itself| {
     itself.def("pow_3", pow_3);
 });
-```
-
-### Rack middleware
-
-Set the `X-RUST` header to `Hello from Rust!`
-
-```rust
-class!(RustMiddleware);
-
-methods!(
-    RustMiddleware,
-    itself,
-
-    fn initialize(app: AnyObject) -> RustMiddleware {
-        itself.instance_variable_set("@app", app);
-
-        itself
-    }
-
-    fn call(env: Hash) -> Array {
-        let app_call = itself
-            .instance_variable_get("@app")
-            .send("call", vec![env.to_any_object()])
-            .to::<Array>();
-
-        let status = app_call.at(0);
-        let mut headers = app_call.at(1).clone().to::<Hash>();
-        let response = app_call.at(2);
-
-        headers.store(RString::new("X-RUST"), RString::new("Hello from Rust!"));
-
-        Array::new().push(status).push(headers).push(response)
-    }
-);
-
-#[no_mangle]
-pub extern fn initialize_middleware() {
-    Class::new("RustMiddleware").define(|itself| {
-        itself.def("initialize", initialize);
-        itself.def("call", call);
-    });
-}
-```
-
-Ruby:
-
-```
-use RustMiddleware
 ```
 
 ### Calling Ruby code from Rust
