@@ -13,4 +13,4 @@ license = "MIT"
 
 [dependencies]
 libc = "0.2.10"
-ruby-sys = { path = "./ruby-sys", version = "0.1.1" }
+ruby-sys = { path = "./ruby-sys", version = "^0.1.3" }
