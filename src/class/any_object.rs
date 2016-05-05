@@ -1,4 +1,5 @@
-use types::Value;
+use binding::util::get_type;
+use types::{Value, ValueType};
 
 use super::traits::Object;
 
@@ -92,6 +93,24 @@ impl AnyObject {
     /// ```
     pub fn to<T: Object>(&self) -> T {
         T::from(self.value)
+    }
+
+    /// Determines the value type of the object
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use ruru::{AnyObject, Fixnum, VM};
+    /// use ruru::traits::Object;
+    /// use ruru::types::ValueType;
+    /// # VM::init();
+    ///
+    /// let any_object = Fixnum::new(1).to_any_object();
+    ///
+    /// assert_eq!(any_object.get_type(), ValueType::Fixnum);
+    /// ```
+    pub fn get_type(&self) -> ValueType {
+        get_type(self.value())
     }
 }
 

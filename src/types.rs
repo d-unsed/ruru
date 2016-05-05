@@ -1,4 +1,5 @@
 use ruby_sys::types;
+pub use ruby_sys::types::ValueType;
 
 use class::any_object::AnyObject;
 
