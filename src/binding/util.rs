@@ -1,8 +1,9 @@
 use binding::global::rb_cObject;
 use types::{Argc, Id, Value};
 use ruby_sys::util::{rb_const_get, rb_funcallv, rb_intern};
-pub use ruby_sys::util::rb_type as get_type;
 use util::str_to_cstring;
+
+pub use ruby_sys::util::rb_type as get_type;
 
 pub fn get_constant(name: &str, _parent_object: Value) -> Value {
     let constant_id = internal_id(name);

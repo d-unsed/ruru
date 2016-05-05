@@ -107,9 +107,9 @@ impl AnyObject {
     ///
     /// let any_object = Fixnum::new(1).to_any_object();
     ///
-    /// assert_eq!(any_object.get_type(), ValueType::Fixnum);
+    /// assert_eq!(any_object.ty(), ValueType::Fixnum);
     /// ```
-    pub fn get_type(&self) -> ValueType {
+    pub fn ty(&self) -> ValueType {
         get_type(self.value())
     }
 }

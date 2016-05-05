@@ -27,29 +27,29 @@ pub enum RubySpecialConsts {
     SymbolFlag = 0x0c,
 }
 
-pub const SPECIAL_SHIFT: usize = 8;
+const SPECIAL_SHIFT: usize = 8;
 
-pub fn rb_value_is_fixnum(value: Value) -> bool {
+fn rb_value_is_fixnum(value: Value) -> bool {
     (value & (RubySpecialConsts::FixnumFlag as usize)) != 0
 }
 
-pub fn rb_value_is_flonum(value: Value) -> bool {
+fn rb_value_is_flonum(value: Value) -> bool {
     (value & (RubySpecialConsts::FlonumMask as usize)) == (RubySpecialConsts::FlonumFlag as usize)
 }
 
-pub fn rb_value_is_immediate(value: Value) -> bool {
+fn rb_value_is_immediate(value: Value) -> bool {
     (value & (RubySpecialConsts::ImmediateMask as usize)) != 0
 }
 
-pub fn rb_value_is_static_sym(value: Value) -> bool {
+fn rb_value_is_static_sym(value: Value) -> bool {
     (value & !((!0) << SPECIAL_SHIFT)) == (RubySpecialConsts::SymbolFlag as usize)
 }
 
-pub fn rb_test(value: Value) -> bool {
+fn rb_test(value: Value) -> bool {
     (value & !(RubySpecialConsts::Nil as usize)) != 0
 }
 
-pub fn rb_builtin_type(value: Value) -> ValueType {
+fn rb_builtin_type(value: Value) -> ValueType {
     unsafe {
         let basic: *const RBasic = mem::transmute(value);
         let masked = (*basic).flags & (ValueType::Mask as size_t);
