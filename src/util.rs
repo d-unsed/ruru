@@ -2,7 +2,7 @@ use std::ffi::{CStr, CString};
 
 use binding::global::RubySpecialConsts;
 use class::any_object::AnyObject;
-use types::{c_char, c_int, Value};
+use types::{c_char, c_int, InternalValue, Value};
 
 use class::traits::Object;
 
@@ -15,20 +15,12 @@ pub fn str_to_cstring(str: &str) -> CString {
 }
 
 pub fn bool_to_value(state: bool) -> Value {
-    let value = match state {
+    let internal_value = match state {
         false => RubySpecialConsts::False,
         true => RubySpecialConsts::True,
     };
 
-    value as Value
-}
-
-pub fn value_to_bool(value: Value) -> bool {
-    if value == (RubySpecialConsts::False as Value) {
-        false
-    } else {
-        true
-    }
+    Value::from(internal_value as InternalValue)
 }
 
 pub fn create_arguments(arguments: Vec<AnyObject>) -> (c_int, Vec<Value>) {

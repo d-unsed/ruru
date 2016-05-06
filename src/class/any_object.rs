@@ -1,5 +1,5 @@
-use binding::util::get_type;
-use types::{Value, ValueType};
+use binding::global::ValueType;
+use types::Value;
 
 use super::traits::Object;
 
@@ -110,7 +110,7 @@ impl AnyObject {
     /// assert_eq!(any_object.ty(), ValueType::Fixnum);
     /// ```
     pub fn ty(&self) -> ValueType {
-        get_type(self.value())
+        self.value().ty()
     }
 }
 
