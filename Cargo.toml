@@ -1,6 +1,6 @@
 [package]
 name = "ruru"
-version = "0.7.1"
+version = "0.7.2"
 authors = ["Dmitry Gritsay <unseductable@gmail.com>"]
 
 description = "Native Ruby extensions in Rust"
@@ -13,4 +13,4 @@ license = "MIT"
 
 [dependencies]
 libc = "0.2.10"
-ruby-sys = { path = "./ruby-sys", version = "^0.1.3" }
+ruby-sys = { path = "./ruby-sys", version = "0.1.4" }
