@@ -132,15 +132,16 @@ macro_rules! methods {
     ) => {
         $(
             #[no_mangle]
+            #[allow(unused_mut)]
             pub extern fn $method_name(argc: Argc,
                                        argv: *const AnyObject,
                                        mut $itself_name: $itself_class) -> $return_type {
-                let arguments = VM::parse_arguments(argc, argv);
-                let mut i = 0;
+                let _arguments = VM::parse_arguments(argc, argv);
+                let mut _i = 0;
 
                 $(
-                    let $arg_name = arguments[i].to::<$arg_type>();
-                    i += 1;
+                    let $arg_name = _arguments[_i].to::<$arg_type>();
+                    _i += 1;
                 )*
 
                 $body
