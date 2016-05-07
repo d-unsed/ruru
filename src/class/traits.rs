@@ -83,6 +83,29 @@ pub trait Object: From<Value> {
         AnyObject::from(result)
     }
 
+    /// Checks weather the object is `nil`
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Hash, NilClass, VM};
+    /// use ruru::traits::Object;
+    /// # VM::init();
+    ///
+    /// assert!(NilClass::new().is_nil());
+    /// assert!(!Hash::new().is_nil());
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// nil.nil? == true
+    /// {}.nil? == false
+    /// ```
+    fn is_nil(&self) -> bool {
+        self.value().is_nil()
+    }
+
     /// Converts struct to `AnyObject`
     ///
     /// See docs for `AnyObject` class for more details.
