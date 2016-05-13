@@ -11,6 +11,8 @@ readme = "README.md"
 keywords = ["ruby", "ruru"]
 license = "MIT"
 
+build = "build.rs"
+
 [dependencies]
 libc = "0.2.10"
-ruby-sys = "0.1.5"
+ruby-sys = "0.2.1"
