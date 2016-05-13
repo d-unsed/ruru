@@ -14,6 +14,10 @@ pub fn join(array: Value, separator: Value) -> Value {
     unsafe { array::rb_ary_join(array, separator) }
 }
 
+pub fn len(array: Value) -> i64 {
+    unsafe { array::rb_ary_len(array) as i64 }
+}
+
 pub fn push(array: Value, item: Value) -> Value {
     unsafe { array::rb_ary_push(array, item) }
 }
