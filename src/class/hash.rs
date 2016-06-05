@@ -32,7 +32,7 @@ impl Hash {
         Hash { value: new() }
     }
 
-    /// Retrieves an `AnyObject` from element stored at `key` key.
+    /// Retrieves an `Option` with an `AnyObject` from element stored at `key` key.
     ///
     /// # Examples
     ///
@@ -44,7 +44,7 @@ impl Hash {
     ///
     /// hash.store(Symbol::new("key"), Fixnum::new(1));
     ///
-    /// assert_eq!(hash.at(Symbol::new("key")).to::<Fixnum>(), Fixnum::new(1));
+    /// assert_eq!(hash.at(Symbol::new("key")).unwrap().to::<Fixnum>(), Fixnum::new(1));
     /// ```
     ///
     /// Ruby:
@@ -55,10 +55,13 @@ impl Hash {
     ///
     /// hash[:key] == 1
     /// ```
-    pub fn at<T: Object>(&self, key: T) -> AnyObject {
-        let value = aref(self.value(), key.value());
-
-        AnyObject::from(value)
+    pub fn at<T: Object>(&self, key: T) -> Option<AnyObject> {
+        let value = AnyObject::from(aref(self.value(), key.value()));
+        if value.value().is_nil() || value.value().is_undef(){
+            None
+        } else {
+            Some(value)
+        }
     }
 
     /// Associates the `value` with the `key`.
@@ -75,7 +78,7 @@ impl Hash {
     ///
     /// hash.store(Symbol::new("key"), Fixnum::new(1));
     ///
-    /// assert_eq!(hash.at(Symbol::new("key")).to::<Fixnum>(), Fixnum::new(1));
+    /// assert_eq!(hash.at(Symbol::new("key")).unwrap().to::<Fixnum>(), Fixnum::new(1));
     /// ```
     ///
     /// Ruby:
