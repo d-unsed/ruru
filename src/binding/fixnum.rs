@@ -6,5 +6,6 @@ pub fn int_to_num(num: i64) -> Value {
 }
 
 pub fn num_to_int(num: Value) -> i64 {
-    unsafe { rb_num2int(num) }
+    unsafe { rb_num2int(num) as i64 }
+
 }
