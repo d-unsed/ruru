@@ -13,4 +13,4 @@ license = "MIT"
 
 [dependencies]
 libc = "0.2.10"
-ruby-sys = "0.2.2"
+ruby-sys = "0.2.3"
