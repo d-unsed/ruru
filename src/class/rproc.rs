@@ -21,8 +21,7 @@ impl Proc {
     /// #[macro_use]
     /// extern crate ruru;
     ///
-    /// use ruru::{AnyObject, Class, Proc, RString, VM};
-    /// use ruru::types::{Argc, Value};
+    /// use ruru::{Class, Proc, RString};
     /// use ruru::traits::Object;
     ///
     /// class!(Greeter);

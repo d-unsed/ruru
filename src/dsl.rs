@@ -6,8 +6,7 @@
 /// #[macro_use]
 /// extern crate ruru;
 ///
-/// use ruru::{AnyObject, Class, RString, VM};
-/// use ruru::types::{Argc, Value};
+/// use ruru::{Class, RString, VM};
 /// use ruru::traits::Object;
 ///
 /// class!(Greeter);
@@ -53,17 +52,17 @@
 macro_rules! class {
     ($class: ident) => {
         pub struct $class {
-            value: Value,
+            value: $crate::types::Value,
         }
 
-        impl From<Value> for $class {
-            fn from(value: Value) -> Self {
+        impl From<$crate::types::Value> for $class {
+            fn from(value: $crate::types::Value) -> Self {
                 $class { value: value }
             }
         }
 
         impl Object for $class {
-            fn value(&self) -> Value {
+            fn value(&self) -> $crate::types::Value {
                 self.value
             }
         }
@@ -78,8 +77,7 @@ macro_rules! class {
 /// #[macro_use]
 /// extern crate ruru;
 ///
-/// use ruru::{AnyObject, Boolean, Class, Fixnum, RString, VM};
-/// use ruru::types::Argc;
+/// use ruru::{Boolean, Class, Fixnum, RString, VM};
 /// use ruru::traits::Object;
 ///
 /// // Creates `string_is_blank` and `string_length_equals` functions
@@ -133,10 +131,10 @@ macro_rules! methods {
         $(
             #[no_mangle]
             #[allow(unused_mut)]
-            pub extern fn $method_name(argc: Argc,
-                                       argv: *const AnyObject,
+            pub extern fn $method_name(argc: $crate::types::Argc,
+                                       argv: *const $crate::AnyObject,
                                        mut $itself_name: $itself_class) -> $return_type {
-                let _arguments = VM::parse_arguments(argc, argv);
+                let _arguments = $crate::VM::parse_arguments(argc, argv);
                 let mut _i = 0;
 
                 $(
