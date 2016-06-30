@@ -1,7 +1,8 @@
 use std::slice;
 
-use binding::vm::{init, require};
+use binding::vm::{block_proc, init, require};
 use class::any_object::AnyObject;
+use class::rproc::Proc;
 use types::Argc;
 
 /// Virtual Machine and helpers
@@ -50,6 +51,58 @@ impl VM {
     /// ```
     pub fn require(name: &str) {
         require(name);
+    }
+
+    /// Converts a block given to current method to a `Proc`
+    ///
+    /// It works similarly to `def method(&block)` which converts block to `Proc`
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// #[macro_use]
+    /// extern crate ruru;
+    ///
+    /// use ruru::{Class, Proc, RString, VM};
+    /// use ruru::traits::Object;
+    ///
+    /// class!(Greeter);
+    ///
+    /// methods!(
+    ///     Greeter,
+    ///     itself,
+    ///
+    ///     fn greet_rust_with() -> RString {
+    ///         let greeting_template = VM::block_proc();
+    ///         let name = RString::new("Rust").to_any_object();
+    ///
+    ///         greeting_template.call(vec![name]).to::<RString>()
+    ///     }
+    /// );
+    ///
+    /// fn main() {
+    ///     Class::new("Greeter").define(|itself| {
+    ///         itself.def_self("greet_rust_with", greet_rust_with);
+    ///     });
+    /// }
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class Greeter
+    ///   def self.greet_rust_with(greeting_template)
+    ///     greeting_template.call('Rust')
+    ///   end
+    /// end
+    ///
+    /// Greeter.greet_rust_with do |name|
+    ///   "Hello, #{name}!"
+    /// end
+    /// # => "Hello, Rust!"
+    /// ```
+    pub fn block_proc() -> Proc {
+        Proc::from(block_proc())
     }
 
     // TODO: Move to other struct
