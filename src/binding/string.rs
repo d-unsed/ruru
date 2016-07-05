@@ -26,3 +26,7 @@ pub fn from_value_unchecked(value: Value) -> String {
         String::from_utf8_unchecked(vec)
     }
 }
+
+pub fn bytesize(value: Value) -> i64 {
+    unsafe { rb_str_len(value) }
+}

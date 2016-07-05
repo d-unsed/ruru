@@ -1,6 +1,6 @@
 use std::convert::From;
 
-use binding::string::{from_value, from_value_unchecked, new};
+use binding::string::{bytesize, from_value, from_value_unchecked, new};
 use types::Value;
 
 use super::traits::Object;
@@ -85,6 +85,34 @@ impl RString {
     /// ```
     pub fn to_string_unchecked(&self) -> String {
         from_value_unchecked(self.value)
+    }
+
+    /// Returns the length of the string in bytes
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{RString, VM};
+    /// # VM::init();
+    ///
+    /// let string = RString::new("Hello, World!");
+    /// let utf8_string = RString::new("⓯");
+    ///
+    /// assert_eq!(string.bytesize(), 13);
+    /// assert_eq!(utf8_string.bytesize(), 3);
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// string = 'Hello, World!'
+    /// utf8_string = '⓯'
+    ///
+    /// string.bytesize == 13
+    /// utf8_string.bytesize == 3
+    /// ```
+    pub fn bytesize(&self) -> i64 {
+        bytesize(self.value)
     }
 }
 
