@@ -7,7 +7,6 @@
 /// extern crate ruru;
 ///
 /// use ruru::{Class, RString, VM};
-/// use ruru::traits::Object;
 ///
 /// class!(Greeter);
 ///
@@ -61,7 +60,7 @@ macro_rules! class {
             }
         }
 
-        impl Object for $class {
+        impl $crate::traits::Object for $class {
             fn value(&self) -> $crate::types::Value {
                 self.value
             }
@@ -78,7 +77,6 @@ macro_rules! class {
 /// extern crate ruru;
 ///
 /// use ruru::{Boolean, Class, Fixnum, RString, VM};
-/// use ruru::traits::Object;
 ///
 /// // Creates `string_is_blank` and `string_length_equals` functions
 /// methods!(
