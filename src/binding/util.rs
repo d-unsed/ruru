@@ -1,20 +1,24 @@
+use ruby_sys::util as ruby_sys_util;
+
+use binding::util as binding_util;
 use binding::global::rb_cObject;
 use types::{Argc, Id, Value};
-use ruby_sys::util::{rb_const_get, rb_funcallv, rb_intern};
-use util::str_to_cstring;
+use util;
 
 pub fn get_constant(name: &str, _parent_object: Value) -> Value {
-    let constant_id = internal_id(name);
+    let constant_id = binding_util::internal_id(name);
 
-    unsafe { rb_const_get(rb_cObject, constant_id) }
+    unsafe { ruby_sys_util::rb_const_get(rb_cObject, constant_id) }
 }
 
 pub fn internal_id(string: &str) -> Id {
-    unsafe { rb_intern(str_to_cstring(string).as_ptr()) }
+    let str = util::str_to_cstring(string).as_ptr();
+
+    unsafe { ruby_sys_util::rb_intern(str) }
 }
 
 pub fn call_method(receiver: Value, method: &str, argc: Argc, argv: *const Value) -> Value {
-    let method_id = internal_id(method);
+    let method_id = binding_util::internal_id(method);
 
-    unsafe { rb_funcallv(receiver, method_id, argc, argv) }
+    unsafe { ruby_sys_util::rb_funcallv(receiver, method_id, argc, argv) }
 }

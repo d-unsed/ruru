@@ -1,19 +1,22 @@
-use ruby_sys::vm::{rb_block_proc, rb_require, ruby_init};
+use ruby_sys::vm;
+
 use types::Value;
-use util::str_to_cstring;
+use util;
 
 pub fn block_proc() -> Value {
-    unsafe { rb_block_proc() }
+    unsafe { vm::rb_block_proc() }
 }
 
 pub fn init() {
     unsafe {
-        ruby_init();
+        vm::ruby_init();
     }
 }
 
 pub fn require(name: &str) {
+    let name = util::str_to_cstring(name).as_ptr();
+
     unsafe {
-        rb_require(str_to_cstring(name).as_ptr());
+        vm::rb_require(name);
     }
 }

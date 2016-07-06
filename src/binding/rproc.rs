@@ -1,12 +1,13 @@
-use types::{Argc, InternalValue, Value};
+use ruby_sys::rproc;
+
 use binding::global::RubySpecialConsts;
-use ruby_sys::rproc::rb_proc_call_with_block;
+use types::{Argc, InternalValue, Value};
 
 pub fn call(rproc: Value, argc: Argc, argv: *const Value) -> Value {
     unsafe {
-        rb_proc_call_with_block(rproc,
-                                argc,
-                                argv,
-                                Value::from(RubySpecialConsts::Nil as InternalValue))
+        rproc::rb_proc_call_with_block(rproc,
+                                       argc,
+                                       argv,
+                                       Value::from(RubySpecialConsts::Nil as InternalValue))
     }
 }

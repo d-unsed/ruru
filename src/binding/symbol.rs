@@ -1,19 +1,18 @@
+use ruby_sys::symbol;
+
 use types::{Id, Value};
-use ruby_sys::symbol::{rb_id2name, rb_id2sym, rb_sym2id};
-use util::cstr_as_string;
+use util;
 
 pub fn id_to_sym(id: Id) -> Value {
-    unsafe { rb_id2sym(id) }
+    unsafe { symbol::rb_id2sym(id) }
 }
 
 pub fn id_to_name(id: Id) -> String {
-    unsafe {
-        let str = rb_id2name(id);
+    let str = unsafe { symbol::rb_id2name(id) };
 
-        cstr_as_string(str)
-    }
+    util::cstr_as_string(str)
 }
 
 pub fn sym_to_id(sym: Value) -> Id {
-    unsafe { rb_sym2id(sym) }
+    unsafe { symbol::rb_sym2id(sym) }
 }
