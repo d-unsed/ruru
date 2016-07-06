@@ -30,7 +30,7 @@ use super::traits::Object;
 /// # VM::init();
 ///
 /// let array = Array::new().push(Fixnum::new(1));
-/// let value = array.at(0).to::<Fixnum>(); // `Array::at()` returns `AnyObject`
+/// let value = array.at(0).unwrap().to::<Fixnum>(); // `Array::at()` returns `AnyObject`
 ///
 /// assert_eq!(value.to_i64(), 1);
 /// ```
@@ -46,7 +46,7 @@ use super::traits::Object;
 /// hash.store(Symbol::new("key"), Fixnum::new(1));
 ///
 /// // `Hash::at()` returns `AnyObject`
-/// let value = hash.at(Symbol::new("key")).to::<Fixnum>();
+/// let value = hash.at(Symbol::new("key")).unwrap().to::<Fixnum>();
 ///
 /// assert_eq!(value, Fixnum::new(1));
 /// ```

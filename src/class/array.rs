@@ -34,7 +34,7 @@ impl Array {
         Array { value: new() }
     }
 
-    /// Retrieves an `AnyObject` from element at `index` position.
+    /// Retrieves an `Option` with an `AnyObject` from element at `index` position.
     ///
     /// # Examples
     ///
@@ -44,7 +44,7 @@ impl Array {
     ///
     /// let array = Array::new().push(Fixnum::new(1));
     ///
-    /// assert_eq!(array.at(0).to::<Fixnum>(), Fixnum::new(1));
+    /// assert_eq!(array.at(0).unwrap().to::<Fixnum>(), Fixnum::new(1));
     /// ```
     ///
     /// Ruby:
@@ -54,10 +54,14 @@ impl Array {
     ///
     /// array[0] == 1
     /// ```
-    pub fn at(&self, index: i64) -> AnyObject {
-        let value = entry(self.value(), index);
+    pub fn at(&self, index: i64) -> Option<AnyObject> {
+        let value = AnyObject::from(entry(self.value(), index));
 
-        AnyObject::from(value)
+        if value.value().is_nil() || value.value().is_undef(){
+            None
+        } else {
+            Some(value)
+        }
     }
 
     /// Joins all elements of `Array` to Ruby `String`.
@@ -103,7 +107,7 @@ impl Array {
     ///
     /// array.push(Fixnum::new(1));
     ///
-    /// assert_eq!(array.at(0).to::<Fixnum>(), Fixnum::new(1));
+    /// assert_eq!(array.at(0).unwrap().to::<Fixnum>(), Fixnum::new(1));
     /// ```
     ///
     /// Ruby:
@@ -132,7 +136,7 @@ impl Array {
     ///
     /// array.store(0, Fixnum::new(2));
     ///
-    /// assert_eq!(array.at(0).to::<Fixnum>(), Fixnum::new(2));
+    /// assert_eq!(array.at(0).unwrap().to::<Fixnum>(), Fixnum::new(2));
     /// ```
     ///
     /// Ruby:
