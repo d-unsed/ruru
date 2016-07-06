@@ -1,7 +1,7 @@
 use std::convert::From;
 
+use binding::fixnum;
 use types::Value;
-use binding::fixnum::{int_to_num, num_to_int};
 
 use super::traits::Object;
 
@@ -31,7 +31,7 @@ impl Fixnum {
     /// 1 == 1
     /// ```
     pub fn new(num: i64) -> Self {
-        Fixnum { value: int_to_num(num) }
+        Fixnum { value: fixnum::int_to_num(num) }
     }
 
     /// Retrieves an `i64` value from `Fixnum`.
@@ -53,7 +53,7 @@ impl Fixnum {
     /// 1 == 1
     /// ```
     pub fn to_i64(&self) -> i64 {
-        num_to_int(self.value)
+        fixnum::num_to_int(self.value)
     }
 }
 

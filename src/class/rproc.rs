@@ -1,8 +1,8 @@
 use std::convert::From;
 
-use binding::rproc::call;
+use binding::rproc;
 use types::Value;
-use util::create_arguments;
+use util;
 
 use super::any_object::AnyObject;
 use super::traits::Object;
@@ -58,10 +58,10 @@ impl Proc {
     /// Greeter.greet_rust_with(greeting_template) # => "Hello, Rust!"
     /// ```
     pub fn call(&self, arguments: Vec<AnyObject>) -> AnyObject {
-        let (argc, argv) = create_arguments(arguments);
-        let value = call(self.value, argc, argv.as_ptr());
+        let (argc, argv) = util::create_arguments(arguments);
+        let result = rproc::call(self.value, argc, argv.as_ptr());
 
-        AnyObject::from(value)
+        AnyObject::from(result)
     }
 }
 

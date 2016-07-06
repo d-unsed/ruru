@@ -1,6 +1,6 @@
 use std::convert::From;
 
-use binding::string::{bytesize, from_value, from_value_unchecked, new};
+use binding::string;
 use types::Value;
 
 use super::traits::Object;
@@ -32,7 +32,7 @@ impl RString {
     /// str == 'Hello, World!'
     /// ```
     pub fn new(string: &str) -> Self {
-        RString { value: new(string) }
+        RString { value: string::new(string) }
     }
 
     /// Retrieves underlying Rust `String` from Ruby `String` object.
@@ -56,7 +56,7 @@ impl RString {
     /// str == 'Hello, World!'
     /// ```
     pub fn to_string(&self) -> String {
-        from_value(self.value)
+        string::from_value(self.value)
     }
 
     /// Retrieves underlying Rust `String` from Ruby `String` object.
@@ -84,7 +84,7 @@ impl RString {
     /// str == 'Hello,\0World!'
     /// ```
     pub fn to_string_unchecked(&self) -> String {
-        from_value_unchecked(self.value)
+        string::from_value_unchecked(self.value)
     }
 
     /// Returns the length of the string in bytes
@@ -112,7 +112,7 @@ impl RString {
     /// utf8_string.bytesize == 3
     /// ```
     pub fn bytesize(&self) -> i64 {
-        bytesize(self.value)
+        string::bytesize(self.value)
     }
 }
 

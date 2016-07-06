@@ -1,7 +1,7 @@
 use std::convert::From;
 
-use binding::symbol::{id_to_name, id_to_sym, sym_to_id};
-use binding::util::internal_id;
+use binding::symbol;
+use binding::util;
 use types::Value;
 
 use super::traits::Object;
@@ -34,7 +34,9 @@ impl Symbol {
     /// sym.to_s == 'hello'
     /// ```
     pub fn new(string: &str) -> Self {
-        Symbol { value: id_to_sym(internal_id(string)) }
+        let id = util::internal_id(string);
+
+        Symbol { value: symbol::id_to_sym(id) }
     }
 
     /// Retrieves the Rust `String` corresponding to `Symbol` object (Ruby `Symbol#to_s`).
@@ -58,7 +60,9 @@ impl Symbol {
     /// sym.to_s == 'hello'
     /// ```
     pub fn to_string(&self) -> String {
-        id_to_name(sym_to_id(self.value()))
+        let id = symbol::sym_to_id(self.value());
+
+        symbol::id_to_name(id)
     }
 }
 

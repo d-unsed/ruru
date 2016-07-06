@@ -1,13 +1,14 @@
 use std::convert::From;
 
-use binding::class::{define_class, new_instance, define_method, define_singleton_method};
+use binding::class;
 use binding::global::rb_cObject;
-use binding::util::get_constant;
+use binding::util as binding_util;
 use types::{Callback, Value};
-use util::create_arguments;
+use util;
 
 use super::any_object::AnyObject;
 use super::traits::Object;
+
 
 /// `Class`
 #[derive(Debug, PartialEq)]
@@ -41,7 +42,7 @@ impl Class {
     /// Hello = Class.new
     /// ```
     pub fn new(name: &str) -> Self {
-        Class { value: define_class(name, rb_cObject) }
+        Class { value: class::define_class(name, rb_cObject) }
     }
 
     // TODO: replace rb_cObject with optional class
@@ -68,7 +69,7 @@ impl Class {
     /// Object.const_get('Hello')
     /// ```
     pub fn from_existing(name: &str) -> Self {
-        Class { value: get_constant(name, rb_cObject) }
+        Class { value: binding_util::get_constant(name, rb_cObject) }
     }
 
     /// Creates a new instance of `Class`
@@ -101,8 +102,8 @@ impl Class {
     /// Worker.new(1, 2)
     /// ```
     pub fn new_instance(&self, arguments: Vec<AnyObject>) -> AnyObject {
-        let (argc, argv) = create_arguments(arguments);
-        let instance = new_instance(self.value(), argc, argv.as_ptr());
+        let (argc, argv) = util::create_arguments(arguments);
+        let instance = class::new_instance(self.value(), argc, argv.as_ptr());
 
         AnyObject::from(instance)
     }
@@ -252,7 +253,7 @@ impl Class {
     /// end
     /// ```
     pub fn define_method<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
-        define_method(self.value, name, callback);
+        class::define_method(self.value, name, callback);
     }
 
     /// Defines a class method for given class.
@@ -295,7 +296,7 @@ impl Class {
     pub fn define_singleton_method<I: Object, O: Object>(&mut self,
                                                          name: &str,
                                                          callback: Callback<I, O>) {
-        define_singleton_method(self.value, name, callback);
+        class::define_singleton_method(self.value, name, callback);
     }
 
     /// An alias for `define_method` (similar to Ruby syntax `def some_method`).

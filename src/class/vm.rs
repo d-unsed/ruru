@@ -1,6 +1,6 @@
 use std::slice;
 
-use binding::vm::{block_proc, init, require};
+use binding::vm;
 use class::any_object::AnyObject;
 use class::rproc::Proc;
 use types::Argc;
@@ -36,7 +36,7 @@ impl VM {
     /// Class::new("SomeClass"); // etc
     /// ```
     pub fn init() {
-        init();
+        vm::init();
     }
 
     /// Requires Ruby source file.
@@ -50,7 +50,7 @@ impl VM {
     /// VM::require("some_ruby_file");
     /// ```
     pub fn require(name: &str) {
-        require(name);
+        vm::require(name);
     }
 
     /// Converts a block given to current method to a `Proc`
@@ -102,7 +102,7 @@ impl VM {
     /// # => "Hello, Rust!"
     /// ```
     pub fn block_proc() -> Proc {
-        Proc::from(block_proc())
+        Proc::from(vm::block_proc())
     }
 
     // TODO: Move to other struct

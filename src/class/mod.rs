@@ -7,7 +7,6 @@ pub mod hash;
 pub mod nil_class;
 pub mod rproc;
 pub mod string;
+pub mod traits;
 pub mod symbol;
 pub mod vm;
-
-pub mod traits;

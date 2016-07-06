@@ -1,7 +1,7 @@
 use std::convert::From;
 
 use types::Value;
-use util::bool_to_value;
+use util;
 
 use super::traits::Object;
 
@@ -28,7 +28,7 @@ impl Boolean {
     /// true == true
     /// ```
     pub fn new(state: bool) -> Self {
-        Boolean { value: bool_to_value(state) }
+        Boolean { value: util::bool_to_value(state) }
     }
 
     /// Retrieves a `bool` value from `Boolean`.

@@ -1,9 +1,9 @@
 use std::convert::From;
 
-use binding::class::{instance_variable_get, instance_variable_set, object_class};
-use binding::util::call_method;
+use binding::class;
+use binding::util as binding_util;
 use types::Value;
-use util::create_arguments;
+use util;
 
 use super::any_object::AnyObject;
 use super::class::Class;
@@ -52,7 +52,7 @@ pub trait Object: From<Value> {
     /// assert_eq!(Array::new().class(), Array::new().class());
     /// ```
     fn class(&self) -> Class {
-        let class = object_class(self.value());
+        let class = class::object_class(self.value());
 
         Class::from(class)
     }
@@ -76,9 +76,9 @@ pub trait Object: From<Value> {
     /// assert_eq!(array_to_str, "[1]".to_string());
     /// ```
     fn send(&self, method: &str, arguments: Vec<AnyObject>) -> AnyObject {
-        let (argc, argv) = create_arguments(arguments);
+        let (argc, argv) = util::create_arguments(arguments);
 
-        let result = call_method(self.value(), method, argc, argv.as_ptr());
+        let result = binding_util::call_method(self.value(), method, argc, argv.as_ptr());
 
         AnyObject::from(result)
     }
@@ -177,7 +177,7 @@ pub trait Object: From<Value> {
     /// }
     /// ```
     fn instance_variable_get(&self, variable: &str) -> AnyObject {
-        let result = instance_variable_get(self.value(), variable);
+        let result = class::instance_variable_get(self.value(), variable);
 
         AnyObject::from(result)
     }
@@ -228,7 +228,7 @@ pub trait Object: From<Value> {
     /// }
     /// ```
     fn instance_variable_set<T: Object>(&mut self, variable: &str, value: T) -> AnyObject {
-        let result = instance_variable_set(self.value(), variable, value.value());
+        let result = class::instance_variable_set(self.value(), variable, value.value());
 
         AnyObject::from(result)
     }

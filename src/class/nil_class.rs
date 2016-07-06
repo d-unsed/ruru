@@ -2,6 +2,7 @@ use std::convert::From;
 
 use binding::global::RubySpecialConsts;
 use types::{InternalValue, Value};
+
 use super::traits::Object;
 
 /// `NilClass`
@@ -28,8 +29,7 @@ impl NilClass {
     /// nil.nil? == true
     /// ```
     pub fn new() -> Self {
-        Self::from(Value::from(RubySpecialConsts::Nil as InternalValue))
-        // NilClass { value: Value::from(RubySpecialConsts::Nil as InternalValue) }
+        NilClass { value: Value::from(RubySpecialConsts::Nil as InternalValue) }
     }
 }
 

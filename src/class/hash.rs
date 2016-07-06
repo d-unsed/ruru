@@ -1,6 +1,6 @@
 use std::convert::From;
 
-use binding::hash::{aset, aref, new};
+use binding::hash;
 use types::Value;
 
 use super::any_object::AnyObject;
@@ -29,7 +29,7 @@ impl Hash {
     /// {}
     /// ```
     pub fn new() -> Self {
-        Hash { value: new() }
+        Hash { value: hash::new() }
     }
 
     /// Retrieves an `AnyObject` from element stored at `key` key.
@@ -56,9 +56,9 @@ impl Hash {
     /// hash[:key] == 1
     /// ```
     pub fn at<T: Object>(&self, key: T) -> AnyObject {
-        let value = aref(self.value(), key.value());
+        let result = hash::aref(self.value(), key.value());
 
-        AnyObject::from(value)
+        AnyObject::from(result)
     }
 
     /// Associates the `value` with the `key`.
@@ -87,9 +87,9 @@ impl Hash {
     /// hash[:key] == 1
     /// ```
     pub fn store<K: Object, V: Object>(&mut self, key: K, value: V) -> AnyObject {
-        let value = aset(self.value(), key.value(), value.value());
+        let result = hash::aset(self.value(), key.value(), value.value());
 
-        AnyObject::from(value)
+        AnyObject::from(result)
     }
 }
 

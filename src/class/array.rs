@@ -1,11 +1,10 @@
 use std::convert::From;
 
-use binding::array::{entry, join, new, push, store};
+use binding::array;
 use types::Value;
 
 use super::any_object::AnyObject;
 use super::string::RString;
-
 use super::traits::Object;
 
 /// `Array`
@@ -31,7 +30,7 @@ impl Array {
     /// []
     /// ```
     pub fn new() -> Self {
-        Array { value: new() }
+        Array { value: array::new() }
     }
 
     /// Retrieves an `AnyObject` from element at `index` position.
@@ -55,9 +54,9 @@ impl Array {
     /// array[0] == 1
     /// ```
     pub fn at(&self, index: i64) -> AnyObject {
-        let value = entry(self.value(), index);
+        let result = array::entry(self.value(), index);
 
-        AnyObject::from(value)
+        AnyObject::from(result)
     }
 
     /// Joins all elements of `Array` to Ruby `String`.
@@ -86,9 +85,9 @@ impl Array {
     /// array.join(', ') == 'Hello, World!'
     /// ```
     pub fn join(&self, separator: RString) -> RString {
-        let value = join(self.value(), separator.value());
+        let result = array::join(self.value(), separator.value());
 
-        RString::from(value)
+        RString::from(result)
     }
 
     /// Pushes an object to `Array`.
@@ -115,9 +114,9 @@ impl Array {
     /// array[0] == 1
     /// ```
     pub fn push<T: Object>(&mut self, item: T) -> Self {
-        let value = push(self.value(), item.value());
+        let result = array::push(self.value(), item.value());
 
-        Array::from(value)
+        Array::from(result)
     }
 
     /// Stores an object at `index` position.
@@ -144,9 +143,9 @@ impl Array {
     /// array[0] == 2
     /// ```
     pub fn store<T: Object>(&mut self, index: i64, item: T) -> AnyObject {
-        let value = store(self.value(), index, item.value());
+        let result = array::store(self.value(), index, item.value());
 
-        AnyObject::from(value)
+        AnyObject::from(result)
     }
 }
 
