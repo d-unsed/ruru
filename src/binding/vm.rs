@@ -7,9 +7,13 @@ pub fn block_proc() -> Value {
 }
 
 pub fn init() {
-    unsafe { ruby_init(); }
+    unsafe {
+        ruby_init();
+    }
 }
 
 pub fn require(name: &str) {
-    unsafe { rb_require(str_to_cstring(name).as_ptr()); }
+    unsafe {
+        rb_require(str_to_cstring(name).as_ptr());
+    }
 }

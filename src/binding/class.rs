@@ -27,7 +27,10 @@ pub fn instance_variable_set(object: Value, name: &str, value: Value) -> Value {
 
 pub fn define_method<I: Object, O: Object>(klass: Value, name: &str, callback: Callback<I, O>) {
     unsafe {
-        rb_define_method(klass, str_to_cstring(name).as_ptr(), callback as CallbackPtr, -1);
+        rb_define_method(klass,
+                         str_to_cstring(name).as_ptr(),
+                         callback as CallbackPtr,
+                         -1);
     }
 }
 

@@ -28,8 +28,7 @@ pub fn create_arguments(arguments: Vec<AnyObject>) -> (c_int, Vec<Value>) {
 }
 
 fn arguments_to_values(arguments: Vec<AnyObject>) -> Vec<Value> {
-    arguments
-        .iter()
+    arguments.iter()
         .map(|object| object.value())
         .collect::<Vec<Value>>()
 }
