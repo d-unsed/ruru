@@ -1,5 +1,3 @@
-extern crate libc;
-
 extern crate ruby_sys;
 
 mod binding;
