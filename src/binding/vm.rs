@@ -14,9 +14,9 @@ pub fn init() {
 }
 
 pub fn require(name: &str) {
-    let name = util::str_to_cstring(name).as_ptr();
+    let name = util::str_to_cstring(name);
 
     unsafe {
-        vm::rb_require(name);
+        vm::rb_require(name.as_ptr());
     }
 }

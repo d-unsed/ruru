@@ -6,9 +6,9 @@ use types::Value;
 use util;
 
 pub fn new(string: &str) -> Value {
-    let str = util::str_to_cstring(string).as_ptr();
+    let str = util::str_to_cstring(string);
 
-    unsafe { string::rb_str_new_cstr(str) }
+    unsafe { string::rb_str_new_cstr(str.as_ptr()) }
 }
 
 pub fn from_value(value: Value) -> String {

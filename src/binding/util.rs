@@ -12,9 +12,9 @@ pub fn get_constant(name: &str, _parent_object: Value) -> Value {
 }
 
 pub fn internal_id(string: &str) -> Id {
-    let str = util::str_to_cstring(string).as_ptr();
+    let str = util::str_to_cstring(string);
 
-    unsafe { ruby_sys_util::rb_intern(str) }
+    unsafe { ruby_sys_util::rb_intern(str.as_ptr()) }
 }
 
 pub fn call_method(receiver: Value, method: &str, argc: Argc, argv: *const Value) -> Value {

@@ -6,9 +6,9 @@ use types::{Argc, Callback, CallbackPtr, Value};
 use util;
 
 pub fn define_class(name: &str, superclass: Value) -> Value {
-    let name = util::str_to_cstring(name).as_ptr();
+    let name = util::str_to_cstring(name);
 
-    unsafe { class::rb_define_class(name, superclass) }
+    unsafe { class::rb_define_class(name.as_ptr(), superclass) }
 }
 
 pub fn object_class(object: Value) -> Value {
@@ -28,19 +28,19 @@ pub fn instance_variable_set(object: Value, name: &str, value: Value) -> Value {
 }
 
 pub fn define_method<I: Object, O: Object>(klass: Value, name: &str, callback: Callback<I, O>) {
-    let name = util::str_to_cstring(name).as_ptr();
+    let name = util::str_to_cstring(name);
 
     unsafe {
-        class::rb_define_method(klass, name, callback as CallbackPtr, -1);
+        class::rb_define_method(klass, name.as_ptr(), callback as CallbackPtr, -1);
     }
 }
 
 pub fn define_singleton_method<I: Object, O: Object>(klass: Value,
                                                      name: &str,
                                                      callback: Callback<I, O>) {
-    let name = util::str_to_cstring(name).as_ptr();
+    let name = util::str_to_cstring(name);
 
     unsafe {
-        class::rb_define_singleton_method(klass, name, callback as CallbackPtr, -1);
+        class::rb_define_singleton_method(klass, name.as_ptr(), callback as CallbackPtr, -1);
     }
 }
