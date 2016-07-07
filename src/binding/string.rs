@@ -29,5 +29,5 @@ pub fn from_value_unchecked(value: Value) -> String {
 }
 
 pub fn bytesize(value: Value) -> i64 {
-    unsafe { string::rb_str_len(value) }
+    unsafe { string::rb_str_len(value) as i64 }
 }
