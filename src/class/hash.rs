@@ -91,6 +91,67 @@ impl Hash {
 
         AnyObject::from(result)
     }
+
+    /// Runs a closure for each `key` and `value` pair.
+    ///
+    /// You can specify types for each object if they are known and the same for each key and
+    /// each value:
+    ///
+    /// ```
+    /// # use ruru::{Fixnum, Hash, Symbol, VM};
+    /// # VM::init();
+    /// # let mut hash = Hash::new();
+    ///
+    /// hash.each(|key: Symbol, value: Fixnum| {
+    ///     // ...
+    /// });
+    /// ```
+    ///
+    /// If the types are unknown or may vary, use `AnyObject` type.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Fixnum, Hash, Symbol, VM};
+    /// # VM::init();
+    ///
+    /// let mut hash = Hash::new();
+    ///
+    /// hash.store(Symbol::new("first_key"), Fixnum::new(1));
+    /// hash.store(Symbol::new("second_key"), Fixnum::new(2));
+    ///
+    /// let mut doubled_values: Vec<i64> = Vec::new();
+    ///
+    /// hash.each(|_key: Symbol, value: Fixnum| {
+    ///     doubled_values.push(value.to_i64() * 2);
+    /// });
+    ///
+    /// assert_eq!(doubled_values, vec![2, 4]);
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// hash = {
+    ///   first_key: 1,
+    ///   second_key: 2
+    /// }
+    ///
+    /// doubled_values = []
+    ///
+    /// hash.each do |_key, value|
+    ///   doubled_values << [value * 2]
+    /// end
+    ///
+    /// doubled_values == [2, 4]
+    /// ```
+    pub fn each<K, V, F>(&self, closure: F)
+        where K: Object,
+              V: Object,
+              F: FnMut(K, V)
+    {
+        hash::each(self.value, closure);
+    }
 }
 
 impl From<Value> for Hash {
