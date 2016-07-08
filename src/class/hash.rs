@@ -111,7 +111,7 @@ impl Hash {
     ///
     /// # Examples
     ///
-    /// ```
+    /// ```no_run
     /// use ruru::{Fixnum, Hash, Symbol, VM};
     /// # VM::init();
     ///
