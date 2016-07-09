@@ -1,4 +1,5 @@
 use std::convert::From;
+use std::iter::{IntoIterator, Iterator};
 
 use binding::array;
 use types::Value;
@@ -31,6 +32,34 @@ impl Array {
     /// ```
     pub fn new() -> Self {
         Array { value: array::new() }
+    }
+
+    /// Retrieves the length of the array.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Array, Fixnum, VM};
+    /// # VM::init();
+    ///
+    /// let mut array = Array::new().push(Fixnum::new(2));
+    ///
+    /// assert_eq!(array.length(), 1);
+    ///
+    /// array.push(Fixnum::new(1));
+    ///
+    /// assert_eq!(array.length(), 2);
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// array = [1]
+    ///
+    /// array.length == 1
+    /// ```
+    pub fn length(&self) -> usize {
+        array::len(self.value()) as usize
     }
 
     /// Retrieves an `AnyObject` from element at `index` position.
@@ -158,5 +187,71 @@ impl From<Value> for Array {
 impl Object for Array {
     fn value(&self) -> Value {
         self.value
+    }
+}
+
+pub struct ArrayIterator {
+    array: Array,
+    current_index: i64,
+}
+
+impl ArrayIterator {
+    fn new(array: Array) -> ArrayIterator {
+        ArrayIterator { array: array, current_index: 0 }
+    }
+}
+
+impl Iterator for ArrayIterator {
+    type Item = AnyObject;
+
+    fn next(&mut self) -> Option<AnyObject> {
+        let item = if (self.current_index as usize) < self.len() {
+            Some(self.array.at(self.current_index))
+        } else {
+            None
+        };
+
+        self.current_index += 1;
+
+        item
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        let total = self.len() as usize;
+        (total, Some(total))
+    }
+}
+
+impl ExactSizeIterator for ArrayIterator {
+    fn len(&self) -> usize {
+        self.array.length() as usize
+    }
+}
+
+/// Allows Arrays to be iterable in Rust.
+///
+/// # Examples
+///
+/// ```
+/// use ruru::{Array, Fixnum, VM};
+/// # VM::init();
+///
+/// let mut array = Array::new().push(Fixnum::new(1));
+/// array.push(Fixnum::new(2));
+/// array.push(Fixnum::new(3));
+/// let mut sum: i64 = 0;
+///
+/// for item in array.into_iter() {
+///     sum += item.to::<Fixnum>().to_i64();
+/// }
+///
+/// assert_eq!(sum, 6);
+/// ```
+impl IntoIterator for Array {
+    type Item = AnyObject;
+    type IntoIter = ArrayIterator;
+
+    fn into_iter(self) -> Self::IntoIter {
+        ArrayIterator::new(self)
     }
 }
