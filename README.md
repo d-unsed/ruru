@@ -202,14 +202,7 @@ examples!
 
 Warning! The crate is a WIP.
 
-There are two ways of using Ruru:
-
- - Standalone application - Rust is run first as a compiled executable file and
-   then it calls Ruby code (see docs for `VM::init()`)
-
- - Running Rust code from a Ruby application
-
-The second way requires additional steps (to be improved):
+To be able to use Ruru, make sure that your Ruby version is 2.2.0 or higher.
 
 1. Your local MRI copy has to be built with the `--enable-shared` option. For
    example, using rbenv:
