@@ -246,6 +246,7 @@ impl ExactSizeIterator for ArrayIterator {
 /// }
 ///
 /// assert_eq!(sum, 6);
+/// ```
 impl IntoIterator for Array {
     type Item = AnyObject;
     type IntoIter = ArrayIterator;
