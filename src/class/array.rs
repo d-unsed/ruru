@@ -1,5 +1,5 @@
 use std::convert::From;
-use std::iter::{IntoIterator, Iterator};
+use std::iter::{FromIterator, IntoIterator, Iterator};
 
 use binding::array;
 use types::Value;
@@ -253,5 +253,39 @@ impl IntoIterator for Array {
 
     fn into_iter(self) -> Self::IntoIter {
         ArrayIterator::new(self)
+    }
+}
+
+/// Converts an iterator into `Array`.
+///
+/// # Examples
+///
+/// ```
+/// use ruru::{Array, Fixnum, VM};
+/// use ruru::traits::Object;
+/// # VM::init();
+///
+/// let array: Array = (1..6)
+///     .map(|num| num * 2)
+///     .map(|num| Fixnum::new(num).to_any_object())
+///     .collect();
+///
+/// assert_eq!(array.length(), 5);
+///
+/// for i in 0..5 {
+///     let expected_number = (i + 1) * 2;
+///
+///     assert_eq!(array.at(i).to::<Fixnum>().to_i64(), expected_number);
+/// }
+/// ```
+impl FromIterator<AnyObject> for Array {
+    fn from_iter<I: IntoIterator<Item = AnyObject>>(iter: I) -> Self {
+        let mut array = Array::new();
+
+        for i in iter {
+            array.push(i);
+        }
+
+        array
     }
 }
