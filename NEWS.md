@@ -99,6 +99,7 @@
 
 For versions prior to 0.7.0, please see `git log`.
 
+[0.7.8]: https://github.com/d-unseductable/ruru/compare/v0.7.7...v0.7.8
 [0.7.7]: https://github.com/d-unseductable/ruru/compare/v0.7.6...v0.7.7
 [0.7.6]: https://github.com/d-unseductable/ruru/compare/v0.7.5...v0.7.6
 [0.7.5]: https://github.com/d-unseductable/ruru/compare/v0.7.4...v0.7.5
