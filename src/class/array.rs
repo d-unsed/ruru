@@ -42,11 +42,11 @@ impl Array {
     /// use ruru::{Array, Fixnum, VM};
     /// # VM::init();
     ///
-    /// let mut array = Array::new().push(Fixnum::new(2));
+    /// let mut array = Array::new().push(Fixnum::new(1));
     ///
     /// assert_eq!(array.length(), 1);
     ///
-    /// array.push(Fixnum::new(1));
+    /// array.push(Fixnum::new(2));
     ///
     /// assert_eq!(array.length(), 2);
     /// ```
@@ -55,8 +55,10 @@ impl Array {
     ///
     /// ```ruby
     /// array = [1]
-    ///
     /// array.length == 1
+    ///
+    /// array << 2
+    /// array.length == 2
     /// ```
     pub fn length(&self) -> usize {
         array::len(self.value()) as usize
