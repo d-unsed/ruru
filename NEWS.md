@@ -6,8 +6,8 @@
 
 ### Added
 
-* Implement `Iterator` for `Array` (#30)
-* Implement `FromIterator` for `Array`
+* `Iterator` for `Array` (#30)
+* `FromIterator` for `Array`
 
 ## [0.7.7] - 2016-07-07
 
