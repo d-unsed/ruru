@@ -3,7 +3,7 @@ use std::convert::From;
 use binding::global::RubySpecialConsts;
 use types::{InternalValue, Value};
 
-use super::traits::Object;
+use traits::Object;
 
 /// `NilClass`
 pub struct NilClass {

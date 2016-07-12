@@ -5,8 +5,8 @@ use binding::util as binding_util;
 use types::Value;
 use util;
 
-use super::any_object::AnyObject;
-use super::class::Class;
+use AnyObject;
+use Class;
 
 /// `Object`
 ///

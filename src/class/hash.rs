@@ -3,8 +3,8 @@ use std::convert::From;
 use binding::hash;
 use types::Value;
 
-use super::any_object::AnyObject;
-use super::traits::Object;
+use AnyObject;
+use traits::Object;
 
 /// `Hash`
 pub struct Hash {

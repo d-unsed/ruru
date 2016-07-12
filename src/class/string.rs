@@ -3,7 +3,7 @@ use std::convert::From;
 use binding::string;
 use types::Value;
 
-use super::traits::Object;
+use traits::Object;
 
 /// `String`
 pub struct RString {

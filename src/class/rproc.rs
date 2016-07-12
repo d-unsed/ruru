@@ -4,8 +4,8 @@ use binding::rproc;
 use types::Value;
 use util;
 
-use super::any_object::AnyObject;
-use super::traits::Object;
+use AnyObject;
+use traits::Object;
 
 /// `Proc` (works with `Lambda` as well)
 pub struct Proc {

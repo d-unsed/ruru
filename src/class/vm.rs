@@ -1,9 +1,9 @@
 use std::slice;
 
 use binding::vm;
-use class::any_object::AnyObject;
-use class::rproc::Proc;
 use types::{Argc, Value};
+
+use {AnyObject, Proc};
 
 /// Virtual Machine and helpers
 pub struct VM;

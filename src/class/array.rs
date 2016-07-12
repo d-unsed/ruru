@@ -4,9 +4,9 @@ use std::iter::{FromIterator, IntoIterator, Iterator};
 use binding::array;
 use types::Value;
 
-use super::any_object::AnyObject;
-use super::string::RString;
-use super::traits::Object;
+use AnyObject;
+use RString;
+use traits::Object;
 
 /// `Array`
 pub struct Array {

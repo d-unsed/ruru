@@ -3,7 +3,7 @@ use std::convert::From;
 use types::Value;
 use util;
 
-use super::traits::Object;
+use traits::Object;
 
 /// `TrueClass` and `FalseClass`
 pub struct Boolean {

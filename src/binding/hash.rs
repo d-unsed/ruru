@@ -1,7 +1,7 @@
 use ruby_sys::hash;
 
-use class::traits::Object;
 use types::{CallbackPtr, CallbackMutPtr, Value};
+use traits::Object;
 
 pub fn new() -> Value {
     unsafe { hash::rb_hash_new() }

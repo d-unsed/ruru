@@ -1,7 +1,7 @@
 use binding::global::ValueType;
 use types::Value;
 
-use super::traits::Object;
+use traits::Object;
 
 /// Representation of any Ruby object while its type is unknown
 ///

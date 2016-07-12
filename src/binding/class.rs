@@ -1,9 +1,10 @@
 use ruby_sys::class;
 
 use binding::util as binding_util;
-use class::traits::Object;
 use types::{Argc, Callback, CallbackPtr, Value};
 use util;
+
+use traits::Object;
 
 pub fn define_class(name: &str, superclass: Value) -> Value {
     let name = util::str_to_cstring(name);

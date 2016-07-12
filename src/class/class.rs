@@ -6,9 +6,8 @@ use binding::util as binding_util;
 use types::{Callback, Value};
 use util;
 
-use super::any_object::AnyObject;
-use super::traits::Object;
-
+use AnyObject;
+use traits::Object;
 
 /// `Class`
 #[derive(Debug, PartialEq)]

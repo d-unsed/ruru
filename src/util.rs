@@ -1,10 +1,10 @@
 use std::ffi::{CStr, CString};
 
 use binding::global::RubySpecialConsts;
-use class::any_object::AnyObject;
 use types::{c_char, c_int, InternalValue, Value};
 
-use class::traits::Object;
+use AnyObject;
+use traits::Object;
 
 pub fn cstr_as_string(str: *const c_char) -> String {
     unsafe { CStr::from_ptr(str).to_string_lossy().into_owned() }
