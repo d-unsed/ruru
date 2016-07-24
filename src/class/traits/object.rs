@@ -1,6 +1,7 @@
 use std::convert::From;
 
 use binding::class;
+use binding::global::ValueType;
 use binding::util as binding_util;
 use types::Value;
 use util;
@@ -231,5 +232,23 @@ pub trait Object: From<Value> {
         let result = class::instance_variable_set(self.value(), variable, value.value());
 
         AnyObject::from(result)
+    }
+
+    /// Determines the value type of the object
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use ruru::{AnyObject, Fixnum, VM};
+    /// use ruru::traits::Object;
+    /// use ruru::types::ValueType;
+    /// # VM::init();
+    ///
+    /// let any_object = Fixnum::new(1).to_any_object();
+    ///
+    /// assert_eq!(any_object.ty(), ValueType::Fixnum);
+    /// ```
+    fn ty(&self) -> ValueType {
+        self.value().ty()
     }
 }
