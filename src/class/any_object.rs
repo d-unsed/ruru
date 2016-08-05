@@ -26,6 +26,7 @@ use traits::Object;
 ///
 /// ```
 /// use ruru::{Array, Fixnum, VM};
+/// use ruru::traits::Object;
 /// # VM::init();
 ///
 /// let array = Array::new().push(Fixnum::new(1));
@@ -38,6 +39,7 @@ use traits::Object;
 ///
 /// ```no_run
 /// use ruru::{Fixnum, Hash, Symbol, VM};
+/// use ruru::traits::Object;
 /// # VM::init();
 ///
 /// let mut hash = Hash::new();
@@ -55,6 +57,7 @@ use traits::Object;
 /// ```no_run
 /// use ruru::types::Argc;
 /// use ruru::{AnyObject, Boolean, Class, RString, VM};
+/// use ruru::traits::Object;
 ///
 /// #[no_mangle]
 /// pub extern fn string_eq(argc: Argc, argv: *const AnyObject, itself: RString) -> Boolean {
@@ -72,27 +75,6 @@ use traits::Object;
 #[derive(Clone)]
 pub struct AnyObject {
     value: Value,
-}
-
-impl AnyObject {
-    /// Casts `AnyObject` to the specified Ruby type
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use ruru::{AnyObject, Fixnum, VM};
-    /// use ruru::traits::Object;
-    /// # VM::init();
-    ///
-    /// let fixnum_as_any_object = Fixnum::new(1).to_any_object();
-    ///
-    /// let fixnum = fixnum_as_any_object.to::<Fixnum>();
-    ///
-    /// assert_eq!(fixnum.to_i64(), 1);
-    /// ```
-    pub fn to<T: Object>(&self) -> T {
-        T::from(self.value)
-    }
 }
 
 impl From<Value> for AnyObject {

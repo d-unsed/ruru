@@ -234,6 +234,25 @@ pub trait Object: From<Value> {
         AnyObject::from(result)
     }
 
+    /// Casts current object to the specified Ruby type
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{AnyObject, Fixnum, VM};
+    /// use ruru::traits::Object;
+    /// # VM::init();
+    ///
+    /// let fixnum_as_any_object = Fixnum::new(1).to_any_object();
+    ///
+    /// let fixnum = fixnum_as_any_object.to::<Fixnum>();
+    ///
+    /// assert_eq!(fixnum.to_i64(), 1);
+    /// ```
+    fn to<T: Object>(&self) -> T {
+        T::from(self.value())
+    }
+
     /// Determines the value type of the object
     ///
     /// # Example

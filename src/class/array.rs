@@ -70,6 +70,7 @@ impl Array {
     ///
     /// ```
     /// use ruru::{Array, Fixnum, VM};
+    /// use ruru::traits::Object;
     /// # VM::init();
     ///
     /// let array = Array::new().push(Fixnum::new(1));
@@ -127,6 +128,7 @@ impl Array {
     ///
     /// ```
     /// use ruru::{Array, Fixnum, VM};
+    /// use ruru::traits::Object;
     /// # VM::init();
     ///
     /// let mut array = Array::new();
@@ -156,6 +158,7 @@ impl Array {
     ///
     /// ```
     /// use ruru::{Array, Fixnum, VM};
+    /// use ruru::traits::Object;
     /// # VM::init();
     ///
     /// let mut array = Array::new().push(Fixnum::new(1));
@@ -236,6 +239,7 @@ impl ExactSizeIterator for ArrayIterator {
 ///
 /// ```
 /// use ruru::{Array, Fixnum, VM};
+/// use ruru::traits::Object;
 /// # VM::init();
 ///
 /// let mut array = Array::new().push(Fixnum::new(1));

@@ -38,6 +38,7 @@ impl Hash {
     ///
     /// ```no_run
     /// use ruru::{Fixnum, Hash, Symbol, VM};
+    /// use ruru::traits::Object;
     /// # VM::init();
     ///
     /// let mut hash = Hash::new();
@@ -69,6 +70,7 @@ impl Hash {
     ///
     /// ```no_run
     /// use ruru::{Fixnum, Hash, Symbol, VM};
+    /// use ruru::traits::Object;
     /// # VM::init();
     ///
     /// let mut hash = Hash::new();

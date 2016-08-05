@@ -227,6 +227,7 @@ impl Class {
     /// ```no_run
     /// use ruru::types::Argc;
     /// use ruru::{AnyObject, Boolean, Class, RString, VM};
+    /// use ruru::traits::Object;
     ///
     /// #[no_mangle]
     /// pub extern fn string_eq(argc: Argc, argv: *const AnyObject, itself: RString) -> Boolean {
@@ -265,6 +266,7 @@ impl Class {
     /// ```no_run
     /// use ruru::types::Argc;
     /// use ruru::{AnyObject, Class, RString, Symbol, VM};
+    /// use ruru::traits::Object;
     ///
     /// #[no_mangle]
     /// pub extern fn symbol_from_string(argc: Argc,
