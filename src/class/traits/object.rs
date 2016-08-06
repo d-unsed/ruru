@@ -8,6 +8,7 @@ use util;
 
 use AnyObject;
 use Class;
+use traits::VerifiedObject;
 
 /// `Object`
 ///
@@ -251,6 +252,16 @@ pub trait Object: From<Value> {
     /// ```
     fn to<T: Object>(&self) -> T {
         T::from(self.value())
+    }
+
+    fn try_convert_to<T: VerifiedObject>(&self) -> Result<T, String> {
+        if T::is_correct_type(self) {
+            let converted_object = self.to::<T>();
+
+            Ok(converted_object)
+        } else {
+            Err("Error".to_owned())
+        }
     }
 
     /// Determines the value type of the object
