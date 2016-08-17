@@ -1,9 +1,9 @@
 use std::convert::From;
 
-use types::Value;
+use types::{Value, ValueType};
 use util;
 
-use traits::Object;
+use traits::{Object, VerifiedObject};
 
 /// `TrueClass` and `FalseClass`
 pub struct Boolean {
@@ -61,5 +61,13 @@ impl From<Value> for Boolean {
 impl Object for Boolean {
     fn value(&self) -> Value {
         self.value
+    }
+}
+
+impl VerifiedObject for Boolean {
+    fn is_correct_type<T: Object>(object: &T) -> bool {
+        let ty = object.value().ty();
+
+        ty == ValueType::True || ty == ValueType::False
     }
 }

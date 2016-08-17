@@ -1,9 +1,9 @@
 use std::convert::From;
 
 use binding::string;
-use types::Value;
+use types::{Value, ValueType};
 
-use traits::Object;
+use traits::{Object, VerifiedObject};
 
 /// `String`
 pub struct RString {
@@ -125,5 +125,11 @@ impl From<Value> for RString {
 impl Object for RString {
     fn value(&self) -> Value {
         self.value
+    }
+}
+
+impl VerifiedObject for RString {
+    fn is_correct_type<T: Object>(object: &T) -> bool {
+        object.value().ty() == ValueType::RString
     }
 }

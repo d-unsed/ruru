@@ -2,11 +2,11 @@ use std::convert::From;
 use std::iter::{FromIterator, IntoIterator, Iterator};
 
 use binding::array;
-use types::Value;
+use types::{Value, ValueType};
 
 use AnyObject;
 use RString;
-use traits::Object;
+use traits::{Object, VerifiedObject};
 
 /// `Array`
 pub struct Array {
@@ -192,6 +192,12 @@ impl From<Value> for Array {
 impl Object for Array {
     fn value(&self) -> Value {
         self.value
+    }
+}
+
+impl VerifiedObject for Array {
+    fn is_correct_type<T: Object>(object: &T) -> bool {
+        object.value().ty() == ValueType::Array
     }
 }
 

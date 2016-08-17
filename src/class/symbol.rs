@@ -2,9 +2,9 @@ use std::convert::From;
 
 use binding::symbol;
 use binding::util;
-use types::Value;
+use types::{Value, ValueType};
 
-use traits::Object;
+use traits::{Object, VerifiedObject};
 
 /// `Symbol`
 #[derive(Debug, PartialEq)]
@@ -75,5 +75,11 @@ impl From<Value> for Symbol {
 impl Object for Symbol {
     fn value(&self) -> Value {
         self.value
+    }
+}
+
+impl VerifiedObject for Symbol {
+    fn is_correct_type<T: Object>(object: &T) -> bool {
+        object.value().ty() == ValueType::Symbol
     }
 }

@@ -5,7 +5,8 @@ use types::Value;
 use util;
 
 use AnyObject;
-use traits::Object;
+use Class;
+use traits::{Object, VerifiedObject};
 
 /// `Proc` (works with `Lambda` as well)
 pub struct Proc {
@@ -74,5 +75,11 @@ impl From<Value> for Proc {
 impl Object for Proc {
     fn value(&self) -> Value {
         self.value
+    }
+}
+
+impl VerifiedObject for Proc {
+    fn is_correct_type<T: Object>(object: &T) -> bool {
+        object.class() == Class::from_existing("Proc")
     }
 }

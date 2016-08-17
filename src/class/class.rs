@@ -3,11 +3,11 @@ use std::convert::From;
 use binding::class;
 use binding::global::rb_cObject;
 use binding::util as binding_util;
-use types::{Callback, Value};
+use types::{Callback, Value, ValueType};
 use util;
 
 use AnyObject;
-use traits::Object;
+use traits::{Object, VerifiedObject};
 
 /// `Class`
 #[derive(Debug, PartialEq)]
@@ -320,5 +320,11 @@ impl From<Value> for Class {
 impl Object for Class {
     fn value(&self) -> Value {
         self.value
+    }
+}
+
+impl VerifiedObject for Class {
+    fn is_correct_type<T: Object>(object: &T) -> bool {
+        object.value().ty() == ValueType::Class
     }
 }

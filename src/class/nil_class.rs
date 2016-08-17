@@ -1,9 +1,9 @@
 use std::convert::From;
 
 use binding::global::RubySpecialConsts;
-use types::{InternalValue, Value};
+use types::{InternalValue, Value, ValueType};
 
-use traits::Object;
+use traits::{Object, VerifiedObject};
 
 /// `NilClass`
 pub struct NilClass {
@@ -42,5 +42,11 @@ impl From<Value> for NilClass {
 impl Object for NilClass {
     fn value(&self) -> Value {
         self.value
+    }
+}
+
+impl VerifiedObject for NilClass {
+    fn is_correct_type<T: Object>(object: &T) -> bool {
+        object.value().ty() == ValueType::Nil
     }
 }

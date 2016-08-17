@@ -1,10 +1,10 @@
 use std::convert::From;
 
 use binding::hash;
-use types::Value;
+use types::{Value, ValueType};
 
 use AnyObject;
-use traits::Object;
+use traits::{Object, VerifiedObject};
 
 /// `Hash`
 pub struct Hash {
@@ -165,5 +165,11 @@ impl From<Value> for Hash {
 impl Object for Hash {
     fn value(&self) -> Value {
         self.value
+    }
+}
+
+impl VerifiedObject for Hash {
+    fn is_correct_type<T: Object>(object: &T) -> bool {
+        object.value().ty() == ValueType::Hash
     }
 }

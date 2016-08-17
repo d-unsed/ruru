@@ -1,9 +1,9 @@
 use std::convert::From;
 
 use binding::fixnum;
-use types::Value;
+use types::{Value, ValueType};
 
-use traits::Object;
+use traits::{Object, VerifiedObject};
 
 /// `Fixnum`
 #[derive(Debug, PartialEq)]
@@ -66,5 +66,11 @@ impl From<Value> for Fixnum {
 impl Object for Fixnum {
     fn value(&self) -> Value {
         self.value
+    }
+}
+
+impl VerifiedObject for Fixnum {
+    fn is_correct_type<T: Object>(object: &T) -> bool {
+        object.value().ty() == ValueType::Fixnum
     }
 }
