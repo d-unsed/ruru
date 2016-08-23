@@ -76,7 +76,7 @@ impl VM {
     ///         let greeting_template = VM::block_proc();
     ///         let name = RString::new("Rust").to_any_object();
     ///
-    ///         greeting_template.call(vec![name]).to::<RString>()
+    ///         greeting_template.call(vec![name]).try_convert_to::<RString>().unwrap()
     ///     }
     /// );
     ///
@@ -122,7 +122,7 @@ impl VM {
     /// #[no_mangle]
     /// pub extern fn string_eq(argc: Argc, argv: *const AnyObject, itself: RString) -> Boolean {
     ///     let argv = VM::parse_arguments(argc, argv);
-    ///     let other_string = argv[0].to::<RString>();
+    ///     let other_string = argv[0].try_convert_to::<RString>().unwrap();
     ///
     ///     Boolean::new(itself.to_string() == other_string.to_string())
     /// }

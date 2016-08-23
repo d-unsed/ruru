@@ -136,9 +136,10 @@ macro_rules! methods {
                 let mut _i = 0;
 
                 $(
-                    let $arg_name =
+                    let $arg_name = unsafe {
                         <$crate::AnyObject as $crate::traits::Object>
-                        ::to::<$arg_type>(&_arguments[_i]);
+                        ::to::<$arg_type>(&_arguments[_i])
+                    };
 
                     _i += 1;
                 )*

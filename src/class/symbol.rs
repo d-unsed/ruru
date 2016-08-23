@@ -82,4 +82,8 @@ impl VerifiedObject for Symbol {
     fn is_correct_type<T: Object>(object: &T) -> bool {
         object.value().ty() == ValueType::Symbol
     }
+
+    fn error_message() -> String {
+        "Error converting to Symbol".to_string()
+    }
 }

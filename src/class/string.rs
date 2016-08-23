@@ -132,4 +132,8 @@ impl VerifiedObject for RString {
     fn is_correct_type<T: Object>(object: &T) -> bool {
         object.value().ty() == ValueType::RString
     }
+
+    fn error_message() -> String {
+        "Error converting to String".to_string()
+    }
 }

@@ -34,7 +34,7 @@ impl Proc {
     ///     fn greet_rust_with(greeting_template: Proc) -> RString {
     ///         let name = RString::new("Rust").to_any_object();
     ///
-    ///         greeting_template.call(vec![name]).to::<RString>()
+    ///         greeting_template.call(vec![name]).try_convert_to::<RString>().unwrap()
     ///     }
     /// );
     ///
@@ -81,5 +81,9 @@ impl Object for Proc {
 impl VerifiedObject for Proc {
     fn is_correct_type<T: Object>(object: &T) -> bool {
         object.class() == Class::from_existing("Proc")
+    }
+
+    fn error_message() -> String {
+        "Error converting to Proc".to_string()
     }
 }

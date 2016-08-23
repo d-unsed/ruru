@@ -45,7 +45,7 @@ impl Hash {
     ///
     /// hash.store(Symbol::new("key"), Fixnum::new(1));
     ///
-    /// assert_eq!(hash.at(Symbol::new("key")).to::<Fixnum>(), Fixnum::new(1));
+    /// assert_eq!(hash.at(Symbol::new("key")).try_convert_to::<Fixnum>(), Ok(Fixnum::new(1)));
     /// ```
     ///
     /// Ruby:
@@ -77,7 +77,7 @@ impl Hash {
     ///
     /// hash.store(Symbol::new("key"), Fixnum::new(1));
     ///
-    /// assert_eq!(hash.at(Symbol::new("key")).to::<Fixnum>(), Fixnum::new(1));
+    /// assert_eq!(hash.at(Symbol::new("key")).try_convert_to::<Fixnum>(), Ok(Fixnum::new(1)));
     /// ```
     ///
     /// Ruby:
@@ -96,8 +96,9 @@ impl Hash {
 
     /// Runs a closure for each `key` and `value` pair.
     ///
-    /// You can specify types for each object if they are known and the same for each key and
-    /// each value:
+    /// You can specify types for each object if they are known and are the same for each key and
+    /// each value. This way is faster, but not safe, because it does not check if the objects
+    /// have correct type.
     ///
     /// ```
     /// # use ruru::{Fixnum, Hash, Symbol, VM};
@@ -109,7 +110,7 @@ impl Hash {
     /// });
     /// ```
     ///
-    /// If the types are unknown or may vary, use `AnyObject` type.
+    /// If the types are unknown or may vary, use `AnyObject` type and try to safely convert them.
     ///
     /// # Examples
     ///
@@ -171,5 +172,9 @@ impl Object for Hash {
 impl VerifiedObject for Hash {
     fn is_correct_type<T: Object>(object: &T) -> bool {
         object.value().ty() == ValueType::Hash
+    }
+
+    fn error_message() -> String {
+        "Error converting to Hash".to_string()
     }
 }

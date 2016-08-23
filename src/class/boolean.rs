@@ -70,4 +70,8 @@ impl VerifiedObject for Boolean {
 
         ty == ValueType::True || ty == ValueType::False
     }
+
+    fn error_message() -> String {
+        "Error converting to Boolean".to_string()
+    }
 }

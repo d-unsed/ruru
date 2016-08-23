@@ -156,6 +156,7 @@ impl Class {
 
     /// Defines an instance method for given class.
     ///
+    ///
     /// # Arguments
     ///
     /// - `name` is name of the Ruby method
@@ -164,6 +165,8 @@ impl Class {
     ///    Ruby
     ///
     /// ## Callback
+    ///
+    /// Use `methods!` macro instead of manually creating callbacks.
     ///
     /// `callback` must have the following signature:
     ///
@@ -232,7 +235,7 @@ impl Class {
     /// #[no_mangle]
     /// pub extern fn string_eq(argc: Argc, argv: *const AnyObject, itself: RString) -> Boolean {
     ///     let argv = VM::parse_arguments(argc, argv);
-    ///     let other_string = argv[0].to::<RString>();
+    ///     let other_string = argv[0].try_convert_to::<RString>().unwrap();
     ///
     ///     Boolean::new(itself.to_string() == other_string.to_string())
     /// }
@@ -261,6 +264,8 @@ impl Class {
     /// Function has the same requirements as `define_method`.
     /// Also the same rules are applied for `callback` (see above).
     ///
+    /// Use `methods!` macro instead of manually creating callbacks.
+    ///
     /// # Examples
     ///
     /// ```no_run
@@ -273,7 +278,7 @@ impl Class {
     ///                                  argv: *const AnyObject,
     ///                                  itself: Class) -> Symbol {
     ///     let argv = VM::parse_arguments(argc, argv);
-    ///     let string = argv[0].to::<RString>();
+    ///     let string = argv[0].try_convert_to::<RString>().unwrap();
     ///
     ///     Symbol::new(&string.to_string())
     /// }
@@ -326,5 +331,9 @@ impl Object for Class {
 impl VerifiedObject for Class {
     fn is_correct_type<T: Object>(object: &T) -> bool {
         object.value().ty() == ValueType::Class
+    }
+
+    fn error_message() -> String {
+        "Error converting to Class".to_string()
     }
 }

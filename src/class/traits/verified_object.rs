@@ -4,4 +4,5 @@ use traits::Object;
 ///
 pub trait VerifiedObject: Object {
     fn is_correct_type<T: Object>(object: &T) -> bool;
+    fn error_message() -> String;
 }

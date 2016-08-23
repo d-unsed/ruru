@@ -73,4 +73,8 @@ impl VerifiedObject for Fixnum {
     fn is_correct_type<T: Object>(object: &T) -> bool {
         object.value().ty() == ValueType::Fixnum
     }
+
+    fn error_message() -> String {
+        "Error converting to Fixnum".to_string()
+    }
 }

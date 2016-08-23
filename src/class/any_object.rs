@@ -30,9 +30,9 @@ use traits::Object;
 /// # VM::init();
 ///
 /// let array = Array::new().push(Fixnum::new(1));
-/// let value = array.at(0).to::<Fixnum>(); // `Array::at()` returns `AnyObject`
+/// let value = array.at(0).try_convert_to::<Fixnum>(); // `Array::at()` returns `AnyObject`
 ///
-/// assert_eq!(value.to_i64(), 1);
+/// assert_eq!(value, Ok(Fixnum::new(1)));
 /// ```
 ///
 /// ## Retrieving an object from `Hash`
@@ -47,12 +47,14 @@ use traits::Object;
 /// hash.store(Symbol::new("key"), Fixnum::new(1));
 ///
 /// // `Hash::at()` returns `AnyObject`
-/// let value = hash.at(Symbol::new("key")).to::<Fixnum>();
+/// let value = hash.at(Symbol::new("key")).try_convert_to::<Fixnum>();
 ///
-/// assert_eq!(value, Fixnum::new(1));
+/// assert_eq!(value, Ok(Fixnum::new(1)));
 /// ```
 ///
 /// ## Receiving arguments from Ruby to Ruru callback
+///
+/// Do not use create callbacks manually. Use `methods!` macro instead.
 ///
 /// ```no_run
 /// use ruru::types::Argc;
@@ -63,7 +65,7 @@ use traits::Object;
 /// pub extern fn string_eq(argc: Argc, argv: *const AnyObject, itself: RString) -> Boolean {
 ///     // `VM::parse_arguments()` returns `Vec<AnyObject>`
 ///     let argv = VM::parse_arguments(argc, argv);
-///     let other_string = argv[0].to::<RString>();
+///     let other_string = argv[0].try_convert_to::<RString>().unwrap();
 ///
 ///     Boolean::new(itself.to_string() == other_string.to_string())
 /// }

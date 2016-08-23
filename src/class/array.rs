@@ -75,7 +75,7 @@ impl Array {
     ///
     /// let array = Array::new().push(Fixnum::new(1));
     ///
-    /// assert_eq!(array.at(0).to::<Fixnum>(), Fixnum::new(1));
+    /// assert_eq!(array.at(0).try_convert_to::<Fixnum>(), Ok(Fixnum::new(1)));
     /// ```
     ///
     /// Ruby:
@@ -135,7 +135,7 @@ impl Array {
     ///
     /// array.push(Fixnum::new(1));
     ///
-    /// assert_eq!(array.at(0).to::<Fixnum>(), Fixnum::new(1));
+    /// assert_eq!(array.at(0).try_convert_to::<Fixnum>(), Ok(Fixnum::new(1)));
     /// ```
     ///
     /// Ruby:
@@ -165,7 +165,7 @@ impl Array {
     ///
     /// array.store(0, Fixnum::new(2));
     ///
-    /// assert_eq!(array.at(0).to::<Fixnum>(), Fixnum::new(2));
+    /// assert_eq!(array.at(0).try_convert_to::<Fixnum>(), Ok(Fixnum::new(2)));
     /// ```
     ///
     /// Ruby:
@@ -198,6 +198,10 @@ impl Object for Array {
 impl VerifiedObject for Array {
     fn is_correct_type<T: Object>(object: &T) -> bool {
         object.value().ty() == ValueType::Array
+    }
+
+    fn error_message() -> String {
+        "Error converting to Boolean".to_string()
     }
 }
 
@@ -254,7 +258,7 @@ impl ExactSizeIterator for ArrayIterator {
 /// let mut sum: i64 = 0;
 ///
 /// for item in array.into_iter() {
-///     sum += item.to::<Fixnum>().to_i64();
+///     sum += item.try_convert_to::<Fixnum>().unwrap().to_i64();
 /// }
 ///
 /// assert_eq!(sum, 6);
@@ -287,7 +291,7 @@ impl IntoIterator for Array {
 /// for i in 0..5 {
 ///     let expected_number = (i + 1) * 2;
 ///
-///     assert_eq!(array.at(i).to::<Fixnum>().to_i64(), expected_number);
+///     assert_eq!(array.at(i).try_convert_to::<Fixnum>().unwrap().to_i64(), expected_number);
 /// }
 /// ```
 impl FromIterator<AnyObject> for Array {
