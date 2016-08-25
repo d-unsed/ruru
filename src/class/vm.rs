@@ -141,6 +141,13 @@ impl VM {
         vm::thread_call_without_gvl(func, unblock_func);
     }
 
+    pub fn thread_call_without_gvl2<F, G>(func: F, unblock_func: Option<G>)
+        where F: Fn(),
+              G: Fn()
+    {
+        vm::thread_call_without_gvl2(func, unblock_func);
+    }
+
     pub fn thread_call_with_gvl<F>(func: F)
         where F: Fn()
     {

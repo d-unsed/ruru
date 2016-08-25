@@ -38,6 +38,22 @@ pub fn thread_call_without_gvl<F, G>(func: F, unblock_func: Option<G>)
     }
 }
 
+pub fn thread_call_without_gvl2<F, G>(func: F, unblock_func: Option<G>)
+    where F: Fn(),
+          G: Fn()
+{
+    unsafe {
+        vm::rb_thread_call_without_gvl2(callbox as CallbackPtr,
+                                       Box::into_raw(Box::new(Box::new(func) as Box<Fn()>)) as *const c_void,
+                                       callbox as CallbackPtr,
+                                       Box::into_raw(
+                                           Box::new(
+                                               unblock_func.map(|f| Box::new(f) as Box<Fn()>).unwrap_or(Box::new(|| {}) as Box<Fn()>)
+                                            )
+                                        ) as *const c_void)
+    }
+}
+
 pub fn thread_call_with_gvl<F>(func: F)
     where F: Fn()
 {
