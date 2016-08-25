@@ -1,6 +1,6 @@
 use ruby_sys::vm;
 
-use types::Value;
+use types::*;
 use util;
 
 pub fn block_proc() -> Value {
@@ -19,4 +19,35 @@ pub fn require(name: &str) {
     unsafe {
         vm::rb_require(name.as_ptr());
     }
+}
+
+
+pub fn thread_call_without_gvl<F, G>(func: F, unblock_func: Option<G>)
+    where F: Fn(),
+          G: Fn()
+{
+    unsafe {
+        vm::rb_thread_call_without_gvl(callbox as CallbackPtr,
+                                       Box::into_raw(Box::new(Box::new(func) as Box<Fn()>)) as *const c_void,
+                                       callbox as CallbackPtr,
+                                       Box::into_raw(
+                                           Box::new(
+                                               unblock_func.map(|f| Box::new(f) as Box<Fn()>).unwrap_or(Box::new(|| {}) as Box<Fn()>)
+                                            )
+                                        ) as *const c_void)
+    }
+}
+
+pub fn thread_call_with_gvl<F>(func: F)
+    where F: Fn()
+{
+    unsafe {
+        vm::rb_thread_call_with_gvl(callbox as CallbackPtr,
+                                    Box::into_raw(Box::new(Box::new(func) as Box<Fn()>)) as *const c_void);
+    }
+}
+
+extern "C" fn callbox(boxptr: *mut c_void) {
+    let fnbox: Box<Box<Fn()>> = unsafe { Box::from_raw(boxptr as *mut Box<Fn()>) };
+    fnbox();
 }

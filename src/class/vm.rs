@@ -133,4 +133,17 @@ impl VM {
     pub fn parse_arguments(argc: Argc, arguments: *const AnyObject) -> Vec<AnyObject> {
         unsafe { slice::from_raw_parts(arguments, argc as usize).to_vec() }
     }
+
+    pub fn thread_call_without_gvl<F, G>(func: F, unblock_func: Option<G>)
+        where F: Fn(),
+              G: Fn()
+    {
+        vm::thread_call_without_gvl(func, unblock_func);
+    }
+
+    pub fn thread_call_with_gvl<F>(func: F)
+        where F: Fn()
+    {
+        vm::thread_call_with_gvl(func);
+    }
 }
