@@ -153,4 +153,10 @@ impl VM {
     {
         vm::thread_call_with_gvl(func);
     }
+
+    pub fn protect<F>(func: F) -> Result<(), ()>
+        where F: Fn()
+    {
+        vm::protect(func)
+    }
 }

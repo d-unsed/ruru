@@ -67,3 +67,20 @@ extern "C" fn callbox(boxptr: *mut c_void) {
     let fnbox: Box<Box<Fn()>> = unsafe { Box::from_raw(boxptr as *mut Box<Fn()>) };
     fnbox();
 }
+
+
+pub fn protect<F>(func: F) -> Result<(), ()>
+    where F: Fn()
+{
+    let mut state = 0;
+    unsafe {
+        vm::rb_protect(callbox as CallbackPtr,
+                       Box::into_raw(Box::new(Box::new(func) as Box<Fn()>)) as *const c_void,
+                       &mut state as *mut i32);
+    }
+    if state == 0 {
+        Ok(())
+    } else {
+        Err(())
+    }
+}
