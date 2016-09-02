@@ -14,11 +14,11 @@
 ///     Greeter,
 ///     itself,
 ///
-///     fn anonymous_greeting() -> RString {
+///     unsafe fn anonymous_greeting() -> RString {
 ///         RString::new("Hello stranger!")
 ///     }
 ///
-///     fn friendly_greeting(name: RString) -> RString {
+///     unsafe fn friendly_greeting(name: RString) -> RString {
 ///         let greeting = format!("Hello dear {}!", name.to_string());
 ///
 ///         RString::new(&greeting)
@@ -83,11 +83,11 @@ macro_rules! class {
 ///     RString, // type of `self` object
 ///     itself, // name of `self` object which will be used in methods
 ///
-///     fn string_is_blank() -> Boolean {
+///     unsafe fn string_is_blank() -> Boolean {
 ///         Boolean::new(itself.to_string().chars().all(|c| c.is_whitespace()))
 ///     }
 ///
-///     fn string_length_equals(expected_length: Fixnum) -> Boolean {
+///     unsafe fn string_length_equals(expected_length: Fixnum) -> Boolean {
 ///         let real_length = itself.to_string().len() as i64;
 ///
 ///         Boolean::new(expected_length.to_i64() == real_length)
@@ -122,7 +122,7 @@ macro_rules! methods {
         $itself_class: ty,
         $itself_name: ident,
         $(
-            fn $method_name: ident
+            unsafe fn $method_name: ident
             ($($arg_name: ident: $arg_type: ty),*) -> $return_type: ident $body: block
         )*
     ) => {

@@ -151,11 +151,11 @@ pub trait Object: From<Value> {
     ///     Counter,
     ///     itself,
     ///
-    ///     fn counter_initialize() -> AnyObject {
+    ///     unsafe fn counter_initialize() -> AnyObject {
     ///         itself.instance_variable_set("@state", Fixnum::new(0))
     ///     }
     ///
-    ///     fn counter_increment() -> AnyObject {
+    ///     unsafe fn counter_increment() -> AnyObject {
     ///         // Using unsafe conversion, because we are sure that `@state` is always a `Fixnum`
     ///         // and we don't provide an interface to set the value externally
     ///         let state = unsafe {
@@ -165,7 +165,7 @@ pub trait Object: From<Value> {
     ///         itself.instance_variable_set("@state", Fixnum::new(state + 1))
     ///     }
     ///
-    ///     fn counter_state() -> Fixnum {
+    ///     unsafe fn counter_state() -> Fixnum {
     ///         unsafe { itself.instance_variable_get("@state").to::<Fixnum>() }
     ///     }
     /// );
@@ -209,11 +209,11 @@ pub trait Object: From<Value> {
     ///     Counter,
     ///     itself,
     ///
-    ///     fn counter_initialize() -> AnyObject {
+    ///     unsafe fn counter_initialize() -> AnyObject {
     ///         itself.instance_variable_set("@state", Fixnum::new(0))
     ///     }
     ///
-    ///     fn counter_increment() -> AnyObject {
+    ///     unsafe fn counter_increment() -> AnyObject {
     ///         // Using unsafe conversion, because we are sure that `@state` is always a `Fixnum`
     ///         // and we don't provide an interface to set the value externally
     ///         let state = unsafe {
@@ -223,7 +223,7 @@ pub trait Object: From<Value> {
     ///         itself.instance_variable_set("@state", Fixnum::new(state + 1))
     ///     }
     ///
-    ///     fn counter_state() -> Fixnum {
+    ///     unsafe fn counter_state() -> Fixnum {
     ///         unsafe { itself.instance_variable_get("@state").to::<Fixnum>() }
     ///     }
     /// );

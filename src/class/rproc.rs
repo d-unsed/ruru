@@ -31,7 +31,7 @@ impl Proc {
     ///     Greeter,
     ///     itself,
     ///
-    ///     fn greet_rust_with(greeting_template: Proc) -> RString {
+    ///     unsafe fn greet_rust_with(greeting_template: Proc) -> RString {
     ///         let name = RString::new("Rust").to_any_object();
     ///
     ///         greeting_template.call(vec![name]).try_convert_to::<RString>().unwrap()
