@@ -72,7 +72,7 @@ impl VM {
     ///     Greeter,
     ///     itself,
     ///
-    ///     unsafe fn greet_rust_with() -> RString {
+    ///     fn greet_rust_with() -> RString {
     ///         let greeting_template = VM::block_proc();
     ///         let name = RString::new("Rust").to_any_object();
     ///

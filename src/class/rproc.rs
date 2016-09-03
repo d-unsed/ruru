@@ -31,10 +31,11 @@ impl Proc {
     ///     Greeter,
     ///     itself,
     ///
-    ///     unsafe fn greet_rust_with(greeting_template: Proc) -> RString {
+    ///     fn greet_rust_with(greeting_template: Proc) -> RString {
     ///         let name = RString::new("Rust").to_any_object();
+    ///         let rendered_template = greeting_template.unwrap().call(vec![name]);
     ///
-    ///         greeting_template.call(vec![name]).try_convert_to::<RString>().unwrap()
+    ///         rendered_template.try_convert_to::<RString>().unwrap()
     ///     }
     /// );
     ///
