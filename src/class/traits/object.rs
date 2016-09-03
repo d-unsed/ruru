@@ -14,6 +14,8 @@ use traits::VerifiedObject;
 ///
 /// Trait consists methods of Ruby `Object` class. Every struct like `Array`, `Hash` etc implements
 /// this trait.
+///
+/// `class!` macro automatically implements this trait for custom classes.
 pub trait Object: From<Value> {
     /// Usually this function just returns a `value` of current object.
     ///
