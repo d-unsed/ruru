@@ -1,6 +1,6 @@
 use types::Value;
 
-use traits::Object;
+use traits::{Object, VerifiedObject};
 
 /// Representation of any Ruby object while its type is unknown
 ///
@@ -88,5 +88,15 @@ impl From<Value> for AnyObject {
 impl Object for AnyObject {
     fn value(&self) -> Value {
         self.value
+    }
+}
+
+impl VerifiedObject for AnyObject {
+    fn is_correct_type<T: Object>(_: &T) -> bool {
+        true
+    }
+
+    fn error_message() -> String {
+        unreachable!()
     }
 }
