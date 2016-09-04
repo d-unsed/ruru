@@ -6,6 +6,7 @@ use util;
 use traits::{Object, VerifiedObject};
 
 /// `TrueClass` and `FalseClass`
+#[derive(Debug, PartialEq)]
 pub struct Boolean {
     value: Value,
 }

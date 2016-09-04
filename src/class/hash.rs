@@ -7,6 +7,7 @@ use AnyObject;
 use traits::{Object, VerifiedObject};
 
 /// `Hash`
+#[derive(Debug, PartialEq)]
 pub struct Hash {
     value: Value,
 }

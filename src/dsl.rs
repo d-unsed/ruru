@@ -54,6 +54,7 @@
 #[macro_export]
 macro_rules! class {
     ($class: ident) => {
+        #[derive(Debug, PartialEq)]
         pub struct $class {
             value: $crate::types::Value,
         }

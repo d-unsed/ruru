@@ -74,7 +74,7 @@ use traits::{Object, VerifiedObject};
 ///     Class::from_existing("String").define_method("==", string_eq);
 /// }
 /// ```
-#[derive(Clone)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct AnyObject {
     value: Value,
 }

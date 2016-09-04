@@ -6,6 +6,7 @@ use types::{Value, ValueType};
 use traits::{Object, VerifiedObject};
 
 /// `String`
+#[derive(Debug, PartialEq)]
 pub struct RString {
     value: Value,
 }

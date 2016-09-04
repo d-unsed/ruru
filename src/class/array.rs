@@ -9,6 +9,7 @@ use RString;
 use traits::{Object, VerifiedObject};
 
 /// `Array`
+#[derive(Debug, PartialEq)]
 pub struct Array {
     value: Value,
 }

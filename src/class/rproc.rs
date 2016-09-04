@@ -9,6 +9,7 @@ use Class;
 use traits::{Object, VerifiedObject};
 
 /// `Proc` (works with `Lambda` as well)
+#[derive(Debug, PartialEq)]
 pub struct Proc {
     value: Value,
 }

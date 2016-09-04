@@ -6,6 +6,7 @@ use types::{InternalValue, Value, ValueType};
 use traits::{Object, VerifiedObject};
 
 /// `NilClass`
+#[derive(Debug, PartialEq)]
 pub struct NilClass {
     value: Value,
 }
