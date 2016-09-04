@@ -1,6 +1,6 @@
 use traits::Object;
 
-/// Interface for save conversions between types.
+/// Interface for safe conversions between types
 ///
 /// This trait is required by `Object::convert_to()` function.
 ///
@@ -28,6 +28,15 @@ use traits::Object;
 /// }
 ///
 /// fn main() {
+///     # VM::init();
+///     Class::new("Server");
+///
+///     let server = Class::from_existing("Server").new_instance(vec![]).to_any_object();
+///
+///     let server_unsafe = unsafe { server.to::<Server>() };
+///     let server_safe = server.try_convert_to::<Server>();
+///
+///     assert_eq!(server_safe, Ok(server_unsafe));
 /// }
 /// ```
 pub trait VerifiedObject: Object {
