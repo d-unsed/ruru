@@ -251,7 +251,7 @@ pub trait Object: From<Value> {
         AnyObject::from(result)
     }
 
-    /// Casts current object to the specified Ruby type.
+    /// Unsafely casts current object to the specified Ruby type
     ///
     /// This operation in unsafe, because it does not perform any validations on the object, but
     /// it is faster than `try_convert_to()`.
@@ -261,6 +261,8 @@ pub trait Object: From<Value> {
     ///  - you own the Ruby code which passes the object to Rust;
     ///  - you are sure that the object has correct type;
     ///  - Ruby code has a good test coverage.
+    ///
+    /// This function is used by `unsafe_methods!` macro for argument casting.
     ///
     /// # Examples
     ///
@@ -279,6 +281,111 @@ pub trait Object: From<Value> {
         T::from(self.value())
     }
 
+    /// Safely casts current object to the specified Ruby type
+    ///
+    /// This function is used by `methods!` macro for argument casting.
+    ///
+    /// # Examples
+    ///
+    /// ### Basic conversions
+    ///
+    /// ```
+    /// use ruru::{Fixnum, RString, VM};
+    /// use ruru::traits::Object;
+    /// # VM::init();
+    ///
+    /// let fixnum_as_any_object = Fixnum::new(1).to_any_object();
+    /// let converted_fixnum = fixnum_as_any_object.try_convert_to::<Fixnum>();
+    ///
+    /// assert_eq!(converted_fixnum, Ok(Fixnum::new(1)));
+    ///
+    /// let string = RString::new("string");
+    /// let string_as_fixnum = string.try_convert_to::<Fixnum>();
+    ///
+    /// assert_eq!(string_as_fixnum, Err("Error converting to Fixnum".to_string()));
+    /// ```
+    ///
+    /// ### Method arguments
+    ///
+    /// To launch a server in Rust, you plan to write a simple `Server` class
+    ///
+    /// ```ruby
+    /// class Server
+    ///   def start(address)
+    ///     # ...
+    ///   end
+    /// end
+    /// ```
+    ///
+    /// The `address` must be `Hash` with the following structure:
+    ///
+    /// ```ruby
+    /// {
+    ///   host: 'localhost',
+    ///   port: 8080,
+    /// }
+    /// ```
+    ///
+    /// You want to extract port from it. Default port is `8080` in case when:
+    ///
+    ///  - `address` is not a `Hash`
+    ///  - `address[:port]` is not present
+    ///  - `address[:port]` is not a `Fixnum`
+    ///
+    /// ```no_run
+    /// #[macro_use]
+    /// extern crate ruru;
+    ///
+    /// use ruru::{Class, Fixnum, Hash, NilClass, Symbol, VM};
+    /// use ruru::traits::Object;
+    ///
+    /// class!(Server);
+    ///
+    /// methods!(
+    ///     Server,
+    ///     itself,
+    ///
+    ///     fn start(address: Hash) -> NilClass {
+    ///         let default_port = 8080;
+    ///
+    ///         let port = address
+    ///             .map(|hash| hash.at(Symbol::new("port")))
+    ///             .and_then(|port| port.try_convert_to::<Fixnum>())
+    ///             .map(|port| port.to_i64())
+    ///             .unwrap_or(default_port);
+    ///
+    ///         // Start server...
+    ///
+    ///         NilClass::new()
+    ///     }
+    /// );
+    ///
+    /// fn main() {
+    ///     # VM::init();
+    ///     Class::new("Server").define(|itself| {
+    ///         itself.def("start", start);
+    ///     });
+    /// }
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class Server
+    ///   def start(address)
+    ///     default_port = 8080
+    ///
+    ///     port =
+    ///       if address.is_a?(Hash) && address[:port].is_a?(Fixnum)
+    ///         address[:port]
+    ///       else
+    ///         default_port
+    ///       end
+    ///
+    ///     # Start server...
+    ///   end
+    /// end
+    /// ```
     fn try_convert_to<T: VerifiedObject>(&self) -> Result<T, String> {
         if T::is_correct_type(self) {
             let converted_object = unsafe { self.to::<T>() };
