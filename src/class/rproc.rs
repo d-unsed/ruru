@@ -41,7 +41,7 @@ impl Proc {
     /// );
     ///
     /// fn main() {
-    ///     Class::new("Greeter").define(|itself| {
+    ///     Class::new("Greeter", None).define(|itself| {
     ///         itself.def_self("greet_rust_with", greet_rust_with);
     ///     });
     /// }

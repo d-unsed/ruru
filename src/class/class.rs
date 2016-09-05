@@ -16,8 +16,13 @@ pub struct Class {
 }
 
 impl Class {
-    // TODO: replace rb_cObject with optional superclass
     /// Creates a new `Class`.
+    ///
+    /// `superclass` can receive the following values:
+    ///
+    ///  - `None` to inherit from `Object` class
+    ///     (standard Ruby behavior when superclass is not given explicitly);
+    ///  - `Some(&class)` to inherit from the given class
     ///
     /// # Examples
     ///
@@ -25,9 +30,11 @@ impl Class {
     /// use ruru::{Class, VM};
     /// # VM::init();
     ///
-    /// let class = Class::new("Hello");
+    /// let new_class = Class::new("NewClass", None);
+    /// assert_eq!(new_class, Class::from_existing("NewClass"));
     ///
-    /// assert_eq!(class, Class::from_existing("Hello"));
+    /// let another_class = Class::new("AnotherClass", Some(&new_class));
+    /// assert_eq!(another_class, Class::from_existing("AnotherClass"));
     /// ```
     ///
     /// Ruby:
@@ -40,8 +47,13 @@ impl Class {
     ///
     /// Hello = Class.new
     /// ```
-    pub fn new(name: &str) -> Self {
-        Class { value: class::define_class(name, rb_cObject) }
+    pub fn new(name: &str, superclass: Option<&Self>) -> Self {
+        let superclass = match superclass {
+            Some(class) => class.value(),
+            None => rb_cObject
+        };
+
+        Class { value: class::define_class(name, superclass) }
     }
 
     // TODO: replace rb_cObject with optional class
@@ -53,7 +65,7 @@ impl Class {
     /// use ruru::{Class, VM};
     /// # VM::init();
     ///
-    /// let class = Class::new("Hello");
+    /// let class = Class::new("Hello", None);
     ///
     /// assert_eq!(class, Class::from_existing("Hello"));
     /// ```
@@ -128,7 +140,7 @@ impl Class {
     /// }
     ///
     /// fn main() {
-    ///     Class::new("Hello").define(|itself| {
+    ///     Class::new("Hello", None).define(|itself| {
     ///         itself.def_self("greeting", many_greetings);
     ///         itself.def("many_greetings", greeting);
     ///     });

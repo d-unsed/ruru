@@ -29,7 +29,7 @@ use traits::Object;
 ///
 /// fn main() {
 ///     # VM::init();
-///     Class::new("Server");
+///     Class::new("Server", None);
 ///
 ///     let server = Class::from_existing("Server").new_instance(vec![]).to_any_object();
 ///

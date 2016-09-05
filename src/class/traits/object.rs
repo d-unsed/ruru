@@ -174,7 +174,7 @@ pub trait Object: From<Value> {
     ///
     /// fn main() {
     ///     # VM::init();
-    ///     let counter = Class::new("Counter").define(|itself| {
+    ///     let counter = Class::new("Counter", None).define(|itself| {
     ///         itself.def("initialize", counter_initialize);
     ///         itself.def("increment!", counter_increment);
     ///         itself.def("state", counter_state);
@@ -232,7 +232,7 @@ pub trait Object: From<Value> {
     ///
     /// fn main() {
     ///     # VM::init();
-    ///     let counter = Class::new("Counter").define(|itself| {
+    ///     let counter = Class::new("Counter", None).define(|itself| {
     ///         itself.def("initialize", counter_initialize);
     ///         itself.def("increment!", counter_increment);
     ///         itself.def("state", counter_state);
@@ -362,7 +362,7 @@ pub trait Object: From<Value> {
     ///
     /// fn main() {
     ///     # VM::init();
-    ///     Class::new("Server").define(|itself| {
+    ///     Class::new("Server", None).define(|itself| {
     ///         itself.def("start", start);
     ///     });
     /// }

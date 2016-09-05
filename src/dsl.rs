@@ -31,7 +31,7 @@
 ///
 /// fn main() {
 ///     # VM::init();
-///     Class::new("Greeter").define(|itself| {
+///     Class::new("Greeter", None).define(|itself| {
 ///         itself.def("anonymous_greeting", anonymous_greeting);
 ///         itself.def("friendly_greeting", friendly_greeting);
 ///     });
@@ -241,7 +241,7 @@ macro_rules! unsafe_methods {
 ///
 /// fn main() {
 ///     # VM::init();
-///     Class::new("Server").define(|itself| {
+///     Class::new("Server", None).define(|itself| {
 ///         itself.def("start", start);
 ///     });
 /// }

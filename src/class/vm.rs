@@ -33,7 +33,7 @@ impl VM {
     /// // VM started, able to use Ruby now
     /// // ...
     ///
-    /// Class::new("SomeClass"); // etc
+    /// Class::new("SomeClass", None); // etc
     /// ```
     pub fn init() {
         vm::init();
@@ -81,7 +81,7 @@ impl VM {
     /// );
     ///
     /// fn main() {
-    ///     Class::new("Greeter").define(|itself| {
+    ///     Class::new("Greeter", None).define(|itself| {
     ///         itself.def_self("greet_rust_with", greet_rust_with);
     ///     });
     /// }
