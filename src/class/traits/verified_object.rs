@@ -1,4 +1,4 @@
-use traits::Object;
+use Object;
 
 /// Interface for safe conversions between types
 ///
@@ -12,8 +12,7 @@ use traits::Object;
 /// #[macro_use]
 /// extern crate ruru;
 ///
-/// use ruru::{Class, Fixnum, VM};
-/// use ruru::traits::{Object, VerifiedObject};
+/// use ruru::{Class, Fixnum, Object, VerifiedObject, VM};
 ///
 /// class!(Server);
 ///

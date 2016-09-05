@@ -1,5 +1,2 @@
-mod object;
-mod verified_object;
-
-pub use self::object::Object;
-pub use self::verified_object::VerifiedObject;
+pub mod object;
+pub mod verified_object;

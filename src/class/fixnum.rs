@@ -3,7 +3,7 @@ use std::convert::From;
 use binding::fixnum;
 use types::{Value, ValueType};
 
-use traits::{Object, VerifiedObject};
+use {Object, VerifiedObject};
 
 /// `Fixnum`
 #[derive(Debug, PartialEq)]

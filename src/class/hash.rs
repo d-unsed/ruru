@@ -3,8 +3,7 @@ use std::convert::From;
 use binding::hash;
 use types::{Value, ValueType};
 
-use AnyObject;
-use traits::{Object, VerifiedObject};
+use {AnyObject, Object, VerifiedObject};
 
 /// `Hash`
 #[derive(Debug, PartialEq)]
@@ -38,8 +37,7 @@ impl Hash {
     /// # Examples
     ///
     /// ```no_run
-    /// use ruru::{Fixnum, Hash, Symbol, VM};
-    /// use ruru::traits::Object;
+    /// use ruru::{Fixnum, Hash, Object, Symbol, VM};
     /// # VM::init();
     ///
     /// let mut hash = Hash::new();
@@ -70,8 +68,7 @@ impl Hash {
     /// # Examples
     ///
     /// ```no_run
-    /// use ruru::{Fixnum, Hash, Symbol, VM};
-    /// use ruru::traits::Object;
+    /// use ruru::{Fixnum, Hash, Object, Symbol, VM};
     /// # VM::init();
     ///
     /// let mut hash = Hash::new();

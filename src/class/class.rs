@@ -6,8 +6,7 @@ use binding::util as binding_util;
 use types::{Callback, Value, ValueType};
 use util;
 
-use AnyObject;
-use traits::{Object, VerifiedObject};
+use {AnyObject, Object, VerifiedObject};
 
 /// `Class`
 #[derive(Debug, PartialEq)]
@@ -90,8 +89,7 @@ impl Class {
     /// # Examples
     ///
     /// ```no_run
-    /// use ruru::{Class, Fixnum};
-    /// use ruru::traits::Object;
+    /// use ruru::{Class, Fixnum, Object};
     ///
     /// // Without arguments
     /// Class::from_existing("Hello").new_instance(vec![]);
@@ -210,9 +208,7 @@ impl Class {
     ///
     /// ```no_run
     /// use ruru::types::Argc;
-    /// use ruru::{AnyObject, Boolean, Class, RString};
-    ///
-    /// use ruru::traits::Object;
+    /// use ruru::{AnyObject, Boolean, Class, Object, RString};
     ///
     /// #[no_mangle]
     /// pub extern fn string_blank(_: Argc, _: *const AnyObject, itself: RString) -> Boolean {
@@ -241,8 +237,7 @@ impl Class {
     ///
     /// ```no_run
     /// use ruru::types::Argc;
-    /// use ruru::{AnyObject, Boolean, Class, RString, VM};
-    /// use ruru::traits::Object;
+    /// use ruru::{AnyObject, Boolean, Class, Object, RString, VM};
     ///
     /// #[no_mangle]
     /// pub extern fn string_eq(argc: Argc, argv: *const AnyObject, itself: RString) -> Boolean {
@@ -282,8 +277,7 @@ impl Class {
     ///
     /// ```no_run
     /// use ruru::types::Argc;
-    /// use ruru::{AnyObject, Class, RString, Symbol, VM};
-    /// use ruru::traits::Object;
+    /// use ruru::{AnyObject, Class, Object, RString, Symbol, VM};
     ///
     /// #[no_mangle]
     /// pub extern fn symbol_from_string(argc: Argc,

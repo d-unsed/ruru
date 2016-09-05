@@ -4,9 +4,7 @@ use std::iter::{FromIterator, IntoIterator, Iterator};
 use binding::array;
 use types::{Value, ValueType};
 
-use AnyObject;
-use RString;
-use traits::{Object, VerifiedObject};
+use {AnyObject, RString, Object, VerifiedObject};
 
 /// `Array`
 #[derive(Debug, PartialEq)]
@@ -70,8 +68,7 @@ impl Array {
     /// # Examples
     ///
     /// ```
-    /// use ruru::{Array, Fixnum, VM};
-    /// use ruru::traits::Object;
+    /// use ruru::{Array, Fixnum, Object, VM};
     /// # VM::init();
     ///
     /// let array = Array::new().push(Fixnum::new(1));
@@ -128,8 +125,7 @@ impl Array {
     /// # Examples
     ///
     /// ```
-    /// use ruru::{Array, Fixnum, VM};
-    /// use ruru::traits::Object;
+    /// use ruru::{Array, Fixnum, Object, VM};
     /// # VM::init();
     ///
     /// let mut array = Array::new();
@@ -158,8 +154,7 @@ impl Array {
     /// # Examples
     ///
     /// ```
-    /// use ruru::{Array, Fixnum, VM};
-    /// use ruru::traits::Object;
+    /// use ruru::{Array, Fixnum, Object, VM};
     /// # VM::init();
     ///
     /// let mut array = Array::new().push(Fixnum::new(1));
@@ -249,8 +244,7 @@ impl ExactSizeIterator for ArrayIterator {
 /// # Examples
 ///
 /// ```
-/// use ruru::{Array, Fixnum, VM};
-/// use ruru::traits::Object;
+/// use ruru::{Array, Fixnum, Object, VM};
 /// # VM::init();
 ///
 /// let mut array = Array::new().push(Fixnum::new(1));
@@ -278,8 +272,7 @@ impl IntoIterator for Array {
 /// # Examples
 ///
 /// ```
-/// use ruru::{Array, Fixnum, VM};
-/// use ruru::traits::Object;
+/// use ruru::{Array, Fixnum, Object, VM};
 /// # VM::init();
 ///
 /// let array: Array = (1..6)

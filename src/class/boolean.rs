@@ -3,7 +3,7 @@ use std::convert::From;
 use types::{Value, ValueType};
 use util;
 
-use traits::{Object, VerifiedObject};
+use {Object, VerifiedObject};
 
 /// `TrueClass` and `FalseClass`
 #[derive(Debug, PartialEq)]

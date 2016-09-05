@@ -4,7 +4,7 @@ use binding::symbol;
 use binding::util;
 use types::{Value, ValueType};
 
-use traits::{Object, VerifiedObject};
+use {Object, VerifiedObject};
 
 /// `Symbol`
 #[derive(Debug, PartialEq)]

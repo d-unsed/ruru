@@ -3,8 +3,7 @@ use std::ffi::{CStr, CString};
 use binding::global::RubySpecialConsts;
 use types::{c_char, c_int, InternalValue, Value};
 
-use AnyObject;
-use traits::Object;
+use {AnyObject, Object};
 
 pub fn cstr_as_string(str: *const c_char) -> String {
     unsafe { CStr::from_ptr(str).to_string_lossy().into_owned() }

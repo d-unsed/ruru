@@ -63,8 +63,7 @@ impl VM {
     /// #[macro_use]
     /// extern crate ruru;
     ///
-    /// use ruru::{Class, Proc, RString, VM};
-    /// use ruru::traits::Object;
+    /// use ruru::{Class, Object, Proc, RString, VM};
     ///
     /// class!(Greeter);
     ///
@@ -116,8 +115,7 @@ impl VM {
     ///
     /// ```no_run
     /// use ruru::types::Argc;
-    /// use ruru::{AnyObject, Boolean, Class, RString, VM};
-    /// use ruru::traits::Object;
+    /// use ruru::{AnyObject, Boolean, Class, Object, RString, VM};
     ///
     /// #[no_mangle]
     /// pub extern fn string_eq(argc: Argc, argv: *const AnyObject, itself: RString) -> Boolean {

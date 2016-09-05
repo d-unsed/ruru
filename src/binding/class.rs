@@ -4,7 +4,7 @@ use binding::util as binding_util;
 use types::{Argc, Callback, CallbackPtr, Value};
 use util;
 
-use traits::Object;
+use Object;
 
 pub fn define_class(name: &str, superclass: Value) -> Value {
     let name = util::str_to_cstring(name);

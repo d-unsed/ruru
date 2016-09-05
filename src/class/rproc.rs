@@ -4,9 +4,7 @@ use binding::rproc;
 use types::Value;
 use util;
 
-use AnyObject;
-use Class;
-use traits::{Object, VerifiedObject};
+use {AnyObject, Class, Object, VerifiedObject};
 
 /// `Proc` (works with `Lambda` as well)
 #[derive(Debug, PartialEq)]
@@ -23,8 +21,7 @@ impl Proc {
     /// #[macro_use]
     /// extern crate ruru;
     ///
-    /// use ruru::{Class, Proc, RString};
-    /// use ruru::traits::Object;
+    /// use ruru::{Class, Object, Proc, RString};
     ///
     /// class!(Greeter);
     ///

@@ -1,6 +1,6 @@
 use types::Value;
 
-use traits::{Object, VerifiedObject};
+use {Object, VerifiedObject};
 
 /// Representation of any Ruby object while its type is unknown
 ///
@@ -25,8 +25,7 @@ use traits::{Object, VerifiedObject};
 /// ## Retrieving an object from `Array`
 ///
 /// ```
-/// use ruru::{Array, Fixnum, VM};
-/// use ruru::traits::Object;
+/// use ruru::{Array, Fixnum, Object, VM};
 /// # VM::init();
 ///
 /// let array = Array::new().push(Fixnum::new(1));
@@ -38,8 +37,7 @@ use traits::{Object, VerifiedObject};
 /// ## Retrieving an object from `Hash`
 ///
 /// ```no_run
-/// use ruru::{Fixnum, Hash, Symbol, VM};
-/// use ruru::traits::Object;
+/// use ruru::{Fixnum, Hash, Object, Symbol, VM};
 /// # VM::init();
 ///
 /// let mut hash = Hash::new();
@@ -58,8 +56,7 @@ use traits::{Object, VerifiedObject};
 ///
 /// ```no_run
 /// use ruru::types::Argc;
-/// use ruru::{AnyObject, Boolean, Class, RString, VM};
-/// use ruru::traits::Object;
+/// use ruru::{AnyObject, Boolean, Class, Object, RString, VM};
 ///
 /// #[no_mangle]
 /// pub extern fn string_eq(argc: Argc, argv: *const AnyObject, itself: RString) -> Boolean {

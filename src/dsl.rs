@@ -65,7 +65,7 @@ macro_rules! class {
             }
         }
 
-        impl $crate::traits::Object for $class {
+        impl $crate::Object for $class {
             fn value(&self) -> $crate::types::Value {
                 self.value
             }
@@ -155,7 +155,7 @@ macro_rules! unsafe_methods {
 
                 $(
                     let $arg_name = unsafe {
-                        <$crate::AnyObject as $crate::traits::Object>
+                        <$crate::AnyObject as $crate::Object>
                             ::to::<$arg_type>(&_arguments[_i])
                     };
 
@@ -215,8 +215,7 @@ macro_rules! unsafe_methods {
 /// #[macro_use]
 /// extern crate ruru;
 ///
-/// use ruru::{Class, Fixnum, Hash, NilClass, Symbol, VM};
-/// use ruru::traits::Object;
+/// use ruru::{Class, Fixnum, Hash, NilClass, Object, Symbol, VM};
 ///
 /// class!(Server);
 ///
@@ -296,7 +295,7 @@ macro_rules! methods {
                                     stringify!($method_name)
                                 )
                             }).and_then(|argument| {
-                                <$crate::AnyObject as $crate::traits::Object>
+                                <$crate::AnyObject as $crate::Object>
                                     ::try_convert_to::<$arg_type>(argument)
                             });
 

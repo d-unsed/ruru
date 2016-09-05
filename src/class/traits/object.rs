@@ -6,9 +6,7 @@ use binding::util as binding_util;
 use types::Value;
 use util;
 
-use AnyObject;
-use Class;
-use traits::VerifiedObject;
+use {AnyObject, Class, VerifiedObject};
 
 /// `Object`
 ///
@@ -23,7 +21,7 @@ pub trait Object: From<Value> {
     ///
     /// ```
     /// use ruru::types::Value;
-    /// use ruru::traits::Object;
+    /// use ruru::Object;
     ///
     /// struct Array {
     ///     value: Value
@@ -49,8 +47,7 @@ pub trait Object: From<Value> {
     ///
     /// # Examples
     /// ```
-    /// use ruru::{Array, VM};
-    /// use ruru::traits::Object;
+    /// use ruru::{Array, Object, VM};
     /// # VM::init();
     ///
     /// assert_eq!(Array::new().class(), Array::new().class());
@@ -66,8 +63,7 @@ pub trait Object: From<Value> {
     /// # Examples
     ///
     /// ```no_run
-    /// use ruru::{Array, Fixnum, RString, VM};
-    /// use ruru::traits::Object;
+    /// use ruru::{Array, Fixnum, Object, RString, VM};
     /// # VM::init();
     ///
     /// let array = Array::new().push(Fixnum::new(1));
@@ -93,8 +89,7 @@ pub trait Object: From<Value> {
     /// # Examples
     ///
     /// ```
-    /// use ruru::{Hash, NilClass, VM};
-    /// use ruru::traits::Object;
+    /// use ruru::{Hash, NilClass, Object, VM};
     /// # VM::init();
     ///
     /// assert!(NilClass::new().is_nil());
@@ -118,8 +113,7 @@ pub trait Object: From<Value> {
     /// # Examples
     ///
     /// ```no_run
-    /// use ruru::{Array, Fixnum, VM};
-    /// use ruru::traits::Object;
+    /// use ruru::{Array, Fixnum, Object, VM};
     /// # VM::init();
     ///
     /// let array = Array::new().push(Fixnum::new(1));
@@ -143,9 +137,8 @@ pub trait Object: From<Value> {
     /// #[macro_use]
     /// extern crate ruru;
     ///
-    /// use ruru::{AnyObject, Class, Fixnum, VM};
+    /// use ruru::{AnyObject, Class, Fixnum, Object, VM};
     /// use ruru::types::Argc;
-    /// use ruru::traits::Object;
     ///
     /// class!(Counter);
     ///
@@ -201,9 +194,8 @@ pub trait Object: From<Value> {
     /// #[macro_use]
     /// extern crate ruru;
     ///
-    /// use ruru::{AnyObject, Class, Fixnum, VM};
+    /// use ruru::{AnyObject, Class, Fixnum, Object, VM};
     /// use ruru::types::Argc;
-    /// use ruru::traits::Object;
     ///
     /// class!(Counter);
     ///
@@ -267,8 +259,7 @@ pub trait Object: From<Value> {
     /// # Examples
     ///
     /// ```
-    /// use ruru::{AnyObject, Fixnum, VM};
-    /// use ruru::traits::Object;
+    /// use ruru::{AnyObject, Fixnum, Object, VM};
     /// # VM::init();
     ///
     /// let fixnum_as_any_object = Fixnum::new(1).to_any_object();
@@ -290,8 +281,7 @@ pub trait Object: From<Value> {
     /// ### Basic conversions
     ///
     /// ```
-    /// use ruru::{Fixnum, RString, VM};
-    /// use ruru::traits::Object;
+    /// use ruru::{Fixnum, Object, RString, VM};
     /// # VM::init();
     ///
     /// let fixnum_as_any_object = Fixnum::new(1).to_any_object();
@@ -336,8 +326,7 @@ pub trait Object: From<Value> {
     /// #[macro_use]
     /// extern crate ruru;
     ///
-    /// use ruru::{Class, Fixnum, Hash, NilClass, Symbol, VM};
-    /// use ruru::traits::Object;
+    /// use ruru::{Class, Fixnum, Hash, NilClass, Object, Symbol, VM};
     ///
     /// class!(Server);
     ///
@@ -401,8 +390,7 @@ pub trait Object: From<Value> {
     /// # Example
     ///
     /// ```
-    /// use ruru::{AnyObject, Fixnum, VM};
-    /// use ruru::traits::Object;
+    /// use ruru::{AnyObject, Fixnum, Object, VM};
     /// use ruru::types::ValueType;
     /// # VM::init();
     ///

@@ -3,7 +3,7 @@ use std::convert::From;
 use binding::string;
 use types::{Value, ValueType};
 
-use traits::{Object, VerifiedObject};
+use {Object, VerifiedObject};
 
 /// `String`
 #[derive(Debug, PartialEq)]

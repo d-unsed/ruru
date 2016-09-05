@@ -20,7 +20,8 @@ pub use class::string::RString;
 pub use class::symbol::Symbol;
 pub use class::vm::VM;
 
-pub use class::traits;
+pub use class::traits::object::Object;
+pub use class::traits::verified_object::VerifiedObject;
 
 #[test]
 fn it_works() {}

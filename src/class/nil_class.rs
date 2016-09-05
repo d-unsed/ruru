@@ -3,7 +3,7 @@ use std::convert::From;
 use binding::global::RubySpecialConsts;
 use types::{InternalValue, Value, ValueType};
 
-use traits::{Object, VerifiedObject};
+use {Object, VerifiedObject};
 
 /// `NilClass`
 #[derive(Debug, PartialEq)]
@@ -17,8 +17,7 @@ impl NilClass {
     /// # Examples
     ///
     /// ```
-    /// use ruru::{NilClass, VM};
-    /// use ruru::traits::Object;
+    /// use ruru::{NilClass, Object, VM};
     /// # VM::init();
     ///
     /// assert!(NilClass::new().value().is_nil());
