@@ -268,7 +268,7 @@ pub trait Object: From<Value> {
     /// Use it when:
     ///
     ///  - you own the Ruby code which passes the object to Rust;
-    ///  - you are sure that the object has correct type;
+    ///  - you are sure that the object always has correct type;
     ///  - Ruby code has a good test coverage.
     ///
     /// This function is used by `unsafe_methods!` macro for argument casting.
@@ -292,6 +292,9 @@ pub trait Object: From<Value> {
     /// Safely casts current object to the specified Ruby type
     ///
     /// This function is used by `methods!` macro for argument casting.
+    ///
+    /// See documentation for `VerifiedObject` trait to enable safe conversions
+    /// for custom classes.
     ///
     /// # Examples
     ///
