@@ -114,6 +114,30 @@ impl Class {
         AnyObject::from(instance)
     }
 
+    /// Returns a superclass of the current class
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Class, Object, VM};
+    /// # VM::init();
+    ///
+    /// assert_eq!(
+    ///     Class::from_existing("Array").superclass(),
+    ///     Some(Class::from_existing("Object"))
+    /// );
+    ///
+    /// assert_eq!(Class::from_existing("BasicObject").superclass(), None);
+    /// ```
+    pub fn superclass(&self) -> Option<Class> {
+        let superclass_value = class::superclass(self.value());
+
+        match superclass_value.is_nil() {
+            true => None,
+            false => Some(Self::from(superclass_value))
+        }
+    }
+
     /// Wraps calls to a class.
     ///
     /// Used to have Ruby-like class definition DSL.
