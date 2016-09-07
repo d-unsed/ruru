@@ -1,5 +1,6 @@
 use ruby_sys::hash;
 
+use binding::fixnum;
 use types::{CallbackPtr, CallbackMutPtr, Value};
 use Object;
 
@@ -13,6 +14,14 @@ pub fn aref(hash: Value, key: Value) -> Value {
 
 pub fn aset(hash: Value, key: Value, value: Value) -> Value {
     unsafe { hash::rb_hash_aset(hash, key, value) }
+}
+
+pub fn length(hash: Value) -> i64 {
+    unsafe {
+        let size = hash::rb_hash_size(hash);
+
+        fixnum::num_to_int(size)
+    }
 }
 
 pub fn each<K, V, F>(hash: Value, closure_callback: F)

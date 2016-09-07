@@ -92,6 +92,38 @@ impl Hash {
         AnyObject::from(result)
     }
 
+    /// Retrieves the length of the hash.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Hash, Fixnum, Symbol, VM};
+    /// # VM::init();
+    ///
+    /// let mut hash = Hash::new();
+    ///
+    /// hash.store(Symbol::new("key1"), Fixnum::new(1));
+    /// assert_eq!(hash.length(), 1);
+    ///
+    /// hash.store(Symbol::new("key2"), Fixnum::new(2));
+    /// assert_eq!(hash.length(), 2);
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// hash = {}
+    ///
+    /// hash[:key1] = 1
+    /// hash.length == 1
+    ///
+    /// hash[:key2] = 2
+    /// hash.length == 2
+    /// ```
+    pub fn length(&self) -> usize {
+        hash::length(self.value()) as usize
+    }
+
     /// Runs a closure for each `key` and `value` pair.
     ///
     /// You can specify types for each object if they are known and are the same for each key and
