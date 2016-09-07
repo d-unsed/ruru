@@ -21,7 +21,7 @@ impl Class {
     ///
     ///  - `None` to inherit from `Object` class
     ///     (standard Ruby behavior when superclass is not given explicitly);
-    ///  - `Some(&class)` to inherit from the given class
+    ///  - `Some(&Class)` to inherit from the given class
     ///
     /// # Examples
     ///
@@ -29,22 +29,28 @@ impl Class {
     /// use ruru::{Class, VM};
     /// # VM::init();
     ///
-    /// let new_class = Class::new("NewClass", None);
-    /// assert_eq!(new_class, Class::from_existing("NewClass"));
+    /// let basic_record_class = Class::new("BasicRecord", None);
     ///
-    /// let another_class = Class::new("AnotherClass", Some(&new_class));
-    /// assert_eq!(another_class, Class::from_existing("AnotherClass"));
+    /// assert_eq!(basic_record_class, Class::from_existing("BasicRecord"));
+    /// assert_eq!(basic_record_class.superclass(), Some(Class::from_existing("Object")));
+    ///
+    /// let record_class = Class::new("Record", Some(&basic_record_class));
+    ///
+    /// assert_eq!(record_class, Class::from_existing("Record"));
+    /// assert_eq!(record_class.superclass(), Some(Class::from_existing("BasicRecord")));
     /// ```
     ///
     /// Ruby:
     ///
     /// ```ruby
-    /// class Hello
+    /// class BasicRecord
     /// end
     ///
-    /// # or
+    /// class Record < BasicRecord
+    /// end
     ///
-    /// Hello = Class.new
+    /// BasicRecord.superclass == Object
+    /// Record.superclass == BasicRecord
     /// ```
     pub fn new(name: &str, superclass: Option<&Self>) -> Self {
         let superclass = Self::superclass_to_value(superclass);
@@ -61,19 +67,24 @@ impl Class {
     /// use ruru::{Class, VM};
     /// # VM::init();
     ///
-    /// let class = Class::new("Hello", None);
+    /// let class = Class::new("Record", None);
     ///
-    /// assert_eq!(class, Class::from_existing("Hello"));
+    /// assert_eq!(class, Class::from_existing("Record"));
     /// ```
     ///
     /// Ruby:
     ///
     /// ```ruby
-    /// Hello
+    /// class Record
+    /// end
+    ///
+    /// # get class
+    ///
+    /// Record
     ///
     /// # or
     ///
-    /// Object.const_get('Hello')
+    /// Object.const_get('Record')
     /// ```
     pub fn from_existing(name: &str) -> Self {
         Class { value: binding_util::get_constant(name, rb_cObject) }
