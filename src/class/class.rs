@@ -47,10 +47,7 @@ impl Class {
     /// Hello = Class.new
     /// ```
     pub fn new(name: &str, superclass: Option<&Self>) -> Self {
-        let superclass = match superclass {
-            Some(class) => class.value(),
-            None => rb_cObject
-        };
+        let superclass = Self::superclass_to_value(superclass);
 
         Class { value: class::define_class(name, superclass) }
     }
@@ -119,28 +116,48 @@ impl Class {
 
     /// Wraps calls to a class.
     ///
-    /// Mostly used to have Ruby-like class definitions.
+    /// Used to have Ruby-like class definition DSL.
     ///
     /// # Examples
     ///
     /// ```no_run
-    /// use ruru::types::Argc;
+    /// #[macro_use] extern crate ruru;
+    ///
     /// use ruru::{AnyObject, Class, Fixnum, RString};
     ///
-    /// #[no_mangle]
-    /// pub extern fn greeting(_: Argc, _: *const AnyObject, _: AnyObject) -> RString {
-    ///     RString::new("Greeting from class")
-    /// }
+    /// class!(Hello);
+    /// class!(Nested);
     ///
-    /// #[no_mangle]
-    /// pub extern fn many_greetings(_: Argc, _: *const AnyObject, _: AnyObject) -> RString {
-    ///     RString::new("Many greetings from instance")
-    /// }
+    /// methods!(
+    ///     Hello,
+    ///     itself,
+    ///
+    ///     fn greeting() -> RString {
+    ///         RString::new("Greeting from class")
+    ///     }
+    ///
+    ///     fn many_greetings() -> RString {
+    ///         RString::new("Many greetings from instance")
+    ///     }
+    /// );
+    ///
+    /// methods!(
+    ///     Nested,
+    ///     itself,
+    ///
+    ///     fn nested_greeting() -> RString {
+    ///         RString::new("Greeting from nested class")
+    ///     }
+    /// );
     ///
     /// fn main() {
     ///     Class::new("Hello", None).define(|itself| {
-    ///         itself.def_self("greeting", many_greetings);
-    ///         itself.def("many_greetings", greeting);
+    ///         itself.def_self("greeting", greeting);
+    ///         itself.def("many_greetings", many_greetings);
+    ///
+    ///         itself.define_nested_class("Nested", None).define(|itself| {
+    ///             itself.def_self("nested_greeting", nested_greeting);
+    ///         });
     ///     });
     /// }
     /// ```
@@ -149,12 +166,18 @@ impl Class {
     ///
     /// ```ruby
     /// class Hello
-    ///   def self.print_many_greetings
-    ///     'Hello from class'
+    ///   def self.greeting
+    ///     'Greeting from class'
     ///   end
     ///
-    ///   def print_greeting
-    ///     'Hello from instance'
+    ///   def many_greetings
+    ///     'Many greetings from instance'
+    ///   end
+    ///
+    ///   class Nested
+    ///     def self.nested_greeting
+    ///       'Greeting from nested class'
+    ///     end
     ///   end
     /// end
     /// ```
@@ -165,7 +188,6 @@ impl Class {
     }
 
     /// Defines an instance method for given class.
-    ///
     ///
     /// # Arguments
     ///
@@ -311,6 +333,41 @@ impl Class {
         class::define_singleton_method(self.value, name, callback);
     }
 
+    /// Creates a new `Class` nested into current class.
+    ///
+    /// `superclass` can receive the following values:
+    ///
+    ///  - `None` to inherit from `Object` class
+    ///     (standard Ruby behavior when superclass is not given explicitly);
+    ///  - `Some(&class)` to inherit from the given class
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Class, VM};
+    /// # VM::init();
+    ///
+    /// Class::new("Outer", None).define(|itself| {
+    ///     itself.define_nested_class("Inner", None);
+    /// });
+    ///
+    ///
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class Outer
+    ///   class Inner
+    ///   end
+    /// end
+    /// ```
+    pub fn define_nested_class(&mut self, name: &str, superclass: Option<&Class>) -> Self {
+        let superclass = Self::superclass_to_value(superclass);
+
+        Class { value: class::define_nested_class(self.value(), name, superclass) }
+    }
+
     /// An alias for `define_method` (similar to Ruby syntax `def some_method`).
     pub fn def<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
         self.define_method(name, callback);
@@ -319,6 +376,13 @@ impl Class {
     /// An alias for `define_singleton_method` (similar to Ruby `def self.some_method`).
     pub fn def_self<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
         self.define_singleton_method(name, callback);
+    }
+
+    fn superclass_to_value(superclass: Option<&Class>) -> Value {
+        match superclass {
+            Some(class) => class.value(),
+            None => rb_cObject
+        }
     }
 }
 

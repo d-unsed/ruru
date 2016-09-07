@@ -12,6 +12,12 @@ pub fn define_class(name: &str, superclass: Value) -> Value {
     unsafe { class::rb_define_class(name.as_ptr(), superclass) }
 }
 
+pub fn define_nested_class(outer: Value, name: &str, superclass: Value) -> Value {
+    let name = util::str_to_cstring(name);
+
+    unsafe { class::rb_define_class_under(outer, name.as_ptr(), superclass) }
+}
+
 pub fn object_class(object: Value) -> Value {
     unsafe { class::rb_obj_class(object) }
 }
