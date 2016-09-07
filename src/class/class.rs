@@ -6,7 +6,7 @@ use binding::util as binding_util;
 use types::{Callback, Value, ValueType};
 use util;
 
-use {AnyObject, Object, VerifiedObject};
+use {AnyObject, Array, Object, VerifiedObject};
 
 /// `Class`
 #[derive(Debug, PartialEq)]
@@ -147,6 +147,47 @@ impl Class {
             true => None,
             false => Some(Self::from(superclass_value))
         }
+    }
+
+    /// Returns a Vector of ancestors of current class
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Class, VM};
+    /// # VM::init();
+    ///
+    /// let true_class_ancestors = Class::from_existing("TrueClass").ancestors();
+    ///
+    /// let expected_ancestors = vec![
+    ///     Class::from_existing("TrueClass"),
+    ///     Class::from_existing("Object"),
+    ///     Class::from_existing("Kernel"),
+    ///     Class::from_existing("BasicObject")
+    /// ];
+    ///
+    /// assert_eq!(true_class_ancestors, expected_ancestors);
+    /// ```
+    ///
+    /// ```
+    /// use ruru::{Class, VM};
+    /// # VM::init();
+    ///
+    /// let basic_record_class = Class::new("BasicRecord", None);
+    /// let record_class = Class::new("Record", Some(&basic_record_class));
+    ///
+    /// let ancestors = record_class.ancestors();
+    ///
+    /// assert!(ancestors.iter().any(|class| *class == basic_record_class));
+    /// assert!(!ancestors.iter().any(|class| *class == Class::from_existing("String")));
+    /// ```
+    // Using unsafe conversions is ok, because MRI guarantees to return an `Array` of `Class`es
+    pub fn ancestors(&self) -> Vec<Class> {
+        let ancestors = Array::from(class::ancestors(self.value));
+
+        ancestors.into_iter()
+            .map(|class| unsafe { class.to::<Self>() })
+            .collect()
     }
 
     /// Wraps calls to a class.

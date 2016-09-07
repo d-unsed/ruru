@@ -26,6 +26,10 @@ pub fn superclass(klass: Value) -> Value {
     unsafe { class::rb_class_superclass(klass) }
 }
 
+pub fn ancestors(klass: Value) -> Value {
+    unsafe { class::rb_mod_ancestors(klass) }
+}
+
 pub fn new_instance(klass: Value, argc: Argc, argv: *const Value) -> Value {
     unsafe { class::rb_class_new_instance(argc, argv, klass) }
 }
