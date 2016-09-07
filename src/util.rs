@@ -22,6 +22,10 @@ pub fn bool_to_value(state: bool) -> Value {
     Value::from(internal_value as InternalValue)
 }
 
+pub fn c_int_to_bool(int: c_int) -> bool {
+    int != 0
+}
+
 pub fn create_arguments(arguments: Vec<AnyObject>) -> (c_int, Vec<Value>) {
     (arguments.len() as c_int, arguments_to_values(arguments))
 }

@@ -34,6 +34,12 @@ pub fn instance_variable_set(object: Value, name: &str, value: Value) -> Value {
     unsafe { class::rb_ivar_set(object, binding_util::internal_id(name), value) }
 }
 
+pub fn respond_to(object: Value, method: &str) -> bool {
+    let result = unsafe { class::rb_respond_to(object, binding_util::internal_id(method)) };
+
+    util::c_int_to_bool(result)
+}
+
 pub fn define_method<I: Object, O: Object>(klass: Value, name: &str, callback: Callback<I, O>) {
     let name = util::str_to_cstring(name);
 

@@ -84,7 +84,24 @@ pub trait Object: From<Value> {
         AnyObject::from(result)
     }
 
-    /// Checks weather the object is `nil`
+    /// Checks whether the object responds to given method
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Array, Object, VM};
+    /// # VM::init();
+    ///
+    /// let array = Array::new();
+    ///
+    /// assert!(array.respond_to("push"));
+    /// assert!(!array.respond_to("something_else"));
+    /// ```
+    fn respond_to(&self, method: &str) -> bool {
+        class::respond_to(self.value(), method)
+    }
+
+    /// Checks whether the object is `nil`
     ///
     /// # Examples
     ///
