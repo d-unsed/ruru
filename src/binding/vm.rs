@@ -22,7 +22,6 @@ pub fn require(name: &str) {
     }
 }
 
-
 pub fn thread_call_without_gvl<F, R, G>(func: F, unblock_func: Option<G>) -> R
     where F: FnMut() -> R,
           G: FnMut()
@@ -93,5 +92,13 @@ pub fn protect<F>(func: F) -> Result<Value, c_int>
         Ok(value)
     } else {
         Err(state)
+    }
+}
+
+pub fn raise(exception: Value, message: &str) {
+    let message = util::str_to_cstring(message);
+
+    unsafe {
+        vm::rb_raise(exception, message.as_ptr());
     }
 }

@@ -12,4 +12,4 @@ keywords = ["ruby", "ruru"]
 license = "MIT"
 
 [dependencies]
-ruby-sys = "0.2.8"
+ruby-sys = "0.2.9"

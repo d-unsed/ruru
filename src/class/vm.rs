@@ -3,7 +3,7 @@ use std::slice;
 use binding::vm;
 use types::{Argc, Value};
 
-use {AnyObject, Proc};
+use {AnyObject, Class, Object, Proc};
 
 /// Virtual Machine and helpers
 pub struct VM;
@@ -49,8 +49,57 @@ impl VM {
     ///
     /// VM::require("some_ruby_file");
     /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// require 'some_ruby_file'
+    /// ```
     pub fn require(name: &str) {
         vm::require(name);
+    }
+
+    /// Raises an exception.
+    ///
+    /// # Examples
+    ///
+    /// ### Built-in exceptions
+    ///
+    /// ```no_run
+    /// use ruru::{Class, VM};
+    /// # VM::init();
+    ///
+    /// VM::raise(Class::from_existing("ArgumentError"), "Wrong argument");
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// raise ArgumentError, 'Wrong argument'
+    /// ```
+    ///
+    /// ### Custom exceptions
+    ///
+    /// ```no_run
+    /// use ruru::{Class, VM};
+    /// # VM::init();
+    ///
+    /// let standard_error = Class::from_existing("StandardError");
+    /// let custom_exception = Class::new("CustomException", Some(&standard_error));
+    ///
+    /// VM::raise(custom_exception, "Something went wrong");
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class CustomException < StandardError
+    /// end
+    ///
+    /// raise CustomException, 'Something went wrong'
+    /// ```
+    pub fn raise(exception: Class, message: &str) {
+        vm::raise(exception.value(), message);
     }
 
     /// Converts a block given to current method to a `Proc`
