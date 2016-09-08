@@ -338,56 +338,34 @@ impl Class {
 
     /// Defines an instance method for given class.
     ///
-    /// # Arguments
+    /// Use `methods!` macro to define a `callback`.
     ///
-    /// - `name` is name of the Ruby method
-    ///
-    /// - `callback` is the function which will be called by MRI when the method is called inside
-    ///    Ruby
-    ///
-    /// ## Callback
-    ///
-    /// Use `methods!` macro instead of manually creating callbacks.
-    ///
-    /// `callback` must have the following signature:
-    ///
-    /// `pub type Callback<I: Object, O: Object> = extern fn(Argc, *const AnyObject, I) -> O;`
-    ///
-    /// The function must also have `#[no_mangle]` attribute.
-    ///
-    /// - First argument `argc: Argc` will receive the number of arguments passed to method
-    ///
-    /// - Second argument `argv: *const AnyObject` will receive the arguments passed to the method
-    ///   as `AnyObject`s
-    ///
-    /// - Third value `itself: I` will receive the object which got the method call (Ruby `self`).
-    ///   Can be any type which implements `Object` trait
-    ///
-    /// - Return type can be any type which implements `Object` trait
-    ///
-    /// If you need to receive and use arguments which are passed to the method, you can use
-    /// `VM::parse_arguments()` function which processes a pointer to array (`*const AnyObject`)
-    /// to a vector of `AnyObject`s (`Vec<AnyObject>`), see examples.
+    /// You can also use `def()` alias for this function combined with `Class::define()` a for
+    /// nicer DSL.
     ///
     /// # Examples
     ///
-    /// ## Method receives no arguments
+    /// ### The famous String#blank? method
     ///
-    /// In this case `argc` and `argv` can be ignored.
+    /// ```rust
+    /// #[macro_use] extern crate ruru;
     ///
-    /// Famous `String#blank?` example
+    /// use ruru::{Boolean, Class, RString, VM};
     ///
-    /// ```no_run
-    /// use ruru::types::Argc;
-    /// use ruru::{AnyObject, Boolean, Class, Object, RString};
+    /// methods!(
+    ///    RString,
+    ///    itself,
     ///
-    /// #[no_mangle]
-    /// pub extern fn string_blank(_: Argc, _: *const AnyObject, itself: RString) -> Boolean {
-    ///     Boolean::new(itself.to_string().chars().all(|c| c.is_whitespace()))
-    /// }
+    ///    fn is_blank() -> Boolean {
+    ///        Boolean::new(itself.to_string().chars().all(|c| c.is_whitespace()))
+    ///    }
+    /// );
     ///
     /// fn main() {
-    ///     Class::from_existing("String").define_method("blank?", string_blank);
+    ///     # VM::init();
+    ///     Class::from_existing("String").define(|itself| {
+    ///         itself.def("blank?", is_blank);
+    ///     });
     /// }
     /// ```
     ///
@@ -402,34 +380,65 @@ impl Class {
     /// end
     /// ```
     ///
-    /// ## Method receives arguments
+    /// ### Receiving arguments
     ///
-    /// Arguments should be processed to vector using `VM::parse_arguments()`.
+    /// Raise `Fixnum` to the power of `exp`.
     ///
-    /// ```no_run
-    /// use ruru::types::Argc;
-    /// use ruru::{AnyObject, Boolean, Class, Object, RString, VM};
+    /// ```rust
+    /// #[macro_use] extern crate ruru;
     ///
-    /// #[no_mangle]
-    /// pub extern fn string_eq(argc: Argc, argv: *const AnyObject, itself: RString) -> Boolean {
-    ///     let argv = VM::parse_arguments(argc, argv);
-    ///     let other_string = argv[0].try_convert_to::<RString>().unwrap();
+    /// use ruru::{Class, Fixnum, VM};
     ///
-    ///     Boolean::new(itself.to_string() == other_string.to_string())
-    /// }
+    /// methods!(
+    ///    Fixnum,
+    ///    itself,
+    ///
+    ///    fn pow(exp: Fixnum) -> Fixnum {
+    ///         // `exp` is not a valid `Fixnum`, raise an exception
+    ///         if let Err(ref message) = exp {
+    ///             VM::raise(Class::from_existing("ArgumentError"), message);
+    ///         }
+    ///
+    ///         // We can safely unwrap here, because an exception was raised if `exp` is `Err`
+    ///         let exp = exp.unwrap().to_i64() as u32;
+    ///         let result = itself.to_i64().pow(exp);
+    ///
+    ///         Fixnum::new(result)
+    ///    }
+    ///
+    ///     fn pow_with_default_argument(exp: Fixnum) -> Fixnum {
+    ///         let default_exp = 0;
+    ///         let exp = exp.map(|exp| exp.to_i64()).unwrap_or(default_exp);
+    ///         let result = itself.to_i64().pow(exp as u32);
+    ///
+    ///         Fixnum::new(result)
+    ///     }
+    /// );
     ///
     /// fn main() {
-    ///     Class::from_existing("String").define_method("==", string_eq);
+    ///     # VM::init();
+    ///     Class::from_existing("Fixnum").define(|itself| {
+    ///         itself.def("pow", pow);
+    ///         itself.def("pow_with_default_argument", pow_with_default_argument);
+    ///     });
     /// }
     /// ```
     ///
     /// Ruby:
     ///
     /// ```ruby
-    /// class String
-    ///   def ==(other_string)
-    ///     # simplified
-    ///     self.chars == other_string.chars
+    /// class Fixnum
+    ///   def pow(exp)
+    ///     raise ArgumentError unless exp.is_a?(Fixnum)
+    ///
+    ///     self ** exp
+    ///   end
+    ///
+    ///   def pow_with_default_argument(exp)
+    ///     default_exp = 0
+    //      exp = default_exp unless exp.is_a?(Fixnum)
+    ///
+    ///     self ** exp
     ///   end
     /// end
     /// ```
@@ -439,30 +448,37 @@ impl Class {
 
     /// Defines a class method for given class.
     ///
-    /// Function has the same requirements as `define_method`.
-    /// Also the same rules are applied for `callback` (see above).
+    /// Use `methods!` macro to define a `callback`.
     ///
-    /// Use `methods!` macro instead of manually creating callbacks.
+    /// You can also use `def()` alias for this function combined with `Class::define()` a for
+    /// nicer DSL.
     ///
     /// # Examples
     ///
-    /// ```no_run
-    /// use ruru::types::Argc;
-    /// use ruru::{AnyObject, Class, Object, RString, Symbol, VM};
+    /// ```
+    /// #[macro_use] extern crate ruru;
     ///
-    /// #[no_mangle]
-    /// pub extern fn symbol_from_string(argc: Argc,
-    ///                                  argv: *const AnyObject,
-    ///                                  itself: Class) -> Symbol {
-    ///     let argv = VM::parse_arguments(argc, argv);
-    ///     let string = argv[0].try_convert_to::<RString>().unwrap();
+    /// use ruru::{Class, RString, Symbol, VM};
     ///
-    ///     Symbol::new(&string.to_string())
-    /// }
+    /// methods!(
+    ///     Symbol,
+    ///     itself,
+    ///
+    ///     fn from_string(string: RString) -> Symbol {
+    ///         // `string` is not a valid `String`, raise an exception
+    ///         if let Err(ref message) = string {
+    ///             VM::raise(Class::from_existing("ArgumentError"), message);
+    ///         }
+    ///
+    ///         Symbol::new(&string.unwrap().to_string())
+    ///     }
+    /// );
     ///
     /// fn main() {
-    ///     Class::from_existing("Symbol")
-    ///         .define_singleton_method("from_string", symbol_from_string);
+    ///     # VM::init();
+    ///     Class::from_existing("Symbol").define(|itself| {
+    ///         itself.def_self("from_string", from_string);
+    ///     });
     /// }
     /// ```
     ///
@@ -471,6 +487,8 @@ impl Class {
     /// ```ruby
     /// class Symbol
     ///   def self.from_string(string)
+    ///     raise ArgumentError unless string.is_a?(String)
+    ///
     ///     # simplified
     ///     string.to_sym
     ///   end
