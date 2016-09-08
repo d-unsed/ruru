@@ -5,24 +5,21 @@ use {Object, VerifiedObject};
 /// Representation of any Ruby object while its type is unknown
 ///
 /// As Ruby is a dynamically typed language, at some points Ruru does not know the exact Ruby type
-/// of the object. It happens in the following cases:
+/// of the object, for example:
 ///
-/// - Retrieving an object from array
+/// - Retrieving an object from array;
 ///
-/// - Retrieving an object from hash
+/// - Retrieving an object from hash;
 ///
-/// - Receiving arguments to callback
+/// - Receiving arguments to a method;
 ///
-/// - Initializing new instance of a class which is not present in Ruru
+/// - Initializing a new instance of a non-built-in class.
 ///
-/// - and some other places you can find in Ruru documentation
-///
-/// In these cases you should cast `AnyObject` to the type to which the object belongs
-/// using functions below.
+/// In these cases you should cast `AnyObject` to the required type.
 ///
 /// # Examples
 ///
-/// ## Retrieving an object from `Array`
+/// ### Retrieving an object from `Array`
 ///
 /// ```
 /// use ruru::{Array, Fixnum, Object, VM};
@@ -34,7 +31,7 @@ use {Object, VerifiedObject};
 /// assert_eq!(value, Ok(Fixnum::new(1)));
 /// ```
 ///
-/// ## Retrieving an object from `Hash`
+/// ### Retrieving an object from `Hash`
 ///
 /// ```no_run
 /// use ruru::{Fixnum, Hash, Object, Symbol, VM};
@@ -50,27 +47,7 @@ use {Object, VerifiedObject};
 /// assert_eq!(value, Ok(Fixnum::new(1)));
 /// ```
 ///
-/// ## Receiving arguments from Ruby to Ruru callback
-///
-/// Do not use create callbacks manually. Use `methods!` macro instead.
-///
-/// ```no_run
-/// use ruru::types::Argc;
-/// use ruru::{AnyObject, Boolean, Class, Object, RString, VM};
-///
-/// #[no_mangle]
-/// pub extern fn string_eq(argc: Argc, argv: *const AnyObject, itself: RString) -> Boolean {
-///     // `VM::parse_arguments()` returns `Vec<AnyObject>`
-///     let argv = VM::parse_arguments(argc, argv);
-///     let other_string = argv[0].try_convert_to::<RString>().unwrap();
-///
-///     Boolean::new(itself.to_string() == other_string.to_string())
-/// }
-///
-/// fn main() {
-///     Class::from_existing("String").define_method("==", string_eq);
-/// }
-/// ```
+/// You can find more examples in `Class`, `Object` and `VerifiedObject` documentation.
 #[derive(Clone, Debug, PartialEq)]
 pub struct AnyObject {
     value: Value,
