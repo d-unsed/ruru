@@ -58,7 +58,6 @@ impl Class {
         Class { value: class::define_class(name, superclass) }
     }
 
-    // TODO: replace rb_cObject with optional class
     /// Retrieves an existing `Class` object.
     ///
     /// # Examples
@@ -188,6 +187,80 @@ impl Class {
         ancestors.into_iter()
             .map(|class| unsafe { class.to::<Self>() })
             .collect()
+    }
+
+    /// Retrieves a `Class` nested to current `Class`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Class, VM};
+    /// # VM::init();
+    ///
+    /// Class::new("Outer", None).define(|itself| {
+    ///     itself.define_nested_class("Inner", None);
+    /// });
+    ///
+    /// Class::from_existing("Outer").get_nested_class("Inner");
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class Outer
+    ///   class Inner
+    ///   end
+    /// end
+    ///
+    /// Outer::Inner
+    ///
+    /// # or
+    ///
+    /// Outer.const_get('Inner')
+    /// ```
+    pub fn get_nested_class(&self, name: &str) -> Self {
+        Class { value: binding_util::get_constant(name, self.value()) }
+    }
+
+    /// Creates a new `Class` nested into current class.
+    ///
+    /// `superclass` can receive the following values:
+    ///
+    ///  - `None` to inherit from `Object` class
+    ///     (standard Ruby behavior when superclass is not given explicitly);
+    ///  - `Some(&class)` to inherit from the given class
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Class, VM};
+    /// # VM::init();
+    ///
+    /// Class::new("Outer", None).define(|itself| {
+    ///     itself.define_nested_class("Inner", None);
+    /// });
+    ///
+    /// Class::from_existing("Outer").get_nested_class("Inner");
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class Outer
+    ///   class Inner
+    ///   end
+    /// end
+    ///
+    /// Outer::Inner
+    ///
+    /// # or
+    ///
+    /// Outer.const_get('Inner')
+    /// ```
+    pub fn define_nested_class(&mut self, name: &str, superclass: Option<&Class>) -> Self {
+        let superclass = Self::superclass_to_value(superclass);
+
+        Class { value: class::define_nested_class(self.value(), name, superclass) }
     }
 
     /// Wraps calls to a class.
@@ -407,41 +480,6 @@ impl Class {
                                                          name: &str,
                                                          callback: Callback<I, O>) {
         class::define_singleton_method(self.value, name, callback);
-    }
-
-    /// Creates a new `Class` nested into current class.
-    ///
-    /// `superclass` can receive the following values:
-    ///
-    ///  - `None` to inherit from `Object` class
-    ///     (standard Ruby behavior when superclass is not given explicitly);
-    ///  - `Some(&class)` to inherit from the given class
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use ruru::{Class, VM};
-    /// # VM::init();
-    ///
-    /// Class::new("Outer", None).define(|itself| {
-    ///     itself.define_nested_class("Inner", None);
-    /// });
-    ///
-    ///
-    /// ```
-    ///
-    /// Ruby:
-    ///
-    /// ```ruby
-    /// class Outer
-    ///   class Inner
-    ///   end
-    /// end
-    /// ```
-    pub fn define_nested_class(&mut self, name: &str, superclass: Option<&Class>) -> Self {
-        let superclass = Self::superclass_to_value(superclass);
-
-        Class { value: class::define_nested_class(self.value(), name, superclass) }
     }
 
     /// An alias for `define_method` (similar to Ruby syntax `def some_method`).

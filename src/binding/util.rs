@@ -1,14 +1,13 @@
 use ruby_sys::util as ruby_sys_util;
 
 use binding::util as binding_util;
-use binding::global::rb_cObject;
 use types::{Argc, c_void, Id, Value};
 use util;
 
-pub fn get_constant(name: &str, _parent_object: Value) -> Value {
+pub fn get_constant(name: &str, parent_object: Value) -> Value {
     let constant_id = binding_util::internal_id(name);
 
-    unsafe { ruby_sys_util::rb_const_get(rb_cObject, constant_id) }
+    unsafe { ruby_sys_util::rb_const_get(parent_object, constant_id) }
 }
 
 pub fn internal_id(string: &str) -> Id {
