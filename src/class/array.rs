@@ -30,7 +30,7 @@ impl Array {
     /// []
     /// ```
     pub fn new() -> Self {
-        Array { value: array::new() }
+        Self::from(array::new())
     }
 
     /// Retrieves the length of the array.

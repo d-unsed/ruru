@@ -55,7 +55,7 @@ impl Class {
     pub fn new(name: &str, superclass: Option<&Self>) -> Self {
         let superclass = Self::superclass_to_value(superclass);
 
-        Class { value: class::define_class(name, superclass) }
+        Self::from(class::define_class(name, superclass))
     }
 
     /// Retrieves an existing `Class` object.
@@ -86,7 +86,7 @@ impl Class {
     /// Object.const_get('Record')
     /// ```
     pub fn from_existing(name: &str) -> Self {
-        Class { value: binding_util::get_constant(name, rb_cObject) }
+        Self::from(binding_util::get_constant(name, rb_cObject))
     }
 
     /// Creates a new instance of `Class`
@@ -219,7 +219,7 @@ impl Class {
     /// Outer.const_get('Inner')
     /// ```
     pub fn get_nested_class(&self, name: &str) -> Self {
-        Class { value: binding_util::get_constant(name, self.value()) }
+        Self::from(binding_util::get_constant(name, self.value))
     }
 
     /// Creates a new `Class` nested into current class.
@@ -260,7 +260,7 @@ impl Class {
     pub fn define_nested_class(&mut self, name: &str, superclass: Option<&Class>) -> Self {
         let superclass = Self::superclass_to_value(superclass);
 
-        Class { value: class::define_nested_class(self.value(), name, superclass) }
+        Self::from(class::define_nested_class(self.value, name, superclass))
     }
 
     /// Wraps calls to a class.

@@ -36,7 +36,7 @@ impl Symbol {
     pub fn new(string: &str) -> Self {
         let id = util::internal_id(string);
 
-        Symbol { value: symbol::id_to_sym(id) }
+        Self::from(symbol::id_to_sym(id))
     }
 
     /// Retrieves the Rust `String` corresponding to `Symbol` object (Ruby `Symbol#to_s`).

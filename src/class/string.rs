@@ -33,7 +33,7 @@ impl RString {
     /// str == 'Hello, World!'
     /// ```
     pub fn new(string: &str) -> Self {
-        RString { value: string::new(string) }
+        Self::from(string::new(string))
     }
 
     /// Retrieves underlying Rust `String` from Ruby `String` object.

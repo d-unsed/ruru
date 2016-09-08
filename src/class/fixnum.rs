@@ -31,7 +31,7 @@ impl Fixnum {
     /// 1 == 1
     /// ```
     pub fn new(num: i64) -> Self {
-        Fixnum { value: fixnum::int_to_num(num) }
+        Self::from(fixnum::int_to_num(num))
     }
 
     /// Retrieves an `i64` value from `Fixnum`.

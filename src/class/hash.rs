@@ -29,7 +29,7 @@ impl Hash {
     /// {}
     /// ```
     pub fn new() -> Self {
-        Hash { value: hash::new() }
+        Self::from(hash::new())
     }
 
     /// Retrieves an `AnyObject` from element stored at `key` key.

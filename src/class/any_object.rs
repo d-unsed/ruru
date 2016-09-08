@@ -88,6 +88,7 @@ impl Object for AnyObject {
     }
 }
 
+// Any object can be safely converted to `AnyObject` :)
 impl VerifiedObject for AnyObject {
     fn is_correct_type<T: Object>(_: &T) -> bool {
         true

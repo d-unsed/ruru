@@ -29,7 +29,7 @@ impl Boolean {
     /// true == true
     /// ```
     pub fn new(state: bool) -> Self {
-        Boolean { value: util::bool_to_value(state) }
+        Self::from(util::bool_to_value(state))
     }
 
     /// Retrieves a `bool` value from `Boolean`.

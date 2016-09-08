@@ -29,7 +29,7 @@ impl NilClass {
     /// nil.nil? == true
     /// ```
     pub fn new() -> Self {
-        NilClass { value: Value::from(RubySpecialConsts::Nil as InternalValue) }
+        Self::from(Value::from(RubySpecialConsts::Nil as InternalValue))
     }
 }
 
