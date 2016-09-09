@@ -44,7 +44,7 @@ pub trait Object: From<Value> {
     #[inline]
     fn value(&self) -> Value;
 
-    /// Returns a `Class` struct of current object.
+    /// Returns a class of current object.
     ///
     /// # Examples
     /// ```
@@ -55,6 +55,63 @@ pub trait Object: From<Value> {
     /// ```
     fn class(&self) -> Class {
         let class = class::object_class(self.value());
+
+        Class::from(class)
+    }
+
+    /// Returns a singleton class of current object.
+    ///
+    /// # Examples
+    ///
+    /// ### Getting singleton class
+    ///
+    /// ```
+    /// use ruru::{Array, Object, VM};
+    /// # VM::init();
+    ///
+    /// let array = Array::new();
+    /// let another_array = Array::new();
+    ///
+    /// assert!(array.singleton_class() != another_array.singleton_class());
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// array = []
+    /// another_array = []
+    ///
+    /// array.singleton_class != another_array.singleton_class
+    /// ```
+    ///
+    /// ### Modifying singleton class
+    ///
+    /// ```
+    /// use ruru::{Array, Object, VM};
+    /// # VM::init();
+    ///
+    /// let array = Array::new();
+    ///
+    /// array.singleton_class().define(|itself| {
+    ///     itself.attr_reader("modified");
+    /// });
+    ///
+    /// assert!(array.respond_to("modified"));
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// array = []
+    ///
+    /// class << array
+    ///   attr_reader :modified
+    /// end
+    ///
+    /// array.respond_to?(:modified)
+    /// ```
+    fn singleton_class(&self) -> Class {
+        let class = class::singleton_class(self.value());
 
         Class::from(class)
     }

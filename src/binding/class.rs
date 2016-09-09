@@ -26,6 +26,10 @@ pub fn superclass(klass: Value) -> Value {
     unsafe { class::rb_class_superclass(klass) }
 }
 
+pub fn singleton_class(object: Value) -> Value {
+    unsafe { class::rb_singleton_class(object) }
+}
+
 pub fn ancestors(klass: Value) -> Value {
     unsafe { class::rb_mod_ancestors(klass) }
 }
