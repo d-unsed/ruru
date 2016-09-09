@@ -46,6 +46,14 @@ pub fn instance_variable_set(object: Value, name: &str, value: Value) -> Value {
     unsafe { class::rb_ivar_set(object, binding_util::internal_id(name), value) }
 }
 
+pub fn define_attribute(object: Value, name: &str, reader: bool, writer: bool) {
+    let name = util::str_to_cstring(name);
+    let reader = util::bool_to_c_int(reader);
+    let writer = util::bool_to_c_int(writer);
+
+    unsafe { class::rb_define_attr(object, name.as_ptr(), reader, writer) };
+}
+
 pub fn respond_to(object: Value, method: &str) -> bool {
     let result = unsafe { class::rb_respond_to(object, binding_util::internal_id(method)) };
 

@@ -263,6 +263,78 @@ impl Class {
         Self::from(class::define_nested_class(self.value(), name, superclass))
     }
 
+    /// Defines an `attr_reader` for class
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Class, Object, VM};
+    /// # VM::init();
+    ///
+    /// Class::new("Test", None).define(|itself| {
+    ///     itself.attr_reader("reader");
+    /// });
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class Test
+    ///   attr_reader :reader
+    /// end
+    /// ```
+    pub fn attr_reader(&mut self, name: &str) {
+        class::define_attribute(self.value(), name, true, false);
+    }
+
+    /// Defines an `attr_writer` for class
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Class, Object, VM};
+    /// # VM::init();
+    ///
+    /// Class::new("Test", None).define(|itself| {
+    ///     itself.attr_writer("writer");
+    /// });
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class Test
+    ///   attr_writer :writer
+    /// end
+    /// ```
+    pub fn attr_writer(&mut self, name: &str) {
+        class::define_attribute(self.value(), name, false, true);
+    }
+
+    /// Defines an `attr_accessor` for class
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Class, Object, VM};
+    /// # VM::init();
+    ///
+    /// Class::new("Test", None).define(|itself| {
+    ///     itself.attr_accessor("accessor");
+    /// });
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class Test
+    ///   attr_accessor :accessor
+    /// end
+    /// ```
+    pub fn attr_accessor(&mut self, name: &str) {
+        class::define_attribute(self.value(), name, true, true);
+    }
+
     /// Wraps calls to a class.
     ///
     /// Used to have Ruby-like class definition DSL.
@@ -301,6 +373,8 @@ impl Class {
     ///
     /// fn main() {
     ///     Class::new("Hello", None).define(|itself| {
+    ///         itself.attr_reader("reader");
+    ///
     ///         itself.def_self("greeting", greeting);
     ///         itself.def("many_greetings", many_greetings);
     ///

@@ -22,8 +22,14 @@ pub fn bool_to_value(state: bool) -> Value {
     Value::from(internal_value as InternalValue)
 }
 
+#[inline]
 pub fn c_int_to_bool(int: c_int) -> bool {
     int != 0
+}
+
+#[inline]
+pub fn bool_to_c_int(state: bool) -> c_int {
+    state as c_int
 }
 
 pub fn create_arguments(arguments: Vec<AnyObject>) -> (c_int, Vec<Value>) {
