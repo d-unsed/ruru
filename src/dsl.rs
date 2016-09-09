@@ -66,6 +66,7 @@ macro_rules! class {
         }
 
         impl $crate::Object for $class {
+            #[inline]
             fn value(&self) -> $crate::types::Value {
                 self.value
             }

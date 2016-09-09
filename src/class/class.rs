@@ -182,7 +182,7 @@ impl Class {
     /// ```
     // Using unsafe conversions is ok, because MRI guarantees to return an `Array` of `Class`es
     pub fn ancestors(&self) -> Vec<Class> {
-        let ancestors = Array::from(class::ancestors(self.value));
+        let ancestors = Array::from(class::ancestors(self.value()));
 
         ancestors.into_iter()
             .map(|class| unsafe { class.to::<Self>() })
@@ -219,7 +219,7 @@ impl Class {
     /// Outer.const_get('Inner')
     /// ```
     pub fn get_nested_class(&self, name: &str) -> Self {
-        Self::from(binding_util::get_constant(name, self.value))
+        Self::from(binding_util::get_constant(name, self.value()))
     }
 
     /// Creates a new `Class` nested into current class.
@@ -260,7 +260,7 @@ impl Class {
     pub fn define_nested_class(&mut self, name: &str, superclass: Option<&Class>) -> Self {
         let superclass = Self::superclass_to_value(superclass);
 
-        Self::from(class::define_nested_class(self.value, name, superclass))
+        Self::from(class::define_nested_class(self.value(), name, superclass))
     }
 
     /// Wraps calls to a class.
@@ -443,7 +443,7 @@ impl Class {
     /// end
     /// ```
     pub fn define_method<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
-        class::define_method(self.value, name, callback);
+        class::define_method(self.value(), name, callback);
     }
 
     /// Defines a class method for given class.
@@ -497,7 +497,7 @@ impl Class {
     pub fn define_singleton_method<I: Object, O: Object>(&mut self,
                                                          name: &str,
                                                          callback: Callback<I, O>) {
-        class::define_singleton_method(self.value, name, callback);
+        class::define_singleton_method(self.value(), name, callback);
     }
 
     /// An alias for `define_method` (similar to Ruby syntax `def some_method`).
@@ -525,6 +525,7 @@ impl From<Value> for Class {
 }
 
 impl Object for Class {
+    #[inline]
     fn value(&self) -> Value {
         self.value
     }

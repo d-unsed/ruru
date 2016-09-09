@@ -53,7 +53,7 @@ impl Fixnum {
     /// 1 == 1
     /// ```
     pub fn to_i64(&self) -> i64 {
-        fixnum::num_to_int(self.value)
+        fixnum::num_to_int(self.value())
     }
 }
 
@@ -64,6 +64,7 @@ impl From<Value> for Fixnum {
 }
 
 impl Object for Fixnum {
+    #[inline]
     fn value(&self) -> Value {
         self.value
     }

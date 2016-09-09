@@ -60,6 +60,7 @@ impl From<Value> for Boolean {
 }
 
 impl Object for Boolean {
+    #[inline]
     fn value(&self) -> Value {
         self.value
     }

@@ -60,6 +60,7 @@ impl From<Value> for AnyObject {
 }
 
 impl Object for AnyObject {
+    #[inline]
     fn value(&self) -> Value {
         self.value
     }

@@ -59,7 +59,7 @@ impl Proc {
     /// ```
     pub fn call(&self, arguments: Vec<AnyObject>) -> AnyObject {
         let (argc, argv) = util::create_arguments(arguments);
-        let result = rproc::call(self.value, argc, argv.as_ptr());
+        let result = rproc::call(self.value(), argc, argv.as_ptr());
 
         AnyObject::from(result)
     }
@@ -72,6 +72,7 @@ impl From<Value> for Proc {
 }
 
 impl Object for Proc {
+    #[inline]
     fn value(&self) -> Value {
         self.value
     }

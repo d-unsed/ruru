@@ -15,7 +15,7 @@ use {AnyObject, Class, VerifiedObject};
 ///
 /// `class!` macro automatically implements this trait for custom classes.
 pub trait Object: From<Value> {
-    /// Usually this function just returns a `value` of current object.
+    /// Returns internal `value` of current object.
     ///
     /// # Examples
     ///
@@ -41,9 +41,10 @@ pub trait Object: From<Value> {
     ///     }
     /// }
     /// ```
+    #[inline]
     fn value(&self) -> Value;
 
-    /// Returns a `Class` struct of current object
+    /// Returns a `Class` struct of current object.
     ///
     /// # Examples
     /// ```

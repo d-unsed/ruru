@@ -73,6 +73,7 @@ impl From<Value> for Symbol {
 }
 
 impl Object for Symbol {
+    #[inline]
     fn value(&self) -> Value {
         self.value
     }

@@ -183,7 +183,7 @@ impl Hash {
               V: Object,
               F: FnMut(K, V)
     {
-        hash::each(self.value, closure);
+        hash::each(self.value(), closure);
     }
 }
 
@@ -194,6 +194,7 @@ impl From<Value> for Hash {
 }
 
 impl Object for Hash {
+    #[inline]
     fn value(&self) -> Value {
         self.value
     }

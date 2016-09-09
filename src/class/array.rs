@@ -186,6 +186,7 @@ impl From<Value> for Array {
 }
 
 impl Object for Array {
+    #[inline]
     fn value(&self) -> Value {
         self.value
     }

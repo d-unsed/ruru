@@ -40,6 +40,7 @@ impl From<Value> for NilClass {
 }
 
 impl Object for NilClass {
+    #[inline]
     fn value(&self) -> Value {
         self.value
     }
