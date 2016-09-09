@@ -156,9 +156,9 @@ impl VM {
     // TODO: Move to other struct
     /// Converts a pointer `AnyObject` array to `Vec<AnyObject>`.
     ///
-    /// This function is a helper for callbacks.
+    /// This function is a helper for callbacks, do not use it directly.
     ///
-    /// Later it will be moved to other struct, because it is not related to VM itself.
+    /// It will be moved to other struct, because it is not related to VM itself.
     ///
     /// # Examples
     ///
