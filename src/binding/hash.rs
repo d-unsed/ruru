@@ -2,7 +2,7 @@ use ruby_sys::hash;
 
 use binding::fixnum;
 use types::{CallbackPtr, CallbackMutPtr, Value};
-use Object;
+use AnyObject;
 
 pub fn new() -> Value {
     unsafe { hash::rb_hash_new() }
@@ -24,22 +24,18 @@ pub fn length(hash: Value) -> i64 {
     }
 }
 
-pub fn each<K, V, F>(hash: Value, closure_callback: F)
-    where K: Object,
-          V: Object,
-          F: FnMut(K, V)
+pub fn each<F>(hash: Value, closure_callback: F)
+    where F: FnMut(AnyObject, AnyObject)
 {
     let closure_ptr = &closure_callback as *const _ as CallbackMutPtr;
 
     unsafe {
-        hash::rb_hash_foreach(hash, hash_callback::<K, V, F> as CallbackPtr, closure_ptr);
+        hash::rb_hash_foreach(hash, each_callback::<F> as CallbackPtr, closure_ptr);
     }
 }
 
-pub extern "C" fn hash_callback<K, V, F>(key: K, value: V, closure: CallbackMutPtr)
-    where K: Object,
-          V: Object,
-          F: FnMut(K, V)
+extern "C" fn each_callback<F>(key: AnyObject, value: AnyObject, closure: CallbackMutPtr)
+    where F: FnMut(AnyObject, AnyObject)
 {
     let closure = closure as *mut F;
 

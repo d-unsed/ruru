@@ -126,26 +126,12 @@ impl Hash {
 
     /// Runs a closure for each `key` and `value` pair.
     ///
-    /// You can specify types for each object if they are known and are the same for each key and
-    /// each value. This way is faster, but not safe, because it does not check if the objects
-    /// have correct type.
-    ///
-    /// ```
-    /// # use ruru::{Fixnum, Hash, Symbol, VM};
-    /// # VM::init();
-    /// # let mut hash = Hash::new();
-    ///
-    /// hash.each(|key: Symbol, value: Fixnum| {
-    ///     // ...
-    /// });
-    /// ```
-    ///
-    /// If the types are unknown or may vary, use `AnyObject` type and try to safely convert them.
+    /// Key and value have `AnyObject` type.
     ///
     /// # Examples
     ///
     /// ```no_run
-    /// use ruru::{Fixnum, Hash, Symbol, VM};
+    /// use ruru::{Fixnum, Hash, Object, Symbol, VM};
     /// # VM::init();
     ///
     /// let mut hash = Hash::new();
@@ -155,8 +141,10 @@ impl Hash {
     ///
     /// let mut doubled_values: Vec<i64> = Vec::new();
     ///
-    /// hash.each(|_key: Symbol, value: Fixnum| {
-    ///     doubled_values.push(value.to_i64() * 2);
+    /// hash.each(|_key, value| {
+    ///     if let Ok(value) = value.try_convert_to::<Fixnum>() {
+    ///         doubled_values.push(value.to_i64() * 2);
+    ///     }
     /// });
     ///
     /// assert_eq!(doubled_values, vec![2, 4]);
@@ -178,10 +166,8 @@ impl Hash {
     ///
     /// doubled_values == [2, 4]
     /// ```
-    pub fn each<K, V, F>(&self, closure: F)
-        where K: Object,
-              V: Object,
-              F: FnMut(K, V)
+    pub fn each<F>(&self, closure: F)
+        where F: FnMut(AnyObject, AnyObject)
     {
         hash::each(self.value(), closure);
     }
