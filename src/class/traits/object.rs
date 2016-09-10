@@ -3,7 +3,7 @@ use std::convert::From;
 use binding::class;
 use binding::global::ValueType;
 use binding::util as binding_util;
-use types::Value;
+use types::{Callback, Value};
 use util;
 
 use {AnyObject, Class, VerifiedObject};
@@ -116,6 +116,357 @@ pub trait Object: From<Value> {
         let class = class::singleton_class(self.value());
 
         Class::from(class)
+    }
+    /// Wraps calls to the object.
+    ///
+    /// Mostly used to have Ruby-like class definition DSL.
+    ///
+    /// # Examples
+    ///
+    /// ### Defining class
+    ///
+    /// ```no_run
+    /// #[macro_use] extern crate ruru;
+    ///
+    /// use ruru::{Class, Fixnum, Object, RString};
+    ///
+    /// class!(Hello);
+    /// class!(Nested);
+    ///
+    /// methods!(
+    ///     Hello,
+    ///     itself,
+    ///
+    ///     fn greeting() -> RString {
+    ///         RString::new("Greeting from class")
+    ///     }
+    ///
+    ///     fn many_greetings() -> RString {
+    ///         RString::new("Many greetings from instance")
+    ///     }
+    /// );
+    ///
+    /// methods!(
+    ///     Nested,
+    ///     itself,
+    ///
+    ///     fn nested_greeting() -> RString {
+    ///         RString::new("Greeting from nested class")
+    ///     }
+    /// );
+    ///
+    /// fn main() {
+    ///     Class::new("Hello", None).define(|itself| {
+    ///         itself.attr_reader("reader");
+    ///
+    ///         itself.def_self("greeting", greeting);
+    ///         itself.def("many_greetings", many_greetings);
+    ///
+    ///         itself.define_nested_class("Nested", None).define(|itself| {
+    ///             itself.def_self("nested_greeting", nested_greeting);
+    ///         });
+    ///     });
+    /// }
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class Hello
+    ///   attr_reader :reader
+    ///
+    ///   def self.greeting
+    ///     'Greeting from class'
+    ///   end
+    ///
+    ///   def many_greetings
+    ///     'Many greetings from instance'
+    ///   end
+    ///
+    ///   class Nested
+    ///     def self.nested_greeting
+    ///       'Greeting from nested class'
+    ///     end
+    ///   end
+    /// end
+    /// ```
+    ///
+    /// ### Defining singleton method for an object
+    ///
+    /// ```
+    /// #[macro_use] extern crate ruru;
+    ///
+    /// use ruru::{AnyObject, Class, Fixnum, Object, RString, VM};
+    ///
+    /// methods!(
+    ///     RString,
+    ///     itself,
+    ///
+    ///     fn greeting() -> RString {
+    ///         RString::new("Greeting!")
+    ///     }
+    /// );
+    ///
+    /// fn main() {
+    ///     # VM::init();
+    ///     let mut string = RString::new("Some string");
+    ///
+    ///     // The same can be done by modifying `string.singleton_class()`
+    ///     // or using `string.define_singleton_method("greeting", greeting)`
+    ///     string.define(|itself| {
+    ///         itself.define_singleton_method("greeting", greeting);
+    ///     });
+    ///
+    ///     assert!(string.respond_to("greeting"));
+    /// }
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// string = "Some string"
+    ///
+    /// class << string
+    ///   def greeting
+    ///     'Greeting!'
+    ///   end
+    /// end
+    ///
+    /// string.respond_to?("greeting")
+    /// ```
+    fn define<F: Fn(&mut Self)>(&mut self, f: F) -> &Self {
+        f(self);
+
+        self
+    }
+
+    /// Defines an instance method for the given class or object.
+    ///
+    /// Use `methods!` macro to define a `callback`.
+    ///
+    /// You can also use `def()` alias for this function combined with `Class::define()` a for
+    /// nicer DSL.
+    ///
+    /// # Panics
+    ///
+    /// Ruby can raise an exception if you try to define instance method directly on an instance
+    /// of some class (like `Fixnum`, `String`, `Array` etc).
+    ///
+    /// Use this method only on classes (or singleton classes of objects).
+    ///
+    /// # Examples
+    ///
+    /// ### The famous String#blank? method
+    ///
+    /// ```rust
+    /// #[macro_use] extern crate ruru;
+    ///
+    /// use ruru::{Boolean, Class, Object, RString, VM};
+    ///
+    /// methods!(
+    ///    RString,
+    ///    itself,
+    ///
+    ///    fn is_blank() -> Boolean {
+    ///        Boolean::new(itself.to_string().chars().all(|c| c.is_whitespace()))
+    ///    }
+    /// );
+    ///
+    /// fn main() {
+    ///     # VM::init();
+    ///     Class::from_existing("String").define(|itself| {
+    ///         itself.def("blank?", is_blank);
+    ///     });
+    /// }
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class String
+    ///   def blank?
+    ///     # simplified
+    ///     self.chars.all? { |c| c == ' ' }
+    ///   end
+    /// end
+    /// ```
+    ///
+    /// ### Receiving arguments
+    ///
+    /// Raise `Fixnum` to the power of `exp`.
+    ///
+    /// ```rust
+    /// #[macro_use] extern crate ruru;
+    ///
+    /// use ruru::{Class, Fixnum, Object, VM};
+    ///
+    /// methods!(
+    ///    Fixnum,
+    ///    itself,
+    ///
+    ///    fn pow(exp: Fixnum) -> Fixnum {
+    ///         // `exp` is not a valid `Fixnum`, raise an exception
+    ///         if let Err(ref message) = exp {
+    ///             VM::raise(Class::from_existing("ArgumentError"), message);
+    ///         }
+    ///
+    ///         // We can safely unwrap here, because an exception was raised if `exp` is `Err`
+    ///         let exp = exp.unwrap().to_i64() as u32;
+    ///         let result = itself.to_i64().pow(exp);
+    ///
+    ///         Fixnum::new(result)
+    ///    }
+    ///
+    ///     fn pow_with_default_argument(exp: Fixnum) -> Fixnum {
+    ///         let default_exp = 0;
+    ///         let exp = exp.map(|exp| exp.to_i64()).unwrap_or(default_exp);
+    ///
+    ///         let result = itself.to_i64().pow(exp as u32);
+    ///
+    ///         Fixnum::new(result)
+    ///     }
+    /// );
+    ///
+    /// fn main() {
+    ///     # VM::init();
+    ///     Class::from_existing("Fixnum").define(|itself| {
+    ///         itself.def("pow", pow);
+    ///         itself.def("pow_with_default_argument", pow_with_default_argument);
+    ///     });
+    /// }
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class Fixnum
+    ///   def pow(exp)
+    ///     raise ArgumentError unless exp.is_a?(Fixnum)
+    ///
+    ///     self ** exp
+    ///   end
+    ///
+    ///   def pow_with_default_argument(exp)
+    ///     default_exp = 0
+    ///     exp = default_exp unless exp.is_a?(Fixnum)
+    ///
+    ///     self ** exp
+    ///   end
+    /// end
+    /// ```
+    fn define_method<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
+        class::define_method(self.value(), name, callback);
+    }
+
+    /// Defines a class method for given class or singleton method for object.
+    ///
+    /// Use `methods!` macro to define a `callback`.
+    ///
+    /// You can also use `def_self()` alias for this function combined with `Class::define()` a for
+    /// nicer DSL.
+    ///
+    /// # Examples
+    ///
+    /// ### Defining a class method
+    ///
+    /// ```
+    /// #[macro_use] extern crate ruru;
+    ///
+    /// use ruru::{Class, Object, RString, Symbol, VM};
+    ///
+    /// methods!(
+    ///     Symbol,
+    ///     itself,
+    ///
+    ///     fn from_string(string: RString) -> Symbol {
+    ///         // `string` is not a valid `String`, raise an exception
+    ///         if let Err(ref message) = string {
+    ///             VM::raise(Class::from_existing("ArgumentError"), message);
+    ///         }
+    ///
+    ///         Symbol::new(&string.unwrap().to_string())
+    ///     }
+    /// );
+    ///
+    /// fn main() {
+    ///     # VM::init();
+    ///     Class::from_existing("Symbol").define(|itself| {
+    ///         itself.def_self("from_string", from_string);
+    ///     });
+    /// }
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class Symbol
+    ///   def self.from_string(string)
+    ///     raise ArgumentError unless string.is_a?(String)
+    ///
+    ///     # simplified
+    ///     string.to_sym
+    ///   end
+    /// end
+    /// ```
+    ///
+    /// ### Defining a singleton method for an object
+    ///
+    /// ```
+    /// #[macro_use] extern crate ruru;
+    ///
+    /// use ruru::{AnyObject, Class, Fixnum, Object, RString, VM};
+    ///
+    /// methods!(
+    ///     RString,
+    ///     itself,
+    ///
+    ///     fn greeting() -> RString {
+    ///         RString::new("Greeting!")
+    ///     }
+    /// );
+    ///
+    /// fn main() {
+    ///     # VM::init();
+    ///     let mut string = RString::new("Some string");
+    ///
+    ///     // The same can be done by modifying `string.singleton_class()`
+    ///     // or using `string.define_singleton_method("greeting", greeting)`
+    ///     string.define(|itself| {
+    ///         itself.define_singleton_method("greeting", greeting);
+    ///     });
+    ///
+    ///     assert!(string.respond_to("greeting"));
+    /// }
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    ///
+    /// string = "Some string"
+    ///
+    /// class << string
+    ///   def greeting
+    ///     'Greeting!'
+    ///   end
+    /// end
+    ///
+    /// string.respond_to?("greeting")
+    /// ```
+    fn define_singleton_method<I: Object, O: Object>(&mut self,
+                                                         name: &str,
+                                                         callback: Callback<I, O>) {
+        class::define_singleton_method(self.value(), name, callback);
+    }
+
+    /// An alias for `define_method` (similar to Ruby syntax `def some_method`).
+    fn def<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
+        self.define_method(name, callback);
+    }
+
+    /// An alias for `define_singleton_method` (similar to Ruby `def self.some_method`).
+    fn def_self<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
+        self.define_singleton_method(name, callback);
     }
 
     /// Calls a given method on an object similarly to Ruby `Object#send` method

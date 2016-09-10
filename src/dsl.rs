@@ -6,7 +6,7 @@
 /// #[macro_use]
 /// extern crate ruru;
 ///
-/// use ruru::{Class, RString, VM};
+/// use ruru::{Class, RString, Object, VM};
 ///
 /// class!(Greeter);
 ///
@@ -100,7 +100,7 @@ macro_rules! class {
 /// #[macro_use]
 /// extern crate ruru;
 ///
-/// use ruru::{Boolean, Class, Fixnum, RString, VM};
+/// use ruru::{Boolean, Class, Fixnum, Object, RString, VM};
 ///
 /// // Creates `string_length_equals` functions
 /// unsafe_methods!(
