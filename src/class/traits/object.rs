@@ -91,12 +91,14 @@ pub trait Object: From<Value> {
     /// # VM::init();
     ///
     /// let array = Array::new();
+    /// let another_array = Array::new();
     ///
     /// array.singleton_class().define(|itself| {
     ///     itself.attr_reader("modified");
     /// });
     ///
     /// assert!(array.respond_to("modified"));
+    /// assert!(!another_array.respond_to("modified"));
     /// ```
     ///
     /// Ruby:
