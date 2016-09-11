@@ -290,7 +290,7 @@ macro_rules! methods {
                             .get(_i)
                             .ok_or({
                                 format!(
-                                    "Argument {}: {} not found for method {}",
+                                    "Argument '{}: {}' not found for method '{}'",
                                     stringify!($arg_name),
                                     stringify!($arg_type),
                                     stringify!($method_name)
