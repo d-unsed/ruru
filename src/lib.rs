@@ -6,6 +6,7 @@ mod util;
 
 #[macro_use]
 pub mod dsl;
+pub mod result;
 pub mod types;
 
 pub use class::any_object::AnyObject;

@@ -3,6 +3,7 @@ use std::convert::From;
 use binding::class;
 use binding::global::ValueType;
 use binding::util as binding_util;
+use result::{Error, Result};
 use types::{Callback, Value};
 use util;
 
@@ -298,24 +299,25 @@ pub trait Object: From<Value> {
     /// ```rust
     /// #[macro_use] extern crate ruru;
     ///
+    /// use std::error::Error;
+    ///
     /// use ruru::{Class, Fixnum, Object, VM};
     ///
     /// methods!(
-    ///    Fixnum,
-    ///    itself,
+    ///     Fixnum,
+    ///     itself,
     ///
-    ///    fn pow(exp: Fixnum) -> Fixnum {
+    ///     fn pow(exp: Fixnum) -> Fixnum {
     ///         // `exp` is not a valid `Fixnum`, raise an exception
-    ///         if let Err(ref message) = exp {
-    ///             VM::raise(Class::from_existing("ArgumentError"), message);
+    ///         if let Err(ref error) = exp {
+    ///             VM::raise(error.to_exception(), error.description());
     ///         }
     ///
     ///         // We can safely unwrap here, because an exception was raised if `exp` is `Err`
     ///         let exp = exp.unwrap().to_i64() as u32;
-    ///         let result = itself.to_i64().pow(exp);
     ///
-    ///         Fixnum::new(result)
-    ///    }
+    ///         Fixnum::new(itself.to_i64().pow(exp))
+    ///     }
     ///
     ///     fn pow_with_default_argument(exp: Fixnum) -> Fixnum {
     ///         let default_exp = 0;
@@ -372,6 +374,8 @@ pub trait Object: From<Value> {
     /// ```
     /// #[macro_use] extern crate ruru;
     ///
+    /// use std::error::Error;
+    ///
     /// use ruru::{Class, Object, RString, Symbol, VM};
     ///
     /// methods!(
@@ -380,8 +384,8 @@ pub trait Object: From<Value> {
     ///
     ///     fn from_string(string: RString) -> Symbol {
     ///         // `string` is not a valid `String`, raise an exception
-    ///         if let Err(ref message) = string {
-    ///             VM::raise(Class::from_existing("ArgumentError"), message);
+    ///         if let Err(ref error) = string {
+    ///             VM::raise(error.to_exception(), error.description());
     ///         }
     ///
     ///         Symbol::new(&string.unwrap().to_string())
@@ -712,6 +716,7 @@ pub trait Object: From<Value> {
     /// ### Basic conversions
     ///
     /// ```
+    /// use ruru::result::Error;
     /// use ruru::{Fixnum, Object, RString, VM};
     /// # VM::init();
     ///
@@ -722,8 +727,9 @@ pub trait Object: From<Value> {
     ///
     /// let string = RString::new("string");
     /// let string_as_fixnum = string.try_convert_to::<Fixnum>();
+    /// let expected_error = Error::TypeError("Error converting to Fixnum".to_string());
     ///
-    /// assert_eq!(string_as_fixnum, Err("Error converting to Fixnum".to_string()));
+    /// assert_eq!(string_as_fixnum, Err(expected_error));
     /// ```
     ///
     /// ### Method arguments
@@ -806,13 +812,13 @@ pub trait Object: From<Value> {
     ///   end
     /// end
     /// ```
-    fn try_convert_to<T: VerifiedObject>(&self) -> Result<T, String> {
+    fn try_convert_to<T: VerifiedObject>(&self) -> Result<T> {
         if T::is_correct_type(self) {
             let converted_object = unsafe { self.to::<T>() };
 
             Ok(converted_object)
         } else {
-            Err(T::error_message())
+            Err(Error::TypeError(T::error_message()))
         }
     }
 

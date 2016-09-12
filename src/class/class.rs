@@ -15,24 +15,25 @@ use {AnyObject, Array, Object, VerifiedObject};
 /// ```rust
 /// #[macro_use] extern crate ruru;
 ///
+/// use std::error::Error;
+///
 /// use ruru::{Class, Fixnum, Object, VM};
 ///
 /// methods!(
 ///    Fixnum,
 ///    itself,
 ///
-///    fn pow(exp: Fixnum) -> Fixnum {
+///     fn pow(exp: Fixnum) -> Fixnum {
 ///         // `exp` is not a valid `Fixnum`, raise an exception
-///         if let Err(ref message) = exp {
-///             VM::raise(Class::from_existing("ArgumentError"), message);
+///         if let Err(ref error) = exp {
+///             VM::raise(error.to_exception(), error.description());
 ///         }
 ///
 ///         // We can safely unwrap here, because an exception was raised if `exp` is `Err`
 ///         let exp = exp.unwrap().to_i64() as u32;
-///         let result = itself.to_i64().pow(exp);
 ///
-///         Fixnum::new(result)
-///    }
+///         Fixnum::new(itself.to_i64().pow(exp))
+///     }
 /// );
 ///
 /// fn main() {
@@ -41,6 +42,18 @@ use {AnyObject, Array, Object, VerifiedObject};
 ///         itself.def("pow", pow);
 ///     });
 /// }
+/// ```
+///
+/// Ruby:
+///
+/// ```ruby
+/// class Fixnum
+///   def pow(exp)
+///     raise TypeError unless exp.is_a?(Fixnum)
+///
+///     self ** exp
+///   end
+/// end
 /// ```
 #[derive(Debug, PartialEq)]
 pub struct Class {

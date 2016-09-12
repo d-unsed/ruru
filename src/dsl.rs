@@ -289,11 +289,13 @@ macro_rules! methods {
                         _arguments
                             .get(_i)
                             .ok_or({
-                                format!(
-                                    "Argument '{}: {}' not found for method '{}'",
-                                    stringify!($arg_name),
-                                    stringify!($arg_type),
-                                    stringify!($method_name)
+                                $crate::result::Error::ArgumentError(
+                                    format!(
+                                        "Argument '{}: {}' not found for method '{}'",
+                                        stringify!($arg_name),
+                                        stringify!($arg_type),
+                                        stringify!($method_name)
+                                    )
                                 )
                             }).and_then(|argument| {
                                 <$crate::AnyObject as $crate::Object>
