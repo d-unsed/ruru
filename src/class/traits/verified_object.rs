@@ -38,8 +38,8 @@ use Object;
 ///         object.class() == Class::from_existing("Server")
 ///     }
 ///
-///     fn error_message() -> String {
-///         "Error converting to Server".to_string()
+///     fn error_message() -> &'static str {
+///         "Error converting to Server"
 ///     }
 /// }
 ///
@@ -59,8 +59,8 @@ use Object;
 ///         object.respond_to("protocol") && object.respond_to("body")
 ///     }
 ///
-///     fn error_message() -> String {
-///         "Error converting to Request".to_string()
+///     fn error_message() -> &'static str {
+///         "Error converting to Request"
 ///     }
 /// }
 ///
@@ -73,8 +73,8 @@ use Object;
 ///             .any(|class| *class == Class::from_existing("BasicResponse"))
 ///     }
 ///
-///     fn error_message() -> String {
-///         "Error converting to Response".to_string()
+///     fn error_message() -> &'static str {
+///         "Error converting to Response"
 ///     }
 /// }
 ///
@@ -86,8 +86,8 @@ use Object;
 ///         object.value().ty() == ValueType::Hash
 ///     }
 ///
-///     fn error_message() -> String {
-///         "Error converting to Headers".to_string()
+///     fn error_message() -> &'static str {
+///         "Error converting to Headers"
 ///     }
 /// }
 ///
@@ -123,5 +123,5 @@ use Object;
 /// ```
 pub trait VerifiedObject: Object {
     fn is_correct_type<T: Object>(object: &T) -> bool;
-    fn error_message() -> String;
+    fn error_message() -> &'static str;
 }

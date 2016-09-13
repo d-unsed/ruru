@@ -135,7 +135,7 @@ impl VerifiedObject for RString {
         object.value().ty() == ValueType::RString
     }
 
-    fn error_message() -> String {
-        "Error converting to String".to_string()
+    fn error_message() -> &'static str {
+        "Error converting to String"
     }
 }

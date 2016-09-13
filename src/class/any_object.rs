@@ -72,7 +72,7 @@ impl VerifiedObject for AnyObject {
         true
     }
 
-    fn error_message() -> String {
+    fn error_message() -> &'static str {
         unreachable!()
     }
 }

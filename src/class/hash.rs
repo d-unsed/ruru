@@ -191,7 +191,7 @@ impl VerifiedObject for Hash {
         object.value().ty() == ValueType::Hash
     }
 
-    fn error_message() -> String {
-        "Error converting to Hash".to_string()
+    fn error_message() -> &'static str {
+        "Error converting to Hash"
     }
 }

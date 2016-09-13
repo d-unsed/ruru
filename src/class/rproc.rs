@@ -83,7 +83,7 @@ impl VerifiedObject for Proc {
         object.class() == Class::from_existing("Proc")
     }
 
-    fn error_message() -> String {
-        "Error converting to Proc".to_string()
+    fn error_message() -> &'static str {
+        "Error converting to Proc"
     }
 }

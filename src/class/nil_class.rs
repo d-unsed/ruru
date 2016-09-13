@@ -51,7 +51,7 @@ impl VerifiedObject for NilClass {
         object.value().ty() == ValueType::Nil
     }
 
-    fn error_message() -> String {
-        "Error converting to NilClass".to_string()
+    fn error_message() -> &'static str {
+        "Error converting to NilClass"
     }
 }

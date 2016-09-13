@@ -75,7 +75,7 @@ impl VerifiedObject for Fixnum {
         object.value().ty() == ValueType::Fixnum
     }
 
-    fn error_message() -> String {
-        "Error converting to Fixnum".to_string()
+    fn error_message() -> &'static str {
+        "Error converting to Fixnum"
     }
 }

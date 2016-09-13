@@ -197,8 +197,8 @@ impl VerifiedObject for Array {
         object.value().ty() == ValueType::Array
     }
 
-    fn error_message() -> String {
-        "Error converting to Boolean".to_string()
+    fn error_message() -> &'static str {
+        "Error converting to Boolean"
     }
 }
 

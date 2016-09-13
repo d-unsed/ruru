@@ -408,7 +408,7 @@ impl VerifiedObject for Class {
         object.value().ty() == ValueType::Class
     }
 
-    fn error_message() -> String {
-        "Error converting to Class".to_string()
+    fn error_message() -> &'static str {
+        "Error converting to Class"
     }
 }

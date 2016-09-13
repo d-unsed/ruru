@@ -818,7 +818,7 @@ pub trait Object: From<Value> {
 
             Ok(converted_object)
         } else {
-            Err(Error::TypeError(T::error_message()))
+            Err(Error::TypeError(T::error_message().to_string()))
         }
     }
 
