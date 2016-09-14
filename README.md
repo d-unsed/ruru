@@ -19,7 +19,12 @@ As simple as Ruby, as efficient as Rust.
 
 The fast `String#blank?` implementation by Yehuda Katz
 
-```rust
+```rust,no_run
+#[macro_use]
+extern crate ruru;
+
+use ruru::{Boolean, Class, Object, RString};
+
 methods!(
    RString,
    itself,
@@ -29,7 +34,8 @@ methods!(
    }
 );
 
-fn main() {
+#[no_mangle]
+pub extern fn initialize_string() {
     Class::from_existing("String").define(|itself| {
         itself.def("blank?", string_is_blank);
     });
@@ -44,7 +50,13 @@ fn main() {
 
 Set the `X-RUST` header to `Hello from Rust!`
 
-```rust
+```rust,no_run
+#[macro_use]
+extern crate ruru;
+
+use std::error::Error;
+use ruru::{AnyObject, Array, Class, Hash, Object, RString, VM};
+
 class!(RustMiddleware);
 
 methods!(
@@ -52,17 +64,30 @@ methods!(
     itself,
 
     fn initialize(app: AnyObject) -> RustMiddleware {
-        itself.instance_variable_set("@app", app);
+        itself.instance_variable_set("@app", app.unwrap());
 
         itself
     }
 
     fn call(env: Hash) -> Array {
+        // Raise exception if `env` is not a Hash
+        if let Err(error) = env {
+            VM::raise(error.to_exception(), error.description());
+        }
+
+        let env = env.unwrap();
+
         let app_call = itself
             .instance_variable_get("@app")
             .send("call", vec![env.to_any_object()])
-            .to::<Array>();
+            .try_convert_to::<Array>();
 
+        // Raise exception if `app` returned not an Array
+        if let Err(error) = app_call {
+            VM::raise(error.to_exception(), error.description());
+        }
+
+        let app_call = app_call.unwrap();
         let status = app_call.at(0);
         let mut headers = app_call.at(1).clone().to::<Hash>();
         let response = app_call.at(2);
@@ -75,7 +100,7 @@ methods!(
 
 #[no_mangle]
 pub extern fn initialize_middleware() {
-    Class::new("RustMiddleware").define(|itself| {
+    Class::new("RustMiddleware", None).define(|itself| {
         itself.def("initialize", initialize);
         itself.def("call", call);
     });
@@ -108,27 +133,38 @@ Calculator.new.pow_3(5) #=> { 1 => 1, 2 => 8, 3 => 27, 4 => 64, 5 => 125 }
 You have found that it's very slow to call `pow_3` for big numbers and decided to replace the whole class
 with Rust.
 
-```rust
+```rust,no_run
+#[macro_use]
+extern crate ruru;
+
+use std::error::Error;
+use ruru::{Class, Fixnum, Hash, Object, VM};
+
 class!(Calculator);
 
 methods!(
     Calculator,
     itself,
 
-    fn pow_3(num: Fixnum) -> Hash {
-        let mut hash = Hash::new();
+    fn pow_3(number: Fixnum) -> Hash {
+        let mut result = Hash::new();
 
-        for i in 1..num.to_i64() + 1 {
-            hash.store(Fixnum::new(i), Fixnum::new(i.pow(3)));
+        // Raise an exception if `number` is not a Fixnum
+        if let Err(ref error) = number {
+            VM::raise(error.to_exception(), error.description());
         }
 
-        hash
+        for i in 1..number.unwrap().to_i64() + 1 {
+            result.store(Fixnum::new(i), Fixnum::new(i.pow(3)));
+        }
+
+        result
     }
 );
 
 #[no_mangle]
-pub extern fn initialize_my_app() {
-    Class::new("Calculator").define(|itself| {
+pub extern fn initialize_calculator() {
+    Class::new("Calculator", None).define(|itself| {
         itself.def("pow_3", pow_3);
     });
 }
@@ -150,7 +186,7 @@ Nothing has changed in the API of class, thus there is no need to change any cod
 If the `Calculator` class from the example above has more Ruby methods, but we want to
 replace only `pow_3`, use `Class::from_existing()`
 
-```rust
+```rust,ignore
 Class::from_existing("Calculator").define(|itself| {
     itself.def("pow_3", pow_3);
 });
@@ -161,33 +197,48 @@ Class::from_existing("Calculator").define(|itself| {
 Getting an account balance of some `User` whose name is John and who is 18 or 19 years old.
 
 ```ruby
-User
+default_balance = 0
+
+account_balance = User
   .find_by(age: [18, 19], name: 'John')
   .account_balance
+
+account_balance = default_balance unless account_balance.is_a?(Fixnum)
 ```
 
-```rust
-let mut conditions = Hash::new();
+```rust,no_run
+#[macro_use]
+extern crate ruru;
 
-conditions.store(
-    Symbol::new("age"),
-    Array::new().push(Fixnum::new(18)).push(Fixnum::new(19))
-);
+use ruru::{Array, Class, Fixnum, Hash, Object, RString, Symbol};
 
-conditions.store(
-    Symbol::new("name"),
-    RString::new("John")
-);
+fn main() {
+    let default_balance = 0;
+    let mut conditions = Hash::new();
 
-let account_balance =
-    Class::from_existing("User")
-        .send("find_by", vec![conditions.to_any_object()])
-        .send("account_balance", vec![])
-        .to::<Fixnum>()
-        .to_i64();
+    conditions.store(
+        Symbol::new("age"),
+        Array::new().push(Fixnum::new(18)).push(Fixnum::new(19))
+    );
+
+    conditions.store(
+        Symbol::new("name"),
+        RString::new("John")
+    );
+
+    // Fetch user and his balance
+    // and set it to 0 if balance is not a Fixnum (for example `nil`)
+    let account_balance =
+        Class::from_existing("User")
+            .send("find_by", vec![conditions.to_any_object()])
+            .send("account_balance", vec![])
+            .try_convert_to::<Fixnum>()
+            .map(|balance| balance.to_i64())
+            .unwrap_or(default_balance);
+}
 ```
 
-Check out **[Documentation](http://d-unseductable.github.io/ruru/ruru/index.html)** for more
+Check out **[Documentation](http://d-unseductable.github.io/ruru/ruru/index.html)** for much more
 examples!
 
 ## ... and why is **FFI** not enough?
@@ -227,7 +278,7 @@ To be able to use Ruru, make sure that your Ruby version is 2.2.0 or higher.
 
 4. Create a function which will initialize the extension
 
-  ```rust
+  ```rust,ignore
   #[no_mangle]
   pub extern fn initialize_my_app() {
       Class::new("SomeClass");
