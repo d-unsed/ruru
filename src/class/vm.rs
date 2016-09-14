@@ -3,7 +3,7 @@ use std::slice;
 use binding::vm;
 use class::any_object::AnyObject;
 use class::rproc::Proc;
-use types::Argc;
+use types::{Argc, Value};
 
 /// Virtual Machine and helpers
 pub struct VM;
@@ -132,5 +132,31 @@ impl VM {
     /// ```
     pub fn parse_arguments(argc: Argc, arguments: *const AnyObject) -> Vec<AnyObject> {
         unsafe { slice::from_raw_parts(arguments, argc as usize).to_vec() }
+    }
+
+    pub fn thread_call_without_gvl<F, R, G>(func: F, unblock_func: Option<G>) -> R
+        where F: FnMut() -> R,
+              G: FnMut()
+    {
+        vm::thread_call_without_gvl(func, unblock_func)
+    }
+
+    pub fn thread_call_without_gvl2<F, R, G>(func: F, unblock_func: Option<G>) -> R
+        where F: FnMut() -> R,
+              G: FnMut()
+    {
+        vm::thread_call_without_gvl2(func, unblock_func)
+    }
+
+    pub fn thread_call_with_gvl<F, R>(func: F) -> R
+        where F: FnMut() -> R
+    {
+        vm::thread_call_with_gvl(func)
+    }
+
+    pub fn protect<F>(func: F) -> Result<Value, i32>
+        where F: FnMut()
+    {
+        vm::protect(func)
     }
 }
