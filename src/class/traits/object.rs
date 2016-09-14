@@ -458,8 +458,8 @@ pub trait Object: From<Value> {
     /// string.respond_to?("greeting")
     /// ```
     fn define_singleton_method<I: Object, O: Object>(&mut self,
-                                                         name: &str,
-                                                         callback: Callback<I, O>) {
+                                                     name: &str,
+                                                     callback: Callback<I, O>) {
         class::define_singleton_method(self.value(), name, callback);
     }
 

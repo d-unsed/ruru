@@ -191,7 +191,7 @@ impl Class {
 
         match superclass_value.is_nil() {
             true => None,
-            false => Some(Self::from(superclass_value))
+            false => Some(Self::from(superclass_value)),
         }
     }
 
@@ -385,7 +385,7 @@ impl Class {
     fn superclass_to_value(superclass: Option<&Class>) -> Value {
         match superclass {
             Some(class) => class.value(),
-            None => rb_cObject
+            None => rb_cObject,
         }
     }
 }

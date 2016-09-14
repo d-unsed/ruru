@@ -209,7 +209,10 @@ pub struct ArrayIterator {
 
 impl ArrayIterator {
     fn new(array: Array) -> ArrayIterator {
-        ArrayIterator { array: array, current_index: 0 }
+        ArrayIterator {
+            array: array,
+            current_index: 0,
+        }
     }
 }
 
