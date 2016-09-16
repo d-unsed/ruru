@@ -199,6 +199,8 @@ impl Class {
     ///
     /// # Examples
     ///
+    /// ### Getting all the ancestors
+    ///
     /// ```
     /// use ruru::{Class, VM};
     /// # VM::init();
@@ -215,6 +217,8 @@ impl Class {
     /// assert_eq!(true_class_ancestors, expected_ancestors);
     /// ```
     ///
+    /// ### Searching for an ancestor
+    ///
     /// ```
     /// use ruru::{Class, VM};
     /// # VM::init();
@@ -225,7 +229,6 @@ impl Class {
     /// let ancestors = record_class.ancestors();
     ///
     /// assert!(ancestors.iter().any(|class| *class == basic_record_class));
-    /// assert!(!ancestors.iter().any(|class| *class == Class::from_existing("String")));
     /// ```
     // Using unsafe conversions is ok, because MRI guarantees to return an `Array` of `Class`es
     pub fn ancestors(&self) -> Vec<Class> {

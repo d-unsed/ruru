@@ -1,5 +1,8 @@
 /// Creates Rust structure for new Ruby class
 ///
+/// This macro does not define an actual Ruby class. It only creates structs for using
+/// the class in Rust. To define the class in Ruby, use `Class` structure.
+///
 /// # Examples
 ///
 /// ```no_run
@@ -47,6 +50,10 @@
 ///   end
 ///
 ///   def friendly_greeting(name)
+///     default_name = 'Anonymous'
+///
+///     name = defaut_name unless name.is_a?(String)
+///
 ///     "Hello dear #{name}"
 ///   end
 /// end

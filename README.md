@@ -46,71 +46,62 @@ pub extern fn initialize_string() {
 
 [Link to the repository](https://github.com/d-unseductable/rust_sidekiq)
 
-### Rack middleware
+### Safe conversions
 
-Set the `X-RUST` header to `Hello from Rust!`
+Since 0.8.0 safe conversions are available for built-in Ruby types and for custom types.
+
+Let's imagine that we are writing an HTTP server. It should handle requests which are passed from
+Ruby side.
+
+Any object which responds to `#body` method is considered as a valid request.
 
 ```rust,no_run
 #[macro_use]
 extern crate ruru;
 
 use std::error::Error;
-use ruru::{AnyObject, Array, Class, Hash, Object, RString, VM};
+use ruru::{Class, Object, RString, VerifiedObject, VM};
 
-class!(RustMiddleware);
+class!(Request);
 
-methods!(
-    RustMiddleware,
-    itself,
-
-    fn initialize(app: AnyObject) -> RustMiddleware {
-        itself.instance_variable_set("@app", app.unwrap());
-
-        itself
+impl VerifiedObject for Request {
+    fn is_correct_type<T: Object>(object: &T) -> bool {
+        object.respond_to("body")
     }
 
-    fn call(env: Hash) -> Array {
-        // Raise exception if `env` is not a Hash
-        if let Err(error) = env {
+    fn error_message() -> &'static str {
+        "Not a valid request"
+    }
+}
+
+class!(Server);
+
+methods!(
+    Server,
+    itself,
+
+    fn process_request(request: Request) -> RString {
+        let body = request
+            .and_then(|request| request.send("body", vec![]).try_convert_to::<RString>())
+            .map(|body| body.to_string());
+
+        // Either request does not respond to `body` or `body` is not a String
+        if let Err(ref error) = body {
             VM::raise(error.to_exception(), error.description());
         }
 
-        let env = env.unwrap();
+        let formatted_body = format!("[BODY] {}", body.unwrap());
 
-        let app_call = itself
-            .instance_variable_get("@app")
-            .send("call", vec![env.to_any_object()])
-            .try_convert_to::<Array>();
-
-        // Raise exception if `app` returned not an Array
-        if let Err(error) = app_call {
-            VM::raise(error.to_exception(), error.description());
-        }
-
-        let app_call = app_call.unwrap();
-        let status = app_call.at(0);
-        let mut headers = app_call.at(1).clone().to::<Hash>();
-        let response = app_call.at(2);
-
-        headers.store(RString::new("X-RUST"), RString::new("Hello from Rust!"));
-
-        Array::new().push(status).push(headers).push(response)
+        RString::new(&formatted_body)
     }
 );
 
 #[no_mangle]
-pub extern fn initialize_middleware() {
-    Class::new("RustMiddleware", None).define(|itself| {
-        itself.def("initialize", initialize);
-        itself.def("call", call);
+pub extern fn initialize_server() {
+    Class::new("Server", None).define(|itself| {
+        itself.def("process_request", process_request);
     });
 }
-```
-
-Ruby:
-
-```
-use RustMiddleware
 ```
 
 ### Defining a new class
@@ -192,6 +183,45 @@ Class::from_existing("Calculator").define(|itself| {
 });
 ```
 
+### Class definition DSL
+
+```rust,no_run
+Class::new("Hello", None).define(|itself| {
+    itself.attr_reader("reader");
+
+    itself.def_self("greeting", greeting);
+    itself.def("many_greetings", many_greetings);
+
+    itself.define_nested_class("Nested", None).define(|itself| {
+        itself.def_self("nested_greeting", nested_greeting);
+    });
+});
+```
+
+Which corresponds to the following Ruby code:
+
+```ruby
+class Hello
+  attr_reader :reader
+
+  def self.greeting
+    # ...
+  end
+
+  def many_greetings
+    # ...
+  end
+
+  class Nested
+    def self.nested_greeting
+      # ...
+    end
+  end
+end
+```
+
+See documentation for `Class` and `Object` for more information.
+
 ### Calling Ruby code from Rust
 
 Getting an account balance of some `User` whose name is John and who is 18 or 19 years old.
@@ -238,8 +268,8 @@ fn main() {
 }
 ```
 
-Check out **[Documentation](http://d-unseductable.github.io/ruru/ruru/index.html)** for much more
-examples!
+**Check out [Documentation](http://d-unseductable.github.io/ruru/ruru/index.html) for much more
+examples!**
 
 ## ... and why is **FFI** not enough?
 
@@ -266,7 +296,7 @@ To be able to use Ruru, make sure that your Ruby version is 2.2.0 or higher.
 
   ```toml
   [dependencies]
-  ruru = ">= 0.5.0"
+  ruru = "0.8.0"
   ```
 
 3. Compile your library as a `dylib`
