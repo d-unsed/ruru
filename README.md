@@ -283,6 +283,9 @@ examples!**
 
 Warning! The crate is a WIP.
 
+It is recommended to use [Thermite](https://github.com/malept/thermite) gem,
+a Rake-based helper for building and distributing Rust-based Ruby extensions.
+
 To be able to use Ruru, make sure that your Ruby version is 2.2.0 or higher.
 
 1. Your local MRI copy has to be built with the `--enable-shared` option. For
@@ -317,12 +320,24 @@ To be able to use Ruru, make sure that your Ruby version is 2.2.0 or higher.
   }
   ```
 
-5. Open the library and call the function from Ruby
+5. Build extension
+
+```bash
+$ cargo build --release
+```
+
+or using Thermite
+
+```bash
+$ rake thermite:build
+```
+
+6. On the ruby side, open the compiled `dylib` and call the function to initialize extension
 
   ```ruby
   require 'fiddle'
 
-  library = Fiddle::dlopen('libmy_library.dylib')
+  library = Fiddle::dlopen('path_to_dylib/libmy_library.dylib')
 
   Fiddle::Function.new(library['initialize_my_app'], [], Fiddle::TYPE_VOIDP).call
   ```
