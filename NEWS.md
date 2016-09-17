@@ -2,6 +2,36 @@
 
 ## Unreleased
 
+### Added
+
+* `VerifiedObject` trait for safe conversions between types
+* `Object::try_convert_to()`
+* `Error` enum convertible to exceptions
+* `Result<T: Object, Error>` as a result of type conversion
+* `unsafe_methods!` macro
+* `Class::define_nested_class()`
+* `Object::respond_to()`
+* `Class::superclass()`
+* `Class::ancestors()`
+* `Hash::length()`
+* `Object::singleton_class()`
+* `attr_reader`, `attr_writer`, `attr_accessor` to `Class`
+* GVL-related functions to `VM` (#34)
+* Checking for presence of method arguments
+* Derive `Debug`, `PartialEq` for all Ruby types
+* `VM::raise()`
+
+### Changed
+
+* `AnyObject::to()` marked as `unsafe`
+* `AnyObject::to()` moved to `Object::to()`
+* `AnyObject::ty()` moved to `Object::ty()`
+* `methods!` macro sets arguments to `Result<T: Object, Error>` using `try_convert_to()`
+* Traits from `ruru::traits::*` module exported to top-level `ruru::*` module
+* `Class::new()` receives optional superclass
+* `define`, `define_method`, `define_singleton_method` moved from `Class` to `Object` trait
+* `Hash::each()` yields keys and values as `AnyObject` instead of `Object` to allow safe conversions
+
 ## [0.7.8] - 2016-07-09
 
 ### Added
