@@ -365,15 +365,15 @@ To be able to use Ruru, make sure that your Ruby version is 2.2.0 or higher.
 
 5. Build extension
 
-```bash
-$ cargo build --release
-```
+  ```bash
+  $ cargo build --release
+  ```
 
-or using Thermite
+  or using Thermite
 
-```bash
-$ rake thermite:build
-```
+  ```bash
+  $ rake thermite:build
+  ```
 
 6. On the ruby side, open the compiled `dylib` and call the function to initialize extension
 
