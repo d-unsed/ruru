@@ -182,6 +182,51 @@ impl VM {
         unsafe { slice::from_raw_parts(arguments, argc as usize).to_vec() }
     }
 
+    /// Release GVL for current thread.
+    ///
+    /// **Warning!** Due to MRI limitations, interaction with Ruby objects is not allowed while
+    /// GVL is released, it may cause unexpected behaviour.
+    /// [Read more at Ruby documentation](https://github.com/ruby/ruby/blob/2fc5210f31ad23463d7b0a0e36bcfbeee7b41b3e/thread.c#L1314-L1398)
+    ///
+    /// You should extract all the information from Ruby world before invoking
+    /// `thread_call_without_gvl`.
+    ///
+    /// GVL will be re-acquired when the closure is finished.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// #[macro_use] extern crate ruru;
+    ///
+    /// use ruru::{Class, Fixnum, Object, VM};
+    ///
+    /// class!(Calculator);
+    ///
+    /// methods!(
+    ///     Calculator,
+    ///     itself,
+    ///
+    ///     fn heavy_computation() -> Fixnum {
+    ///         let computation = || { 2 * 2 };
+    ///         let unblocking_function = || {};
+    ///
+    ///         // release GVL for current thread until `computation` is completed
+    ///         let result = VM::thread_call_without_gvl(
+    ///             computation,
+    ///             Some(unblocking_function)
+    ///         );
+    ///
+    ///         // GVL is re-acquired, we can interact with Ruby-world
+    ///         Fixnum::new(result)
+    ///     }
+    /// );
+    ///
+    /// fn main() {
+    ///     Class::new("Calculator", None).define(|itself| {
+    ///         itself.def("heavy_computation", heavy_computation);
+    ///     });
+    /// }
+    /// ```
     pub fn thread_call_without_gvl<F, R, G>(func: F, unblock_func: Option<G>) -> R
         where F: FnMut() -> R,
               G: FnMut()

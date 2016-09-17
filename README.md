@@ -104,6 +104,47 @@ pub extern fn initialize_server() {
 }
 ```
 
+### True parallelism
+
+Ruru provides a way to enable true parallelism for Ruby threads by releasing GVL (GIL).
+
+It means that a thread with released GVL runs in parallel with other threads without
+being interrupted by GVL.
+
+Current example demonstrates a "heavy" computation (`2 * 2` for simplicity) run in parallel.
+
+```rust,no_run
+#[macro_use] extern crate ruru;
+
+use ruru::{Class, Fixnum, Object, VM};
+
+class!(Calculator);
+
+methods!(
+    Calculator,
+    itself,
+
+    fn heavy_computation() -> Fixnum {
+        let computation = || { 2 * 2 };
+        let unblocking_function = || {};
+
+        // release GVL for current thread until `computation` is completed
+        let result = VM::thread_call_without_gvl(
+            computation,
+            Some(unblocking_function)
+        );
+
+        Fixnum::new(result)
+    }
+);
+
+fn main() {
+    Class::new("Calculator", None).define(|itself| {
+        itself.def("heavy_computation", heavy_computation);
+    });
+}
+```
+
 ### Defining a new class
 
 Let's say you have a `Calculator` class.
