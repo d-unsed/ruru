@@ -2,7 +2,9 @@
 
 ## Native Ruby extensions in Rust
 
-[![](http://meritbadge.herokuapp.com/ruru)](https://crates.io/crates/ruru) [![Build Status](https://travis-ci.org/d-unseductable/ruru.svg?branch=master)](https://travis-ci.org/d-unseductable/ruru)
+[![](http://meritbadge.herokuapp.com/ruru)](https://crates.io/crates/ruru)
+[![Build Status](https://travis-ci.org/d-unseductable/ruru.svg?branch=master)](https://travis-ci.org/d-unseductable/ruru)
+[![Build status](https://ci.appveyor.com/api/projects/status/2epyqhooimdu6u5l?svg=true)](https://ci.appveyor.com/project/d-unseductable/ruru)
 
 **[Documentation](http://d-unseductable.github.io/ruru/ruru/index.html)**
 
