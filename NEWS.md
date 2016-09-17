@@ -32,6 +32,10 @@
 * `define`, `define_method`, `define_singleton_method` moved from `Class` to `Object` trait
 * `Hash::each()` yields keys and values as `AnyObject` instead of `Object` to allow safe conversions
 
+### Fixed
+
+* `x86` build
+
 ## [0.7.8] - 2016-07-09
 
 ### Added
