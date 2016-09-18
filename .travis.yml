@@ -1,24 +1,43 @@
+# Based on https://github.com/malept/rusty_blank/blob/master/.travis.yml
+
 language: rust
+
 rust:
   - stable
   - beta
   - nightly
+
 cache: cargo
+
 matrix:
   allow_failures:
     - rust: nightly
+
+before_install:
+- |
+  rvm install "$RUBY_VERSION"
+  rvm use "$RUBY_VERSION"
+  ruby --version
+  ruby -e 'require "pp"; pp RbConfig::CONFIG'
+
 before_script:
 - |
   pip install 'travis-cargo<0.2' --user &&
   export PATH=$HOME/.local/bin:$PATH
+
 script:
 - |
   travis-cargo build &&
   travis-cargo test &&
   travis-cargo --only stable doc
+
 after_success:
   - travis-cargo --only stable doc-upload
+
 env:
   global:
     - TRAVIS_CARGO_NIGHTLY_FEATURE=""
     - secure: i1r+8I+hC30rlbgt6ky5c/Kjm3zOEfa+M7Xab7nY2NG9lJVe/c5jABQlSmIlkjroYIkPcmC/ti+0WBJ+MexSfyRZqf8ozdA4FSvj0YASB2xWtcXnwXYVv7pJ0mOIwaTJM9oBnPML1XIEtJf7knGdPW0lPQkzmgpYQyrSIHsn6IppQ5quuREU2ynsELKuSAxfdrG3AQDbB94INJOxJkpFj/H0Uw2KGfN8ManrAsREbmGnFXpdoyqfZWTFAWTpCMAyurHJcUXuBjlCYgjm2gKbWa4kZsL3HhYnZDZkNDHONkmh2/iEbYr8+4+Ll8RFHG2A41JrcYLjBY3/L4HLtz7cMksZSuFEk3ZxoqN0fkJ3dRa1y8rTkJ4yIAXYG/VzqsOxYoo9Oe87HV8tTF+PPy5dPojonFnYLAtH7V/n1dh+QtznRHLg/rkoomHiyAkwvPoPqQHz8gdExo55/NJkI0pvzaM4zMbAK1X5Xwj0IUJyUfDhl26QTu3Yi8QGsA5LpdFcf/jH/2fecontJ0yUfT1/GJvhZ3lHpyMxGB8O/sX21u60iIYRvSYGrfiymV6eSLFFMmiAJAwsgSUkOZvSk7JJrJQbB6LENuy4RPUaQ6Uabzve0OgNoax3RkYnmuiX4B+WUOhSzeBRWzSAb9A76O1gYUO9JmY7duvWSTTplJY90i8=
+  matrix:
+    - RUBY_VERSION: 2.2.5
+    - RUBY_VERSION: 2.3.1
