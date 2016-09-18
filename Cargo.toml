@@ -1,6 +1,6 @@
 [package]
 name = "ruru"
-version = "0.7.8"
+version = "0.8.0"
 authors = ["Dmitry Gritsay <unseductable@gmail.com>"]
 
 description = "Native Ruby extensions in Rust"

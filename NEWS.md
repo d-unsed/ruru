@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+## [0.8.0] - 2016-09-18
+
 ### Added
 
 * `VerifiedObject` trait for safe conversions between types
@@ -133,6 +135,7 @@
 
 For versions prior to 0.7.0, please see `git log`.
 
+[0.8.0]: https://github.com/d-unseductable/ruru/compare/v0.7.8...v0.8.0
 [0.7.8]: https://github.com/d-unseductable/ruru/compare/v0.7.7...v0.7.8
 [0.7.7]: https://github.com/d-unseductable/ruru/compare/v0.7.6...v0.7.7
 [0.7.6]: https://github.com/d-unseductable/ruru/compare/v0.7.5...v0.7.6
