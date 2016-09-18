@@ -1,10 +1,11 @@
-# Ruru (Rust + Ruby = :heart:)
+# Ruru (Rust + Ruby)
 
 ## Native Ruby extensions in Rust
 
 [![](http://meritbadge.herokuapp.com/ruru)](https://crates.io/crates/ruru)
 [![Build Status](https://travis-ci.org/d-unseductable/ruru.svg?branch=master)](https://travis-ci.org/d-unseductable/ruru)
 [![Build status](https://ci.appveyor.com/api/projects/status/2epyqhooimdu6u5l?svg=true)](https://ci.appveyor.com/project/d-unseductable/ruru)
+[![Gitter](https://badges.gitter.im/rust-ruru/general.svg)](https://gitter.im/rust-ruru/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 **[Documentation](http://d-unseductable.github.io/ruru/ruru/index.html)**
 
@@ -387,4 +388,7 @@ To be able to use Ruru, make sure that your Ruby version is 2.2.0 or higher.
 
 6. Ruru is ready :heart:
 
-# Contributors are welcome!
+## Contributors are welcome!
+
+If you have any questions, join Ruru on
+[Gitter](https://gitter.im/rust-ruru/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
