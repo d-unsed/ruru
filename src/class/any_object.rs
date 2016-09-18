@@ -33,7 +33,7 @@ use {Object, VerifiedObject};
 ///
 /// ### Retrieving an object from `Hash`
 ///
-/// ```no_run
+/// ```
 /// use ruru::{Fixnum, Hash, Object, Symbol, VM};
 /// # VM::init();
 ///

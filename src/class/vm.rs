@@ -154,7 +154,7 @@ impl VM {
     }
 
     // TODO: Move to other struct
-    /// Converts a pointer `AnyObject` array to `Vec<AnyObject>`.
+    /// Converts a pointer to array of `AnyObject`s to `Vec<AnyObject>`.
     ///
     /// This function is a helper for callbacks, do not use it directly.
     ///

@@ -5,7 +5,7 @@
 ///
 /// # Examples
 ///
-/// ```no_run
+/// ```
 /// #[macro_use]
 /// extern crate ruru;
 ///
@@ -103,7 +103,7 @@ macro_rules! class {
 ///
 /// # Examples
 ///
-/// ```no_run
+/// ```
 /// #[macro_use]
 /// extern crate ruru;
 ///
@@ -217,7 +217,7 @@ macro_rules! unsafe_methods {
 ///  - `address[:port]` is not present
 ///  - `address[:port]` is not a `Fixnum`
 ///
-/// ```no_run
+/// ```
 /// #[macro_use]
 /// extern crate ruru;
 ///

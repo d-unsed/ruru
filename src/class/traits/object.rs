@@ -118,6 +118,7 @@ pub trait Object: From<Value> {
 
         Class::from(class)
     }
+
     /// Wraps calls to the object.
     ///
     /// Mostly used to have Ruby-like class definition DSL.
@@ -477,7 +478,7 @@ pub trait Object: From<Value> {
     ///
     /// # Examples
     ///
-    /// ```no_run
+    /// ```
     /// use ruru::{Array, Fixnum, Object, RString, VM};
     /// # VM::init();
     ///
@@ -544,7 +545,7 @@ pub trait Object: From<Value> {
     ///
     /// # Examples
     ///
-    /// ```no_run
+    /// ```
     /// use ruru::{Array, Fixnum, Object, VM};
     /// # VM::init();
     ///
@@ -565,7 +566,7 @@ pub trait Object: From<Value> {
     ///
     /// # Examples
     ///
-    /// ```no_run
+    /// ```
     /// #[macro_use]
     /// extern crate ruru;
     ///
@@ -622,7 +623,7 @@ pub trait Object: From<Value> {
     ///
     /// # Examples
     ///
-    /// ```no_run
+    /// ```
     /// #[macro_use]
     /// extern crate ruru;
     ///

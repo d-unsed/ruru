@@ -36,7 +36,7 @@ impl Hash {
     ///
     /// # Examples
     ///
-    /// ```no_run
+    /// ```
     /// use ruru::{Fixnum, Hash, Object, Symbol, VM};
     /// # VM::init();
     ///
@@ -67,7 +67,7 @@ impl Hash {
     ///
     /// # Examples
     ///
-    /// ```no_run
+    /// ```
     /// use ruru::{Fixnum, Hash, Object, Symbol, VM};
     /// # VM::init();
     ///
@@ -130,7 +130,7 @@ impl Hash {
     ///
     /// # Examples
     ///
-    /// ```no_run
+    /// ```
     /// use ruru::{Fixnum, Hash, Object, Symbol, VM};
     /// # VM::init();
     ///
