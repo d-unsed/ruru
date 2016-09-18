@@ -7,7 +7,13 @@
 [![Build status](https://ci.appveyor.com/api/projects/status/2epyqhooimdu6u5l?svg=true)](https://ci.appveyor.com/project/d-unseductable/ruru)
 [![Gitter](https://badges.gitter.im/rust-ruru/general.svg)](https://gitter.im/rust-ruru/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
-**[Documentation](http://d-unseductable.github.io/ruru/ruru/index.html)**
+<p align="center">
+  <img src="http://this-week-in-ruru.org/assets/images/logo.png" width="300" height="300">
+  <br><br>
+  <b><a href="http://d-unseductable.github.io/ruru/ruru/index.html">Documentation</a></b>
+  <br><br>
+  <b><a href="http://this-week-in-ruru.org">Website</a></b>
+</p>
 
 Have you ever considered rewriting some parts of your ~~slow~~ Ruby application?
 
@@ -386,7 +392,33 @@ To be able to use Ruru, make sure that your Ruby version is 2.2.0 or higher.
   Fiddle::Function.new(library['initialize_my_app'], [], Fiddle::TYPE_VOIDP).call
   ```
 
-6. Ruru is ready :heart:
+7. Ruru is ready :heart:
+
+## License
+
+MIT License
+
+Copyright (c) 2015-2016 Dmitry Gritsay
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+Icon is designed by [Github](https://github.com).
 
 ## Contributors are welcome!
 
