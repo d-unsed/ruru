@@ -8,11 +8,12 @@
 [![Gitter](https://badges.gitter.im/rust-ruru/general.svg)](https://gitter.im/rust-ruru/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 
 <p align="center">
-  <img src="http://this-week-in-ruru.org/assets/images/logo.png" width="300" height="300">
-  <br><br>
+  <img src="http://this-week-in-ruru.org/assets/images/logo.png" width="350" height="350">
+  <br>
   <b><a href="http://d-unseductable.github.io/ruru/ruru/index.html">Documentation</a></b>
-  <br><br>
+  <br>
   <b><a href="http://this-week-in-ruru.org">Website</a></b>
+  <br>
 </p>
 
 Have you ever considered rewriting some parts of your ~~slow~~ Ruby application?
@@ -394,6 +395,11 @@ To be able to use Ruru, make sure that your Ruby version is 2.2.0 or higher.
 
 7. Ruru is ready :heart:
 
+## Contributors are welcome!
+
+If you have any questions, join Ruru on
+[Gitter](https://gitter.im/rust-ruru/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
+
 ## License
 
 MIT License
@@ -419,8 +425,3 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 Icon is designed by [Github](https://github.com).
-
-## Contributors are welcome!
-
-If you have any questions, join Ruru on
-[Gitter](https://gitter.im/rust-ruru/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
