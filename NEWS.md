@@ -4,6 +4,8 @@
 
 ## [0.8.0] - 2016-09-18
 
+See [wiki page for upgrading from 0.7.x to 0.8.0](https://github.com/d-unseductable/ruru/wiki/Upgrading-from-0.7-to-0.8).
+
 ### Added
 
 * `VerifiedObject` trait for safe conversions between types
