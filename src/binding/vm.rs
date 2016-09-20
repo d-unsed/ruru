@@ -1,6 +1,5 @@
 use ruby_sys::vm;
 
-use binding::util::{unwrap_data_from_ptr, wrap_closure_to_ptr};
 use types::{CallbackPtr, c_int, c_void, Value};
 use util;
 
@@ -22,52 +21,63 @@ pub fn require(name: &str) {
     }
 }
 
+pub fn raise(exception: Value, message: &str) {
+    let message = util::str_to_cstring(message);
+
+    unsafe {
+        vm::rb_raise(exception, message.as_ptr());
+    }
+}
+
 pub fn thread_call_without_gvl<F, R, G>(func: F, unblock_func: Option<G>) -> R
-    where F: FnMut() -> R,
-          G: FnMut()
+    where F: FnOnce() -> R,
+          G: FnOnce()
 {
     unsafe {
         let ptr = if let Some(ubf) = unblock_func {
             vm::rb_thread_call_without_gvl(callbox as CallbackPtr,
-                                           wrap_closure_to_ptr(func),
+                                           util::closure_to_ptr(func),
                                            callbox as CallbackPtr,
-                                           wrap_closure_to_ptr(ubf))
+                                           util::closure_to_ptr(ubf))
         } else {
             vm::rb_thread_call_without_gvl(callbox as CallbackPtr,
-                                           wrap_closure_to_ptr(func),
+                                           util::closure_to_ptr(func),
                                            0 as CallbackPtr,
                                            0 as *const c_void)
         };
-        unwrap_data_from_ptr(ptr as *mut _)
+
+        util::ptr_to_data(ptr)
     }
 }
 
 pub fn thread_call_without_gvl2<F, R, G>(func: F, unblock_func: Option<G>) -> R
-    where F: FnMut() -> R,
-          G: FnMut()
+    where F: FnOnce() -> R,
+          G: FnOnce()
 {
     unsafe {
         let ptr = if let Some(ubf) = unblock_func {
             vm::rb_thread_call_without_gvl2(callbox as CallbackPtr,
-                                            wrap_closure_to_ptr(func),
+                                            util::closure_to_ptr(func),
                                             callbox as CallbackPtr,
-                                            wrap_closure_to_ptr(ubf))
+                                            util::closure_to_ptr(ubf))
         } else {
             vm::rb_thread_call_without_gvl2(callbox as CallbackPtr,
-                                            wrap_closure_to_ptr(func),
+                                            util::closure_to_ptr(func),
                                             0 as CallbackPtr,
                                             0 as *const c_void)
         };
-        unwrap_data_from_ptr(ptr as *mut _)
+
+        util::ptr_to_data(ptr)
     }
 }
 
 pub fn thread_call_with_gvl<F, R>(func: F) -> R
-    where F: FnMut() -> R
+    where F: FnOnce() -> R
 {
     unsafe {
-        let ptr = vm::rb_thread_call_with_gvl(callbox as CallbackPtr, wrap_closure_to_ptr(func));
-        unwrap_data_from_ptr(ptr as *mut _)
+        let ptr = vm::rb_thread_call_with_gvl(callbox as CallbackPtr, util::closure_to_ptr(func));
+
+        util::ptr_to_data(ptr)
     }
 
 }
@@ -75,30 +85,23 @@ pub fn thread_call_with_gvl<F, R>(func: F) -> R
 extern "C" fn callbox(boxptr: *mut c_void) -> *const c_void {
     let mut fnbox: Box<Box<FnMut() -> *const c_void>> =
         unsafe { Box::from_raw(boxptr as *mut Box<FnMut() -> *const c_void>) };
+
     fnbox()
 }
 
 
 pub fn protect<F>(func: F) -> Result<Value, c_int>
-    where F: FnMut()
+    where F: FnOnce()
 {
     let mut state = 0;
     let value = unsafe {
         vm::rb_protect(callbox as CallbackPtr,
-                       wrap_closure_to_ptr(func),
+                       util::closure_to_ptr(func),
                        &mut state as *mut c_int)
     };
     if state == 0 {
         Ok(value)
     } else {
         Err(state)
-    }
-}
-
-pub fn raise(exception: Value, message: &str) {
-    let message = util::str_to_cstring(message);
-
-    unsafe {
-        vm::rb_raise(exception, message.as_ptr());
     }
 }

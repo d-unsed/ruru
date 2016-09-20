@@ -1,7 +1,7 @@
 use std::ffi::{CStr, CString};
 
 use binding::global::RubySpecialConsts;
-use types::{c_char, c_int, InternalValue, Value};
+use types::{c_char, c_int, c_void, InternalValue, Value};
 
 use {AnyObject, Object};
 
@@ -40,4 +40,21 @@ fn arguments_to_values(arguments: Vec<AnyObject>) -> Vec<Value> {
     arguments.iter()
         .map(|object| object.value())
         .collect::<Vec<Value>>()
+}
+
+pub fn closure_to_ptr<F, R>(func: F) -> *const c_void
+    where F: FnOnce() -> R
+{
+    let wrap_return = || {
+        let r = func();
+        Box::into_raw(Box::new(r)) as *const c_void
+    };
+
+    let fnbox = Box::new(wrap_return) as Box<FnOnce() -> *const c_void>;
+
+    Box::into_raw(Box::new(fnbox)) as *const c_void
+}
+
+pub unsafe fn ptr_to_data<R>(ptr: *mut c_void) -> R {
+    *Box::from_raw(ptr as *mut R)
 }
