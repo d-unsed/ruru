@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+## [0.8.1] - 2016-09-25
+
+### Changed
+
+* `VM` thread functions to receive `FnOnce` instead of `FnMut`
+
 ## [0.8.0] - 2016-09-18
 
 See [wiki page for upgrading from 0.7.x to 0.8.0](https://github.com/d-unseductable/ruru/wiki/Upgrading-from-0.7-to-0.8).
@@ -137,6 +143,7 @@ See [wiki page for upgrading from 0.7.x to 0.8.0](https://github.com/d-unseducta
 
 For versions prior to 0.7.0, please see `git log`.
 
+[0.8.1]: https://github.com/d-unseductable/ruru/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/d-unseductable/ruru/compare/v0.7.8...v0.8.0
 [0.7.8]: https://github.com/d-unseductable/ruru/compare/v0.7.7...v0.7.8
 [0.7.7]: https://github.com/d-unseductable/ruru/compare/v0.7.6...v0.7.7
