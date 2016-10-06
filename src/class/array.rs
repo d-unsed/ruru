@@ -177,6 +177,193 @@ impl Array {
 
         AnyObject::from(result)
     }
+
+    /// Removes and returns the last element of the array.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Array, Fixnum, Object};
+    ///
+    /// let mut array = Array::new().push(Fixnum::new(1));
+    ///
+    /// array.store(0, Fixnum::new(2));
+    ///
+    /// let last_element = array.pop();
+    ///
+    /// assert_eq!(last_element.try_convert_to::<Fixnum>(), Ok(Fixnum::new(1)));
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// array = [1]
+    /// array[0] = 2
+    /// last_element = array.pop
+    /// last_element == 2
+    /// ```
+    pub fn pop(&mut self) -> AnyObject {
+        let result = array::pop(self.value());
+
+        AnyObject::from(result)
+    }
+
+    /// Inserts `item` at the beggining of the array
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Array, Fixnum, Object};
+    ///
+    /// let mut array = Array::new().push(Fixnum::new(1));
+    ///
+    /// array.unshift(Fixnum::new(2));
+    ///
+    /// assert_eq!(array.at(0).try_convert_to::<Fixnum>(), Ok(Fixnum::new(2)));
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// array = [1]
+    /// array.unshift 2
+    ///
+    /// array[0] == 2
+    /// ```
+    pub fn unshift<T: Object>(&mut self, item: T) -> AnyObject {
+        let result = array::unshift(self.value(),item.value());
+        AnyObject::from(result)
+    }
+
+    /// Removes the first `item` of the array and moves the rest of the items
+    /// one position back
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Array, Fixnum, Object};
+    ///
+    /// let mut array = Array::new().push(Fixnum::new(1));
+    /// array.push(Fixnum::new(2));
+    ///
+    /// array.shift();
+    ///
+    /// assert_eq!(array.at(0).try_convert_to::<Fixnum>(), Ok(Fixnum::new(2)));
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// array = [1]
+    /// array.push 2
+    /// array.shift
+    ///
+    /// array[0] == 2
+    /// ```
+    pub fn shift(&mut self) -> AnyObject {
+        let result = array::shift(self.value());
+        AnyObject::from(result)
+    }
+
+    /// Creates a copy of the array
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Array, Fixnum, Object};
+    ///
+    /// let mut array = Array::new().push(Fixnum::new(1));
+    ///
+    /// let mut copy = array.dup();
+    ///
+    /// assert_eq!(
+    ///    array.at(0).try_convert_to::<Fixnum>(),
+    ///    Ok( copy.at(0).try_convert_to::<Fixnum>() ));
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// array = [1]
+    /// copy = array.dup
+    ///
+    /// array[0] == copy[0]
+    /// ```
+    pub fn dup(&mut self) -> Array {
+        let result = array::dup(self.value());
+        Array::from(result)
+    }
+
+    /// Concatenates the array elements together without spacing
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Array, Fixnum, Object};
+    ///
+    /// let mut array = Array::new().push(Fixnum::new(1)).push(Fixnum::new(2));
+    /// let string = array.to_s().to_string();
+    ///
+    /// assert_eq!(string, "12".to_string());
+    ///
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// array = [1,2]
+    /// str = array.to_s
+    ///
+    /// str == "12"
+    /// ```
+    pub fn to_s(&mut self) -> RString {
+        let result = array::to_s(self.value());
+        RString::from(result)
+    }
+
+    /// Reverse the order of all of the elements in array
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Array, Fixnum, Object};
+    ///
+    /// let mut array = Array::new()
+    ///                    .push(Fixnum::new(1))
+    ///                    .push(Fixnum::new(2))
+    ///                    .push(Fixnum::new(3));
+    ///
+    /// array.reverse();
+    ///
+    /// assert_eq!(
+    ///    array.at(0).try_convert_to::<Fixnum>(),
+    ///    Ok( Fixnum::new(3) )
+    /// );
+    /// assert_eq!(
+    ///    array.at(1).try_convert_to::<Fixnum>(),
+    ///    Ok( Fixnum::new(2) )
+    /// );
+    /// assert_eq!(
+    ///    array.at(2).try_convert_to::<Fixnum>(),
+    ///    Ok( Fixnum::new(1) )
+    /// );
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// array = [1,2,3]
+    /// array.reverse!
+    ///
+    /// array[0] == 3
+    /// array[1] == 2
+    /// array[2] == 1
+    ///
+    /// ```
+    pub fn reverse(&mut self) -> AnyObject {
+        let result = array::reverse(self.value());
+        AnyObject::from(result)
+    }
 }
 
 impl From<Value> for Array {

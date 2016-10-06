@@ -25,3 +25,27 @@ pub fn push(array: Value, item: Value) -> Value {
 pub fn store(array: Value, offset: i64, item: Value) -> Value {
     unsafe { array::rb_ary_store(array, offset as c_long, item) }
 }
+
+pub fn pop(array: Value) -> Value {
+    unsafe { array::rb_ary_pop(array) }
+}
+
+pub fn unshift(array: Value, item: Value) -> Value {
+    unsafe { array::rb_ary_unshift(array,item) }
+}
+
+pub fn shift(array: Value) -> Value {
+    unsafe { array::rb_ary_shift(array) }
+}
+
+pub fn dup(array: Value) -> Value {
+    unsafe { array::rb_ary_dup(array) }
+}
+
+pub fn to_s(array: Value) -> Value {
+    unsafe { array::rb_ary_to_s(array) }
+}
+
+pub fn reverse(array: Value) -> Value {
+    unsafe { array::rb_ary_reverse(array) }
+}
