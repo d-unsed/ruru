@@ -278,7 +278,7 @@ impl Array {
     ///
     /// assert_eq!(
     ///    array.at(0).try_convert_to::<Fixnum>(),
-    ///    Ok( copy.at(0).try_convert_to::<Fixnum>() ));
+    ///    Ok(copy.at(0).try_convert_to::<Fixnum>()));
     /// ```
     ///
     /// Ruby:
@@ -336,15 +336,15 @@ impl Array {
     ///
     /// assert_eq!(
     ///    array.at(0).try_convert_to::<Fixnum>(),
-    ///    Ok( Fixnum::new(3) )
+    ///    Ok(Fixnum::new(3))
     /// );
     /// assert_eq!(
     ///    array.at(1).try_convert_to::<Fixnum>(),
-    ///    Ok( Fixnum::new(2) )
+    ///    Ok(Fixnum::new(2))
     /// );
     /// assert_eq!(
     ///    array.at(2).try_convert_to::<Fixnum>(),
-    ///    Ok( Fixnum::new(1) )
+    ///    Ok(Fixnum::new(1))
     /// );
     /// ```
     ///
@@ -359,9 +359,145 @@ impl Array {
     /// array[2] == 1
     ///
     /// ```
-    pub fn reverse(&mut self) -> AnyObject {
+    pub fn reverse(&mut self) -> Array {
         let result = array::reverse(self.value());
-        AnyObject::from(result)
+        Array::from(result)
+    }
+
+    /// Appends the elements of `other` to `self`
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Array, Fixnum, Object};
+    ///
+    /// let mut array = Array::new()
+    ///                    .push(Fixnum::new(1))
+    ///                    .push(Fixnum::new(2))
+    ///                    .push(Fixnum::new(3));
+    ///
+    /// let mut other = Array::new()
+    ///                    .push(Fixnum::new(4))
+    ///                    .push(Fixnum::new(5))
+    ///                    .push(Fixnum::new(6));
+    /// array.concat(other);
+    ///
+    /// assert_eq!(
+    ///    array.at(3).try_convert_to::<Fixnum>(),
+    ///    Ok(Fixnum::new(4))
+    /// );
+    /// assert_eq!(
+    ///    array.at(4).try_convert_to::<Fixnum>(),
+    ///    Ok(Fixnum::new(5))
+    /// );
+    /// assert_eq!(
+    ///    array.at(5).try_convert_to::<Fixnum>(),
+    ///    Ok(Fixnum::new(6))
+    /// );
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// array = [1,2,3]
+    /// other = [4,5,6]
+    ///
+    /// array[3] == 4
+    /// array[4] == 5
+    /// array[5] == 6
+    ///
+    /// ```
+    pub fn concat(&mut self, other: Array) -> Array {
+        let result = array::concat(self.value(), other.value());
+        Array::from(result)
+    }
+
+    /// Returns a new array created by sorting self
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Array, Fixnum, Object};
+    ///
+    /// let mut array = Array::new()
+    ///                    .push(Fixnum::new(100))
+    ///                    .push(Fixnum::new(-1))
+    ///                    .push(Fixnum::new(5));
+    ///
+    /// let sorted_array = array.sort();
+    ///
+    /// assert_eq!(
+    ///    sorted_array.at(0).try_convert_to::<Fixnum>(),
+    ///    Ok(Fixnum::new(-1))
+    /// );
+    /// assert_eq!(
+    ///    sorted_array.at(1).try_convert_to::<Fixnum>(),
+    ///    Ok(Fixnum::new(5))
+    /// );
+    /// assert_eq!(
+    ///    sorted_array.at(2).try_convert_to::<Fixnum>(),
+    ///    Ok(Fixnum::new(100))
+    /// );
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// array = [100,-1,5]
+    /// sorted_array = array.sort
+    ///
+    /// sorted_array[0] == -1
+    /// sorted_array[1] == 5
+    /// sorted_array[2] == 100
+    ///
+    /// ```
+    pub fn sort(&mut self) -> Array {
+        let result = array::sort(self.value());
+        Array::from(result)
+    }
+
+    /// Sorts array in place
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Array, Fixnum, Object};
+    ///
+    /// let mut array = Array::new()
+    ///                    .push(Fixnum::new(100))
+    ///                    .push(Fixnum::new(-1))
+    ///                    .push(Fixnum::new(5));
+    ///
+    /// array.sort_bang();
+    ///
+    /// assert_eq!(
+    ///    array.at(0).try_convert_to::<Fixnum>(),
+    ///    Ok(Fixnum::new(-1))
+    /// );
+    /// assert_eq!(
+    ///    array.at(1).try_convert_to::<Fixnum>(),
+    ///    Ok(Fixnum::new(5))
+    /// );
+    /// assert_eq!(
+    ///    array.at(2).try_convert_to::<Fixnum>(),
+    ///    Ok(Fixnum::new(100))
+    /// );
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// array = [100,-1,5]
+    /// array.sort!
+    ///
+    /// array[0] == -1
+    /// array[1] == 5
+    /// array[2] == 100
+    ///
+    /// ```
+    pub fn sort_bang(&mut self) -> Array {
+        let result = array::sort_bang(self.value());
+        Array::from(result)
     }
 }
 

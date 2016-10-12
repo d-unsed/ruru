@@ -1,16 +1,16 @@
 # Changes by Version
 
 ## Unreleased
-## [0.9.0] - 2016-10-06
 
-### Added
-
-* `Array::pop()`
-* `Array::unshift(item)`
-* `Array::shift()`
+* `Array::concat()`
 * `Array::dup()`
-* `Array::to_s()`
+* `Array::pop()`
 * `Array::reverse()`
+* `Array::shift()`
+* `Array::sort_bang()`
+* `Array::sort()`
+* `Array::to_s()`
+* `Array::unshift(item)`
 
 ## [0.8.1] - 2016-09-25
 
