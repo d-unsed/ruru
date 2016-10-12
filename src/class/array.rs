@@ -231,7 +231,7 @@ impl Array {
     /// array[0] == 2
     /// ```
     pub fn unshift<T: Object>(&mut self, item: T) -> AnyObject {
-        let result = array::unshift(self.value(),item.value());
+        let result = array::unshift(self.value(), item.value());
         AnyObject::from(result)
     }
 
@@ -305,7 +305,6 @@ impl Array {
     /// let string = array.to_s().to_string();
     ///
     /// assert_eq!(string, "12".to_string());
-    ///
     /// ```
     ///
     /// Ruby:

@@ -31,7 +31,7 @@ pub fn pop(array: Value) -> Value {
 }
 
 pub fn unshift(array: Value, item: Value) -> Value {
-    unsafe { array::rb_ary_unshift(array,item) }
+    unsafe { array::rb_ary_unshift(array, item) }
 }
 
 pub fn shift(array: Value) -> Value {
