@@ -99,9 +99,5 @@ pub fn protect<F>(func: F) -> Result<Value, c_int>
                        util::closure_to_ptr(func),
                        &mut state as *mut c_int)
     };
-    if state == 0 {
-        Ok(value)
-    } else {
-        Err(state)
-    }
+    if state == 0 { Ok(value) } else { Err(state) }
 }
