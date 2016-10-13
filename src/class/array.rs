@@ -183,15 +183,11 @@ impl Array {
     /// # Examples
     ///
     /// ```
-    /// use ruru::{Array, Fixnum, Object};
-    ///
+    /// use ruru::{Array, Fixnum, Object, VM};
+    /// VM::init();
     /// let mut array = Array::new().push(Fixnum::new(1));
-    ///
-    /// array.store(0, Fixnum::new(2));
-    ///
-    /// let last_element = array.pop();
-    ///
-    /// assert_eq!(last_element.try_convert_to::<Fixnum>(), Ok(Fixnum::new(1)));
+    /// let last_element = array.pop().try_convert_to::<Fixnum>();
+    /// assert_eq!(last_element, Ok(Fixnum::new(1)));
     /// ```
     ///
     /// Ruby:
@@ -213,8 +209,8 @@ impl Array {
     /// # Examples
     ///
     /// ```
-    /// use ruru::{Array, Fixnum, Object};
-    ///
+    /// use ruru::{Array, Fixnum, Object, VM};
+    /// VM::init();
     /// let mut array = Array::new().push(Fixnum::new(1));
     ///
     /// array.unshift(Fixnum::new(2));
@@ -241,8 +237,8 @@ impl Array {
     /// # Examples
     ///
     /// ```
-    /// use ruru::{Array, Fixnum, Object};
-    ///
+    /// use ruru::{Array, Fixnum, Object, VM};
+    /// VM::init();
     /// let mut array = Array::new().push(Fixnum::new(1));
     /// array.push(Fixnum::new(2));
     ///
@@ -270,15 +266,15 @@ impl Array {
     /// # Examples
     ///
     /// ```
-    /// use ruru::{Array, Fixnum, Object};
-    ///
+    /// use ruru::{Array, Fixnum, Object, VM};
+    /// VM::init();
     /// let mut array = Array::new().push(Fixnum::new(1));
     ///
-    /// let mut copy = array.dup();
+    /// let copy = array.dup();
     ///
     /// assert_eq!(
     ///    array.at(0).try_convert_to::<Fixnum>(),
-    ///    Ok(copy.at(0).try_convert_to::<Fixnum>()));
+    ///    copy.at(0).try_convert_to::<Fixnum>());
     /// ```
     ///
     /// Ruby:
@@ -299,12 +295,12 @@ impl Array {
     /// # Examples
     ///
     /// ```
-    /// use ruru::{Array, Fixnum, Object};
-    ///
+    /// use ruru::{Array, Fixnum, VM};
+    /// VM::init();
     /// let mut array = Array::new().push(Fixnum::new(1)).push(Fixnum::new(2));
     /// let string = array.to_s().to_string();
     ///
-    /// assert_eq!(string, "12".to_string());
+    /// assert_eq!(string, "[1, 2]".to_string());
     /// ```
     ///
     /// Ruby:
@@ -313,7 +309,7 @@ impl Array {
     /// array = [1,2]
     /// str = array.to_s
     ///
-    /// str == "12"
+    /// str == "[1, 2]"
     /// ```
     pub fn to_s(&mut self) -> RString {
         let result = array::to_s(self.value());
@@ -325,8 +321,8 @@ impl Array {
     /// # Examples
     ///
     /// ```
-    /// use ruru::{Array, Fixnum, Object};
-    ///
+    /// use ruru::{Array, Fixnum, Object, VM};
+    /// VM::init();
     /// let mut array = Array::new()
     ///                    .push(Fixnum::new(1))
     ///                    .push(Fixnum::new(2))
@@ -357,7 +353,6 @@ impl Array {
     /// array[0] == 3
     /// array[1] == 2
     /// array[2] == 1
-    ///
     /// ```
     pub fn reverse(&mut self) -> Array {
         let result = array::reverse(self.value());
@@ -369,18 +364,18 @@ impl Array {
     /// # Examples
     ///
     /// ```
-    /// use ruru::{Array, Fixnum, Object};
-    ///
+    /// use ruru::{Array, Fixnum, Object, VM};
+    /// VM::init();
     /// let mut array = Array::new()
     ///                    .push(Fixnum::new(1))
     ///                    .push(Fixnum::new(2))
     ///                    .push(Fixnum::new(3));
     ///
-    /// let mut other = Array::new()
+    /// let other = Array::new()
     ///                    .push(Fixnum::new(4))
     ///                    .push(Fixnum::new(5))
     ///                    .push(Fixnum::new(6));
-    /// array.concat(other);
+    /// let array = array.concat(other);
     ///
     /// assert_eq!(
     ///    array.at(3).try_convert_to::<Fixnum>(),
@@ -405,7 +400,6 @@ impl Array {
     /// array[3] == 4
     /// array[4] == 5
     /// array[5] == 6
-    ///
     /// ```
     pub fn concat(&mut self, other: Array) -> Array {
         let result = array::concat(self.value(), other.value());
@@ -417,8 +411,8 @@ impl Array {
     /// # Examples
     ///
     /// ```
-    /// use ruru::{Array, Fixnum, Object};
-    ///
+    /// use ruru::{Array, Fixnum, Object, VM};
+    /// VM::init();
     /// let mut array = Array::new()
     ///                    .push(Fixnum::new(100))
     ///                    .push(Fixnum::new(-1))
@@ -449,7 +443,6 @@ impl Array {
     /// sorted_array[0] == -1
     /// sorted_array[1] == 5
     /// sorted_array[2] == 100
-    ///
     /// ```
     pub fn sort(&mut self) -> Array {
         let result = array::sort(self.value());
@@ -461,8 +454,8 @@ impl Array {
     /// # Examples
     ///
     /// ```
-    /// use ruru::{Array, Fixnum, Object};
-    ///
+    /// use ruru::{Array, Fixnum, Object, VM};
+    /// VM::init();
     /// let mut array = Array::new()
     ///                    .push(Fixnum::new(100))
     ///                    .push(Fixnum::new(-1))
@@ -493,7 +486,6 @@ impl Array {
     /// array[0] == -1
     /// array[1] == 5
     /// array[2] == 100
-    ///
     /// ```
     pub fn sort_bang(&mut self) -> Array {
         let result = array::sort_bang(self.value());
