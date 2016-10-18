@@ -330,7 +330,37 @@ impl Array {
     ///
     /// let mut array = Array::new().push(Fixnum::new(1)).push(Fixnum::new(2));
     ///
-    /// array.reverse();
+    /// let reversed_array = array.reverse();
+    ///
+    /// assert_eq!(reversed_array.at(0).try_convert_to::<Fixnum>(), Ok(Fixnum::new(2)));
+    /// assert_eq!(reversed_array.at(1).try_convert_to::<Fixnum>(), Ok(Fixnum::new(1)));
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// array = [1, 2]
+    ///
+    /// reversed_array = array.reverse
+    ///
+    /// reversed_array[0] == 2
+    /// reversed_array[1] == 1
+    /// ```
+    pub fn reverse(&self) -> Array {
+        self.dup().reverse_bang()
+    }
+
+    /// Reverses `self` in place.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Array, Fixnum, Object, VM};
+    /// # VM::init();
+    ///
+    /// let mut array = Array::new().push(Fixnum::new(1)).push(Fixnum::new(2));
+    ///
+    /// array.reverse_bang();
     ///
     /// assert_eq!(array.at(0).try_convert_to::<Fixnum>(), Ok(Fixnum::new(2)));
     /// assert_eq!(array.at(1).try_convert_to::<Fixnum>(), Ok(Fixnum::new(1)));
@@ -340,13 +370,15 @@ impl Array {
     ///
     /// ```ruby
     /// array = [1, 2]
+    ///
     /// array.reverse!
     ///
     /// array[0] == 2
     /// array[1] == 1
     /// ```
-    pub fn reverse(&mut self) -> Array {
-        let result = array::reverse(self.value());
+    pub fn reverse_bang(&mut self) -> Array {
+        let result = array::reverse_bang(self.value());
+
         Array::from(result)
     }
 

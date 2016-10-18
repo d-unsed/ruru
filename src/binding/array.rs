@@ -46,7 +46,7 @@ pub fn to_s(array: Value) -> Value {
     unsafe { array::rb_ary_to_s(array) }
 }
 
-pub fn reverse(array: Value) -> Value {
+pub fn reverse_bang(array: Value) -> Value {
     unsafe { array::rb_ary_reverse(array) }
 }
 
