@@ -274,7 +274,7 @@ impl Array {
     /// use ruru::{Array, Fixnum, Object, VM};
     /// # VM::init();
     ///
-    /// let mut array = Array::new().push(Fixnum::new(1));
+    /// let array = Array::new().push(Fixnum::new(1));
     /// let copy = array.dup();
     ///
     /// assert_eq!(array.at(0), copy.at(0));
@@ -288,7 +288,7 @@ impl Array {
     ///
     /// array[0] == copy[0]
     /// ```
-    pub fn dup(&mut self) -> Array {
+    pub fn dup(&self) -> Array {
         let result = array::dup(self.value());
 
         Array::from(result)
