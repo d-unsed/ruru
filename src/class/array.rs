@@ -361,7 +361,7 @@ impl Array {
     /// let mut array = Array::new().push(Fixnum::new(1));
     /// let other = Array::new().push(Fixnum::new(2));
     ///
-    /// array.concat(other);
+    /// array.concat(&other);
     ///
     /// assert_eq!(array.at(0).try_convert_to::<Fixnum>(), Ok(Fixnum::new(1)));
     /// assert_eq!(array.at(1).try_convert_to::<Fixnum>(), Ok(Fixnum::new(2)));
@@ -378,7 +378,7 @@ impl Array {
     /// array[0] == 1
     /// array[1] == 2
     /// ```
-    pub fn concat(&mut self, other: Array) -> Array {
+    pub fn concat(&mut self, other: &Array) -> Array {
         let result = array::concat(self.value(), other.value());
 
         Array::from(result)
