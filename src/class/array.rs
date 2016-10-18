@@ -392,7 +392,7 @@ impl Array {
     /// use ruru::{Array, Fixnum, Object, VM};
     /// # VM::init();
     ///
-    /// let mut array = Array::new().push(Fixnum::new(2)).push(Fixnum::new(1));
+    /// let array = Array::new().push(Fixnum::new(2)).push(Fixnum::new(1));
     ///
     /// let sorted_array = array.sort();
     ///
@@ -410,7 +410,7 @@ impl Array {
     /// sorted_array[0] == 1
     /// sorted_array[1] == 2
     /// ```
-    pub fn sort(&mut self) -> Array {
+    pub fn sort(&self) -> Array {
         let result = array::sort(self.value());
         Array::from(result)
     }
