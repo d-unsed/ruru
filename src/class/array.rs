@@ -302,7 +302,7 @@ impl Array {
     /// use ruru::{Array, Fixnum, VM};
     /// # VM::init();
     ///
-    /// let mut array = Array::new().push(Fixnum::new(1)).push(Fixnum::new(2));
+    /// let array = Array::new().push(Fixnum::new(1)).push(Fixnum::new(2));
     ///
     /// assert_eq!(array.to_s().to_string(), "[1, 2]".to_string());
     /// ```
@@ -314,7 +314,7 @@ impl Array {
     ///
     /// array.to_s == "[1, 2]"
     /// ```
-    pub fn to_s(&mut self) -> RString {
+    pub fn to_s(&self) -> RString {
         let result = array::to_s(self.value());
 
         RString::from(result)
