@@ -228,10 +228,10 @@ impl Array {
     ///
     /// array[0] == 2
     /// ```
-    pub fn unshift<T: Object>(&mut self, item: T) -> AnyObject {
+    pub fn unshift<T: Object>(&mut self, item: T) -> Array {
         let result = array::unshift(self.value(), item.value());
 
-        AnyObject::from(result)
+        Array::from(result)
     }
 
     /// Removes the first item of the array and returns it.
