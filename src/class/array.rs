@@ -63,7 +63,7 @@ impl Array {
         array::len(self.value()) as usize
     }
 
-    /// Retrieves an `AnyObject` from element at `index` position.
+    /// Retrieves an `AnyObject` from the element at `index` position.
     ///
     /// # Examples
     ///
@@ -97,10 +97,9 @@ impl Array {
     /// use ruru::{Array, RString, VM};
     /// # VM::init();
     ///
-    /// let array =
-    ///     Array::new()
-    ///         .push(RString::new("Hello"))
-    ///         .push(RString::new("World!"));
+    /// let array = Array::new()
+    ///     .push(RString::new("Hello"))
+    ///     .push(RString::new("World!"));
     ///
     /// let joined_string = array.join(RString::new(", ")).to_string();
     ///
@@ -112,7 +111,9 @@ impl Array {
     /// ```ruby
     /// array = ['Hello', 'World!']
     ///
-    /// array.join(', ') == 'Hello, World!'
+    /// joined_string = array.join(', ')
+    ///
+    /// joined_string == 'Hello, World!'
     /// ```
     pub fn join(&self, separator: RString) -> RString {
         let result = array::join(self.value(), separator.value());
@@ -184,19 +185,19 @@ impl Array {
     ///
     /// ```
     /// use ruru::{Array, Fixnum, Object, VM};
-    /// VM::init();
+    /// # VM::init();
+    ///
     /// let mut array = Array::new().push(Fixnum::new(1));
-    /// let last_element = array.pop().try_convert_to::<Fixnum>();
-    /// assert_eq!(last_element, Ok(Fixnum::new(1)));
+    ///
+    /// assert_eq!(array.pop().try_convert_to::<Fixnum>(), Ok(Fixnum::new(1)));
     /// ```
     ///
     /// Ruby:
     ///
     /// ```ruby
     /// array = [1]
-    /// array[0] = 2
-    /// last_element = array.pop
-    /// last_element == 2
+    ///
+    /// array.pop == 1
     /// ```
     pub fn pop(&mut self) -> AnyObject {
         let result = array::pop(self.value());
@@ -204,13 +205,14 @@ impl Array {
         AnyObject::from(result)
     }
 
-    /// Inserts `item` at the beggining of the array
+    /// Inserts `item` at the beggining of the array.
     ///
     /// # Examples
     ///
     /// ```
     /// use ruru::{Array, Fixnum, Object, VM};
-    /// VM::init();
+    /// # VM::init();
+    ///
     /// let mut array = Array::new().push(Fixnum::new(1));
     ///
     /// array.unshift(Fixnum::new(2));
@@ -222,59 +224,60 @@ impl Array {
     ///
     /// ```ruby
     /// array = [1]
-    /// array.unshift 2
+    /// array.unshift(2)
     ///
     /// array[0] == 2
     /// ```
     pub fn unshift<T: Object>(&mut self, item: T) -> AnyObject {
         let result = array::unshift(self.value(), item.value());
+
         AnyObject::from(result)
     }
 
-    /// Removes the first `item` of the array and moves the rest of the items
-    /// one position back
+    /// Removes the first item of the array and returns it.
     ///
     /// # Examples
     ///
     /// ```
     /// use ruru::{Array, Fixnum, Object, VM};
-    /// VM::init();
-    /// let mut array = Array::new().push(Fixnum::new(1));
-    /// array.push(Fixnum::new(2));
+    /// # VM::init();
     ///
-    /// array.shift();
+    /// let mut array = Array::new().push(Fixnum::new(1)).push(Fixnum::new(2));
     ///
+    /// let item = array.shift();
+    ///
+    /// assert_eq!(item.try_convert_to::<Fixnum>(), Ok(Fixnum::new(1)));
     /// assert_eq!(array.at(0).try_convert_to::<Fixnum>(), Ok(Fixnum::new(2)));
     /// ```
     ///
     /// Ruby:
     ///
     /// ```ruby
-    /// array = [1]
-    /// array.push 2
-    /// array.shift
+    /// array = [1, 2]
     ///
+    /// item = array.shift
+    ///
+    /// item == 1
     /// array[0] == 2
     /// ```
     pub fn shift(&mut self) -> AnyObject {
         let result = array::shift(self.value());
+
         AnyObject::from(result)
     }
 
-    /// Creates a copy of the array
+    /// Creates a copy of the array.
     ///
     /// # Examples
     ///
     /// ```
     /// use ruru::{Array, Fixnum, Object, VM};
-    /// VM::init();
-    /// let mut array = Array::new().push(Fixnum::new(1));
+    /// # VM::init();
     ///
+    /// let mut array = Array::new().push(Fixnum::new(1));
     /// let copy = array.dup();
     ///
-    /// assert_eq!(
-    ///    array.at(0).try_convert_to::<Fixnum>(),
-    ///    copy.at(0).try_convert_to::<Fixnum>());
+    /// assert_eq!(array.at(0), copy.at(0));
     /// ```
     ///
     /// Ruby:
@@ -287,205 +290,156 @@ impl Array {
     /// ```
     pub fn dup(&mut self) -> Array {
         let result = array::dup(self.value());
+
         Array::from(result)
     }
 
-    /// Concatenates the array elements together without spacing
+    /// Creates a string representation of the array.
     ///
     /// # Examples
     ///
     /// ```
     /// use ruru::{Array, Fixnum, VM};
-    /// VM::init();
-    /// let mut array = Array::new().push(Fixnum::new(1)).push(Fixnum::new(2));
-    /// let string = array.to_s().to_string();
+    /// # VM::init();
     ///
-    /// assert_eq!(string, "[1, 2]".to_string());
+    /// let mut array = Array::new().push(Fixnum::new(1)).push(Fixnum::new(2));
+    ///
+    /// assert_eq!(array.to_s().to_string(), "[1, 2]".to_string());
     /// ```
     ///
     /// Ruby:
     ///
     /// ```ruby
-    /// array = [1,2]
-    /// str = array.to_s
+    /// array = [1, 2]
     ///
-    /// str == "[1, 2]"
+    /// array.to_s == "[1, 2]"
     /// ```
     pub fn to_s(&mut self) -> RString {
         let result = array::to_s(self.value());
+
         RString::from(result)
     }
 
-    /// Reverse the order of all of the elements in array
+    /// Returns a new array containing array's elements in reverse order.
     ///
     /// # Examples
     ///
     /// ```
     /// use ruru::{Array, Fixnum, Object, VM};
-    /// VM::init();
-    /// let mut array = Array::new()
-    ///                    .push(Fixnum::new(1))
-    ///                    .push(Fixnum::new(2))
-    ///                    .push(Fixnum::new(3));
+    /// # VM::init();
+    ///
+    /// let mut array = Array::new().push(Fixnum::new(1)).push(Fixnum::new(2));
     ///
     /// array.reverse();
     ///
-    /// assert_eq!(
-    ///    array.at(0).try_convert_to::<Fixnum>(),
-    ///    Ok(Fixnum::new(3))
-    /// );
-    /// assert_eq!(
-    ///    array.at(1).try_convert_to::<Fixnum>(),
-    ///    Ok(Fixnum::new(2))
-    /// );
-    /// assert_eq!(
-    ///    array.at(2).try_convert_to::<Fixnum>(),
-    ///    Ok(Fixnum::new(1))
-    /// );
+    /// assert_eq!(array.at(0).try_convert_to::<Fixnum>(), Ok(Fixnum::new(2)));
+    /// assert_eq!(array.at(1).try_convert_to::<Fixnum>(), Ok(Fixnum::new(1)));
     /// ```
     ///
     /// Ruby:
     ///
     /// ```ruby
-    /// array = [1,2,3]
+    /// array = [1, 2]
     /// array.reverse!
     ///
-    /// array[0] == 3
-    /// array[1] == 2
-    /// array[2] == 1
+    /// array[0] == 2
+    /// array[1] == 1
     /// ```
     pub fn reverse(&mut self) -> Array {
         let result = array::reverse(self.value());
         Array::from(result)
     }
 
-    /// Appends the elements of `other` to `self`
+    /// Appends the elements of `other` array to `self`.
     ///
     /// # Examples
     ///
     /// ```
     /// use ruru::{Array, Fixnum, Object, VM};
-    /// VM::init();
-    /// let mut array = Array::new()
-    ///                    .push(Fixnum::new(1))
-    ///                    .push(Fixnum::new(2))
-    ///                    .push(Fixnum::new(3));
+    /// # VM::init();
     ///
-    /// let other = Array::new()
-    ///                    .push(Fixnum::new(4))
-    ///                    .push(Fixnum::new(5))
-    ///                    .push(Fixnum::new(6));
-    /// let array = array.concat(other);
+    /// let mut array = Array::new().push(Fixnum::new(1));
+    /// let other = Array::new().push(Fixnum::new(2));
     ///
-    /// assert_eq!(
-    ///    array.at(3).try_convert_to::<Fixnum>(),
-    ///    Ok(Fixnum::new(4))
-    /// );
-    /// assert_eq!(
-    ///    array.at(4).try_convert_to::<Fixnum>(),
-    ///    Ok(Fixnum::new(5))
-    /// );
-    /// assert_eq!(
-    ///    array.at(5).try_convert_to::<Fixnum>(),
-    ///    Ok(Fixnum::new(6))
-    /// );
+    /// array.concat(other);
+    ///
+    /// assert_eq!(array.at(0).try_convert_to::<Fixnum>(), Ok(Fixnum::new(1)));
+    /// assert_eq!(array.at(1).try_convert_to::<Fixnum>(), Ok(Fixnum::new(2)));
     /// ```
     ///
     /// Ruby:
     ///
     /// ```ruby
-    /// array = [1,2,3]
-    /// other = [4,5,6]
+    /// array = [1]
+    /// other = [2]
     ///
-    /// array[3] == 4
-    /// array[4] == 5
-    /// array[5] == 6
+    /// array.concat(other)
+    ///
+    /// array[0] == 1
+    /// array[1] == 2
     /// ```
     pub fn concat(&mut self, other: Array) -> Array {
         let result = array::concat(self.value(), other.value());
+
         Array::from(result)
     }
 
-    /// Returns a new array created by sorting self
+    /// Returns a new array created by sorting `self`.
     ///
     /// # Examples
     ///
     /// ```
     /// use ruru::{Array, Fixnum, Object, VM};
-    /// VM::init();
-    /// let mut array = Array::new()
-    ///                    .push(Fixnum::new(100))
-    ///                    .push(Fixnum::new(-1))
-    ///                    .push(Fixnum::new(5));
+    /// # VM::init();
+    ///
+    /// let mut array = Array::new().push(Fixnum::new(2)).push(Fixnum::new(1));
     ///
     /// let sorted_array = array.sort();
     ///
-    /// assert_eq!(
-    ///    sorted_array.at(0).try_convert_to::<Fixnum>(),
-    ///    Ok(Fixnum::new(-1))
-    /// );
-    /// assert_eq!(
-    ///    sorted_array.at(1).try_convert_to::<Fixnum>(),
-    ///    Ok(Fixnum::new(5))
-    /// );
-    /// assert_eq!(
-    ///    sorted_array.at(2).try_convert_to::<Fixnum>(),
-    ///    Ok(Fixnum::new(100))
-    /// );
+    /// assert_eq!(sorted_array.at(0).try_convert_to::<Fixnum>(), Ok(Fixnum::new(1)));
+    /// assert_eq!(sorted_array.at(1).try_convert_to::<Fixnum>(), Ok(Fixnum::new(2)));
     /// ```
     ///
     /// Ruby:
     ///
     /// ```ruby
-    /// array = [100,-1,5]
+    /// array = [2, 1]
+    ///
     /// sorted_array = array.sort
     ///
-    /// sorted_array[0] == -1
-    /// sorted_array[1] == 5
-    /// sorted_array[2] == 100
+    /// sorted_array[0] == 1
+    /// sorted_array[1] == 2
     /// ```
     pub fn sort(&mut self) -> Array {
         let result = array::sort(self.value());
         Array::from(result)
     }
 
-    /// Sorts array in place
+    /// Sorts the array in place.
     ///
     /// # Examples
     ///
     /// ```
     /// use ruru::{Array, Fixnum, Object, VM};
-    /// VM::init();
-    /// let mut array = Array::new()
-    ///                    .push(Fixnum::new(100))
-    ///                    .push(Fixnum::new(-1))
-    ///                    .push(Fixnum::new(5));
+    /// # VM::init();
+    ///
+    /// let mut array = Array::new().push(Fixnum::new(2)).push(Fixnum::new(1));
     ///
     /// array.sort_bang();
     ///
-    /// assert_eq!(
-    ///    array.at(0).try_convert_to::<Fixnum>(),
-    ///    Ok(Fixnum::new(-1))
-    /// );
-    /// assert_eq!(
-    ///    array.at(1).try_convert_to::<Fixnum>(),
-    ///    Ok(Fixnum::new(5))
-    /// );
-    /// assert_eq!(
-    ///    array.at(2).try_convert_to::<Fixnum>(),
-    ///    Ok(Fixnum::new(100))
-    /// );
+    /// assert_eq!(array.at(0).try_convert_to::<Fixnum>(), Ok(Fixnum::new(1)));
+    /// assert_eq!(array.at(1).try_convert_to::<Fixnum>(), Ok(Fixnum::new(2)));
     /// ```
     ///
     /// Ruby:
     ///
     /// ```ruby
-    /// array = [100,-1,5]
+    /// array = [2, 1]
+    ///
     /// array.sort!
     ///
-    /// array[0] == -1
-    /// array[1] == 5
-    /// array[2] == 100
+    /// array[0] == 1
+    /// array[1] == 2
     /// ```
     pub fn sort_bang(&mut self) -> Array {
         let result = array::sort_bang(self.value());
@@ -565,9 +519,11 @@ impl ExactSizeIterator for ArrayIterator {
 /// use ruru::{Array, Fixnum, Object, VM};
 /// # VM::init();
 ///
-/// let mut array = Array::new().push(Fixnum::new(1));
-/// array.push(Fixnum::new(2));
-/// array.push(Fixnum::new(3));
+/// let mut array = Array::new()
+///     .push(Fixnum::new(1))
+///     .push(Fixnum::new(2))
+///     .push(Fixnum::new(3));
+///
 /// let mut sum: i64 = 0;
 ///
 /// for item in array.into_iter() {
