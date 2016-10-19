@@ -2,13 +2,14 @@ use std::slice;
 
 use ruby_sys::string;
 
-use types::Value;
+use types::{c_char, c_long, Value};
 use util;
 
 pub fn new(string: &str) -> Value {
-    let str = util::str_to_cstring(string);
+    let str = string.as_ptr() as *const c_char;
+    let len = string.len() as c_long;
 
-    unsafe { string::rb_str_new_cstr(str.as_ptr()) }
+    unsafe { string::rb_str_new(str, len) }
 }
 
 pub fn from_value(value: Value) -> String {
