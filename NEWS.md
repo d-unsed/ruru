@@ -2,15 +2,32 @@
 
 ## Unreleased
 
-* `Array::concat()`
-* `Array::dup()`
-* `Array::pop()`
+## [0.9.0] - 2016-10-24
+
+### Added
+
+* `Array::concat()` (#38)
+* `Array::dup()` (#38)
+* `Array::pop()` (#38)
 * `Array::reverse()`
-* `Array::shift()`
-* `Array::sort_bang()`
-* `Array::sort()`
-* `Array::to_s()`
-* `Array::unshift(item)`
+* `Array::reverse_bang()`
+* `Array::shift()` (#38)
+* `Array::sort_bang()` (#38)
+* `Array::sort()` (#38)
+* `Array::to_s()` (#38)
+* `Array::unshift()` (#38)
+* `GC::mark()`
+* `Class::wrap_data()`
+* `Object::get_data()`
+* `wrappable_struct!`
+
+### Changed
+
+* Strings with interior null-bytes can be passed to Ruby
+
+### Fixed
+
+* AppVeyor build freezes (#39)
 
 ## [0.8.1] - 2016-09-25
 
@@ -153,6 +170,7 @@ See [wiki page for upgrading from 0.7.x to 0.8.0](https://github.com/d-unseducta
 
 For versions prior to 0.7.0, please see `git log`.
 
+[0.9.0]: https://github.com/d-unseductable/ruru/compare/v0.8.1...v0.9.0
 [0.8.1]: https://github.com/d-unseductable/ruru/compare/v0.8.0...v0.8.1
 [0.8.0]: https://github.com/d-unseductable/ruru/compare/v0.7.8...v0.8.0
 [0.7.8]: https://github.com/d-unseductable/ruru/compare/v0.7.7...v0.7.8
