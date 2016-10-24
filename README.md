@@ -40,6 +40,7 @@ As simple as Ruby, as efficient as Rust.
 * [License](#license)
 
 ## Examples
+
 ### The famous `String#blank?` method
 
 The fast `String#blank?` implementation by Yehuda Katz
