@@ -1,3 +1,5 @@
+use std::ptr;
+
 use ruby_sys::vm;
 
 use types::{CallbackPtr, c_int, c_void, Value};
@@ -42,8 +44,8 @@ pub fn thread_call_without_gvl<F, R, G>(func: F, unblock_func: Option<G>) -> R
         } else {
             vm::rb_thread_call_without_gvl(callbox as CallbackPtr,
                                            util::closure_to_ptr(func),
-                                           0 as CallbackPtr,
-                                           0 as *const c_void)
+                                           ptr::null() as CallbackPtr,
+                                           ptr::null() as *const c_void)
         };
 
         util::ptr_to_data(ptr)
@@ -63,8 +65,8 @@ pub fn thread_call_without_gvl2<F, R, G>(func: F, unblock_func: Option<G>) -> R
         } else {
             vm::rb_thread_call_without_gvl2(callbox as CallbackPtr,
                                             util::closure_to_ptr(func),
-                                            0 as CallbackPtr,
-                                            0 as *const c_void)
+                                            ptr::null() as CallbackPtr,
+                                            ptr::null() as *const c_void)
         };
 
         util::ptr_to_data(ptr)
