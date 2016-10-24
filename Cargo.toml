@@ -12,4 +12,4 @@ keywords = ["cruby", "mri", "ruby", "ruru"]
 license = "MIT"
 
 [dependencies]
-ruby-sys = "0.2.14"
+ruby-sys = "0.2.15"
