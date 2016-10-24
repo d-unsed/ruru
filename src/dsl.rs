@@ -359,6 +359,20 @@ macro_rules! methods {
 ///     server2.get_data(&*SERVER_WRAPPER); // <-- the same `SERVER_WRAPPER`
 ///     ```
 ///
+/// The result of `wrappable_struct!` is:
+///
+/// ```ignore
+/// wrappable_struct!(Server, ServerWrapper, SERVER_WRAPPER);
+///
+/// // produces
+///
+/// struct ServerWrapper {
+///     // ...
+/// }
+///
+/// pub static ref SERVER_WRAPPER: ServerWrapper<Server> = // ...
+/// ```
+///
 /// # Examples
 ///
 /// Wrap `Server` structs to `RubyServer` objects
