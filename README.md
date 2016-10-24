@@ -114,6 +114,77 @@ pub extern fn initialize_server() {
 }
 ```
 
+### Wrapping Rust data to Ruby objects
+
+Wrap `Server`s to `RubyServer` objects
+
+```
+#[macro_use] extern crate ruru;
+#[macro_use] extern crate lazy_static;
+
+use ruru::{AnyObject, Class, Fixnum, Object, RString, VM};
+
+// The structure which we want to wrap
+pub struct Server {
+    host: String,
+    port: u16,
+}
+
+impl Server {
+    fn new(host: String, port: u16) -> Self {
+        Server {
+            host: host,
+            port: port,
+        }
+    }
+
+    fn host(&self) -> &str {
+        &self.host
+    }
+
+    fn port(&self) -> u16 {
+        self.port
+    }
+}
+
+wrappable_struct!(Server, ServerWrapper, SERVER_WRAPPER);
+
+class!(RubyServer);
+
+methods!(
+    RubyServer,
+    itself,
+
+    fn ruby_server_new(host: RString, port: Fixnum) -> AnyObject {
+        let server = Server::new(host.unwrap().to_string(),
+                                 port.unwrap().to_i64() as u16);
+
+        Class::from_existing("RubyServer").wrap_data(server, &*SERVER_WRAPPER)
+    }
+
+    fn ruby_server_host() -> RString {
+        let host = itself.get_data(&*SERVER_WRAPPER).host();
+
+        RString::new(host)
+    }
+
+    fn ruby_server_port() -> Fixnum {
+        let port = itself.get_data(&*SERVER_WRAPPER).port();
+
+        Fixnum::new(port as i64)
+    }
+);
+
+fn main() {
+    Class::new("RubyServer", None).define(|itself| {
+        itself.def_self("new", ruby_server_new);
+
+        itself.def("host", ruby_server_host);
+        itself.def("port", ruby_server_port);
+    });
+}
+```
+
 ### True parallelism
 
 Ruru provides a way to enable true parallelism for Ruby threads by releasing GVL (GIL).
@@ -367,7 +438,7 @@ To be able to use Ruru, make sure that your Ruby version is 2.2.0 or higher.
   pub extern fn initialize_my_app() {
       Class::new("SomeClass");
 
-      /// ... etc
+      // ... etc
   }
   ```
 
