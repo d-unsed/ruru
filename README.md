@@ -28,9 +28,10 @@ As simple as Ruby, as efficient as Rust.
 * [Examples](#examples)
   - [The famous `String#blank?` method](#the-famous-stringblank-method)
   - [Simple Sidekiq-compatible server](#simple-sidekiq-compatible-server)
-  - [Safe-conversions](#safe-conversions)
+  - [Safe conversions](#safe-conversions)
+  - [Wrapping Rust data to Ruby objects](#wrapping-rust-data-to-ruby-objects)
   - [True parallelism](#true-parallelism)
-  - [Defining-a-new-class](#defining-a-new-class)
+  - [Defining a new class](#defining-a-new-class)
   - [Replacing only several methods instead of the whole class](#replacing-only-several-methods-instead-of-the-whole-class)
   - [Class definition DSL](#class-definition-dsl)
   - [Calling Ruby code from Rust](#calling-ruby-code-from-rust)
@@ -134,7 +135,7 @@ pub extern fn initialize_server() {
 
 Wrap `Server`s to `RubyServer` objects
 
-```
+```rust
 #[macro_use] extern crate ruru;
 #[macro_use] extern crate lazy_static;
 
