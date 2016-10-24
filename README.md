@@ -421,7 +421,7 @@ To be able to use Ruru, make sure that your Ruby version is 2.2.0 or higher.
 
   ```toml
   [dependencies]
-  ruru = "0.8.0"
+  ruru = "0.9.0"
   ```
 
 3. Compile your library as a `dylib`
