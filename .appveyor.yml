@@ -7,19 +7,10 @@ environment:
   matrix:
     - RUST_VERSION: stable
       BUILD_TARGET: gnu
-      RUBY_VERSION: 22
-    - RUST_VERSION: stable
-      BUILD_TARGET: gnu
       RUBY_VERSION: 23
     - RUST_VERSION: beta
       BUILD_TARGET: gnu
-      RUBY_VERSION: 22
-    - RUST_VERSION: beta
-      BUILD_TARGET: gnu
       RUBY_VERSION: 23
-    - RUST_VERSION: nightly
-      BUILD_TARGET: gnu
-      RUBY_VERSION: 22
     - RUST_VERSION: nightly
       BUILD_TARGET: gnu
       RUBY_VERSION: 23
