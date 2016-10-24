@@ -23,6 +23,22 @@ to change the interface of your classes or to change any other Ruby code.
 
 As simple as Ruby, as efficient as Rust.
 
+## Contents
+
+* [Examples](#examples)
+  - [The famous `String#blank?` method](#the-famous-stringblank-method)
+  - [Simple Sidekiq-compatible server](#simple-sidekiq-compatible-server)
+  - [Safe-conversions](#safe-conversions)
+  - [True parallelism](#true-parallelism)
+  - [Defining-a-new-class](#defining-a-new-class)
+  - [Replacing only several methods instead of the whole class](#replacing-only-several-methods-instead-of-the-whole-class)
+  - [Class definition DSL](#class-definition-dsl)
+  - [Calling Ruby code from Rust](#calling-ruby-code-from-rust)
+* [... and why is FFI not enough?](#-and-why-is-ffi-not-enough)
+* [How do I use it?](#how-do-i-use-it)
+* [Contributors are welcome!](#contributors-are-welcome)
+* [License](#license)
+
 ## Examples
 
 ### The famous `String#blank?` method
@@ -390,7 +406,7 @@ fn main() {
 }
 ```
 
-**Check out [Documentation](http://d-unseductable.github.io/ruru/ruru/index.html) for much more
+**Check out [Documentation](http://d-unseductable.github.io/ruru/ruru/index.html) for many more
 examples!**
 
 ## ... and why is **FFI** not enough?
