@@ -3,6 +3,7 @@ use std::convert::From;
 use binding::class;
 use binding::global::rb_cObject;
 use binding::util as binding_util;
+use typed_data::DataTypeWrapper;
 use types::{Value, ValueType};
 use util;
 
@@ -383,6 +384,96 @@ impl Class {
     /// ```
     pub fn attr_accessor(&mut self, name: &str) {
         class::define_attribute(self.value(), name, true, true);
+    }
+
+    /// Wraps Rust structure into a new Ruby object of the current class.
+    ///
+    /// See the documentation for `wrappable_struct!` macro for more information.
+    ///
+    /// # Examples
+    ///
+    /// Wrap `Server` structs to `RubyServer` objects
+    ///
+    /// ```
+    /// #[macro_use] extern crate ruru;
+    /// #[macro_use] extern crate lazy_static;
+    ///
+    /// use ruru::{AnyObject, Class, Fixnum, Object, RString, VM};
+    ///
+    /// // The structure which we want to wrap
+    /// pub struct Server {
+    ///     host: String,
+    ///     port: u16,
+    /// }
+    ///
+    /// impl Server {
+    ///     fn new(host: String, port: u16) -> Self {
+    ///         Server {
+    ///             host: host,
+    ///             port: port,
+    ///         }
+    ///     }
+    ///
+    ///     fn host(&self) -> &str {
+    ///         &self.host
+    ///     }
+    ///
+    ///     fn port(&self) -> u16 {
+    ///         self.port
+    ///     }
+    /// }
+    ///
+    /// wrappable_struct!(Server, ServerWrapper, SERVER_WRAPPER);
+    ///
+    /// class!(RubyServer);
+    ///
+    /// methods!(
+    ///     RubyServer,
+    ///     itself,
+    ///
+    ///     fn ruby_server_new(host: RString, port: Fixnum) -> AnyObject {
+    ///         let server = Server::new(host.unwrap().to_string(),
+    ///                                  port.unwrap().to_i64() as u16);
+    ///
+    ///         Class::from_existing("RubyServer").wrap_data(server, &*SERVER_WRAPPER)
+    ///     }
+    ///
+    ///     fn ruby_server_host() -> RString {
+    ///         let host = itself.get_data(&*SERVER_WRAPPER).host();
+    ///
+    ///         RString::new(host)
+    ///     }
+    ///
+    ///     fn ruby_server_port() -> Fixnum {
+    ///         let port = itself.get_data(&*SERVER_WRAPPER).port();
+    ///
+    ///         Fixnum::new(port as i64)
+    ///     }
+    /// );
+    ///
+    /// fn main() {
+    ///     # VM::init();
+    ///     Class::new("RubyServer", None).define(|itself| {
+    ///         itself.def_self("new", ruby_server_new);
+    ///
+    ///         itself.def("host", ruby_server_host);
+    ///         itself.def("port", ruby_server_port);
+    ///     });
+    /// }
+    /// ```
+    ///
+    /// To use the `RubyServer` class in Ruby:
+    ///
+    /// ```ruby
+    /// server = RubyServer.new("127.0.0.1", 3000)
+    ///
+    /// server.host == "127.0.0.1"
+    /// server.port == 3000
+    /// ```
+    pub fn wrap_data<T, O: Object>(&self, data: T, wrapper: &DataTypeWrapper<T>) -> O {
+        let value = class::wrap_data(self.value(), data, wrapper);
+
+        O::from(value)
     }
 
     fn superclass_to_value(superclass: Option<&Class>) -> Value {

@@ -1,13 +1,18 @@
+#[macro_use]
+extern crate lazy_static;
+
 extern crate ruby_sys;
 
 mod binding;
 mod class;
-mod util;
 
 #[macro_use]
 pub mod dsl;
+
 pub mod result;
+pub mod typed_data;
 pub mod types;
+pub mod util;
 
 pub use class::any_object::AnyObject;
 pub use class::array::Array;

@@ -1,7 +1,8 @@
-use ruby_sys::class;
+use ruby_sys::{class, typed_data};
 
 use binding::util as binding_util;
-use types::{Argc, Callback, CallbackPtr, Value};
+use typed_data::DataTypeWrapper;
+use types::{Argc, c_void, Callback, CallbackPtr, Value};
 use util;
 
 use Object;
@@ -75,5 +76,19 @@ pub fn define_singleton_method<I: Object, O: Object>(klass: Value,
 
     unsafe {
         class::rb_define_singleton_method(klass, name.as_ptr(), callback as CallbackPtr, -1);
+    }
+}
+
+pub fn wrap_data<T>(klass: Value, data: T, wrapper: &DataTypeWrapper<T>) -> Value {
+    let data = Box::into_raw(Box::new(data)) as *mut c_void;
+
+    unsafe { typed_data::rb_data_typed_object_wrap(klass, data, wrapper.data_type()) }
+}
+
+pub fn get_data<T>(object: Value, wrapper: &DataTypeWrapper<T>) -> &mut T {
+    unsafe {
+        let data = typed_data::rb_check_typeddata(object, wrapper.data_type());
+
+        &mut *(data as *mut T)
     }
 }

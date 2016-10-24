@@ -13,3 +13,4 @@ license = "MIT"
 
 [dependencies]
 ruby-sys = "0.2.15"
+lazy_static = "0.2.1"

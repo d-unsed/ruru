@@ -315,3 +315,176 @@ macro_rules! methods {
         )*
     }
 }
+
+/// Makes a Rust struct wrappable for Ruby objects.
+///
+/// **Note:** Currently to be able to use `wrappable_struct!` macro, you should include
+/// `lazy_static` crate to the crate you are working on.
+///
+/// `Cargo.toml`
+///
+/// ```toml
+/// lazy_static = "0.2.1" # the version is not a strict requirement
+/// ```
+///
+/// Crate root `lib.rs` or `main.rs`
+///
+/// ```ignore
+/// #[macro_use]
+/// extern crate lazy_static;
+/// ```
+///
+/// # Arguments
+///
+///  - `$struct_name` is name of the actual Rust struct. This structure has to be public (`pub`).
+///
+///  - `$wrapper` is a name for the structcure which will be created to wrap the `$struct_name`.
+///
+///     The wrapper will be created automatically by the macro.
+///
+///  - `$static_name` is a name for a static variable which will contain the wrapper.
+///
+///     The static variable will be created automatically by the macro.
+///
+///     This variable has to be passed to `wrap_data()` and `get_data()` functions (see examples).
+///
+///     Also, these variables describe the structure in general, but not some specific object.
+///     So you should pass the same wrapper static variable when wrapping/getting data of the same
+///     kind for different ruby objects.
+///
+///     For example,
+///
+///     ```ignore
+///     server1.get_data(&*SERVER_WRAPPER);
+///     server2.get_data(&*SERVER_WRAPPER); // <-- the same `SERVER_WRAPPER`
+///     ```
+///
+/// # Examples
+///
+/// Wrap `Server` structs to `RubyServer` objects
+///
+/// ```
+/// #[macro_use] extern crate ruru;
+/// #[macro_use] extern crate lazy_static;
+///
+/// use ruru::{AnyObject, Class, Fixnum, Object, RString, VM};
+///
+/// // The structure which we want to wrap
+/// pub struct Server {
+///     host: String,
+///     port: u16,
+/// }
+///
+/// impl Server {
+///     fn new(host: String, port: u16) -> Self {
+///         Server {
+///             host: host,
+///             port: port,
+///         }
+///     }
+///
+///     fn host(&self) -> &str {
+///         &self.host
+///     }
+///
+///     fn port(&self) -> u16 {
+///         self.port
+///     }
+/// }
+///
+/// wrappable_struct!(Server, ServerWrapper, SERVER_WRAPPER);
+///
+/// class!(RubyServer);
+///
+/// methods!(
+///     RubyServer,
+///     itself,
+///
+///     fn ruby_server_new(host: RString, port: Fixnum) -> AnyObject {
+///         let server = Server::new(host.unwrap().to_string(),
+///                                  port.unwrap().to_i64() as u16);
+///
+///         Class::from_existing("RubyServer").wrap_data(server, &*SERVER_WRAPPER)
+///     }
+///
+///     fn ruby_server_host() -> RString {
+///         let host = itself.get_data(&*SERVER_WRAPPER).host();
+///
+///         RString::new(host)
+///     }
+///
+///     fn ruby_server_port() -> Fixnum {
+///         let port = itself.get_data(&*SERVER_WRAPPER).port();
+///
+///         Fixnum::new(port as i64)
+///     }
+/// );
+///
+/// fn main() {
+///     # VM::init();
+///     Class::new("RubyServer", None).define(|itself| {
+///         itself.def_self("new", ruby_server_new);
+///
+///         itself.def("host", ruby_server_host);
+///         itself.def("port", ruby_server_port);
+///     });
+/// }
+/// ```
+///
+/// To use the `RubyServer` class in Ruby:
+///
+/// ```ruby
+/// server = RubyServer.new("127.0.0.1", 3000)
+///
+/// server.host == "127.0.0.1"
+/// server.port == 3000
+/// ```
+#[macro_export]
+macro_rules! wrappable_struct {
+    ($struct_name: ty, $wrapper: ident, $static_name: ident) => {
+        pub struct $wrapper<T> {
+            data_type: $crate::types::DataType,
+            _marker: ::std::marker::PhantomData<T>,
+        }
+
+        lazy_static! {
+            pub static ref $static_name: $wrapper<$struct_name> = $wrapper::new();
+        }
+
+        impl<T> $wrapper<T> {
+            fn new() -> $wrapper<T> {
+                let name = concat!("Ruru/", stringify!($struct_name));
+                let name = $crate::util::str_to_cstring(name);
+                let reserved_bytes: [*mut $crate::types::c_void; 2] = [::std::ptr::null_mut(); 2];
+
+                let data_type = $crate::types::DataType {
+                    wrap_struct_name: name.into_raw(),
+                    parent: ::std::ptr::null(),
+                    data: ::std::ptr::null_mut(),
+                    flags: $crate::types::Value::from(0),
+
+                    function: $crate::types::DataTypeFunction {
+                        dmark: None,
+                        dfree: Some($crate::typed_data::free::<T>),
+                        dsize: None,
+                        reserved: reserved_bytes,
+                    },
+                };
+
+                $wrapper {
+                    data_type: data_type,
+                    _marker: ::std::marker::PhantomData,
+                }
+            }
+        }
+
+        unsafe impl<T> Sync for $wrapper<T> {}
+
+        // Set constraint to be able to wrap and get data only for type `T`
+        impl<T> $crate::typed_data::DataTypeWrapper<T> for $wrapper<T> {
+            fn data_type(&self) -> &$crate::types::DataType {
+                &self.data_type
+            }
+        }
+    }
+}
