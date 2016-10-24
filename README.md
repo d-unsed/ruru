@@ -408,7 +408,7 @@ Warning! The crate is a WIP.
 It is recommended to use [Thermite](https://github.com/malept/thermite) gem,
 a Rake-based helper for building and distributing Rust-based Ruby extensions.
 
-To be able to use Ruru, make sure that your Ruby version is 2.2.0 or higher.
+To be able to use Ruru, make sure that your Ruby version is 2.3.0 or higher.
 
 1. Your local MRI copy has to be built with the `--enable-shared` option. For
    example, using rbenv:
