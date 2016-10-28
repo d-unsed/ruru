@@ -3,6 +3,7 @@ pub mod array;
 pub mod boolean;
 pub mod class;
 pub mod fixnum;
+pub mod float;
 pub mod gc;
 pub mod hash;
 pub mod nil_class;
