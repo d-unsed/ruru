@@ -1,6 +1,7 @@
 pub mod array;
 pub mod class;
 pub mod fixnum;
+pub mod float;
 pub mod gc;
 pub mod global;
 pub mod hash;
