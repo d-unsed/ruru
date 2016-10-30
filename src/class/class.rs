@@ -314,6 +314,34 @@ impl Class {
         Self::from(class::define_nested_class(self.value(), name, superclass))
     }
 
+    /// Defines a constant for class.
+    ///
+    /// ```
+    /// use ruru::{Class, Object, RString, VM};
+    /// # VM::init();
+    ///
+    /// Class::new("Greeter", None).define(|itself| {
+    ///     itself.const_set("GREETING", &RString::new("Hello, World!"));
+    /// });
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class Greeter
+    ///   GREETING = 'Hello, World!'
+    /// end
+    ///
+    /// # or
+    ///
+    /// Greeter = Class.new
+    ///
+    /// Greeter.const_set('GREETING', 'Hello, World!')
+    /// ```
+    pub fn const_set<T: Object>(&mut self, name: &str, value: &T) {
+        class::const_set(self.value(), name, value.value());
+    }
+
     /// Defines an `attr_reader` for class
     ///
     /// # Examples
