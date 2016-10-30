@@ -103,6 +103,10 @@ pub fn get_data<T>(object: Value, wrapper: &DataTypeWrapper<T>) -> &mut T {
     }
 }
 
+pub fn is_frozen(object: Value) -> Value {
+    unsafe { class::rb_obj_frozen_p(object) }
+}
+
 pub fn freeze(object: Value) -> Value {
     unsafe { class::rb_obj_freeze(object) }
 }
