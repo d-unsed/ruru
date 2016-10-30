@@ -314,7 +314,9 @@ impl Class {
         Self::from(class::define_nested_class(self.value(), name, superclass))
     }
 
-    /// Defines a constant for class.
+    /// Retrieves a constant from class.
+    ///
+    /// # Examples
     ///
     /// ```
     /// use ruru::{Class, Object, RString, VM};
@@ -323,6 +325,13 @@ impl Class {
     /// Class::new("Greeter", None).define(|itself| {
     ///     itself.const_set("GREETING", &RString::new("Hello, World!"));
     /// });
+    ///
+    /// let greeting = Class::from_existing("Greeter")
+    ///     .const_get("GREETING")
+    ///     .try_convert_to::<RString>().unwrap()
+    ///     .to_string();
+    ///
+    /// assert_eq!(greeting, "Hello, World!");
     /// ```
     ///
     /// Ruby:
@@ -335,8 +344,61 @@ impl Class {
     /// # or
     ///
     /// Greeter = Class.new
-    ///
     /// Greeter.const_set('GREETING', 'Hello, World!')
+    ///
+    /// # ...
+    ///
+    /// Greeter::GREETING == 'Hello, World!'
+    ///
+    /// # or
+    ///
+    /// Greeter.const_get('GREETING') == 'Hello, World'
+    /// ```
+    pub fn const_get(&self, name: &str) -> AnyObject {
+        let value = class::const_get(self.value(), name);
+
+        AnyObject::from(value)
+    }
+
+    /// Defines a constant for class.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Class, Object, RString, VM};
+    /// # VM::init();
+    ///
+    /// Class::new("Greeter", None).define(|itself| {
+    ///     itself.const_set("GREETING", &RString::new("Hello, World!"));
+    /// });
+    ///
+    /// let greeting = Class::from_existing("Greeter")
+    ///     .const_get("GREETING")
+    ///     .try_convert_to::<RString>().unwrap()
+    ///     .to_string();
+    ///
+    /// assert_eq!(greeting, "Hello, World!");
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class Greeter
+    ///   GREETING = 'Hello, World!'
+    /// end
+    ///
+    /// # or
+    ///
+    /// Greeter = Class.new
+    /// Greeter.const_set('GREETING', 'Hello, World!')
+    ///
+    /// # ...
+    ///
+    /// Greeter::GREETING == 'Hello, World!'
+    ///
+    /// # or
+    ///
+    /// Greeter.const_get('GREETING') == 'Hello, World'
     /// ```
     pub fn const_set<T: Object>(&mut self, name: &str, value: &T) {
         class::const_set(self.value(), name, value.value());
