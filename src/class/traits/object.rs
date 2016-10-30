@@ -765,6 +765,28 @@ pub trait Object: From<Value> {
         AnyObject::from(result)
     }
 
+    /// Prevents further modifications to the object.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Object, RString, VM};
+    /// # VM::init();
+    ///
+    /// let string = RString::new("String").freeze();
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// string = 'String'.freeze
+    /// ```
+    fn freeze(&mut self) -> Self {
+        let result = class::freeze(self.value());
+
+        Self::from(result)
+    }
+
     /// Unsafely casts current object to the specified Ruby type
     ///
     /// This operation in unsafe, because it does not perform any validations on the object, but
