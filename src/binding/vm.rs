@@ -9,6 +9,12 @@ pub fn block_proc() -> Value {
     unsafe { vm::rb_block_proc() }
 }
 
+pub fn is_block_given() -> bool {
+    let result = unsafe { vm::rb_block_given_p() };
+
+    util::c_int_to_bool(result)
+}
+
 pub fn init() {
     unsafe {
         vm::ruby_init();
