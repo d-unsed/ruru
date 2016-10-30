@@ -8,7 +8,7 @@ use typed_data::DataTypeWrapper;
 use types::{Callback, Value};
 use util;
 
-use {AnyObject, Class, VerifiedObject};
+use {AnyObject, Boolean, Class, VerifiedObject};
 
 /// `Object`
 ///
@@ -765,6 +765,32 @@ pub trait Object: From<Value> {
         AnyObject::from(result)
     }
 
+    /// Returns the freeze status of the object.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Object, RString, VM};
+    /// # VM::init();
+    ///
+    /// let frozen_string = RString::new("String").freeze();
+    ///
+    /// assert!(frozen_string.is_frozen());
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// frozen_string = 'String'.freeze
+    ///
+    /// frozen_string.frozen? == true
+    /// ```
+    fn is_frozen(&self) -> bool {
+        let result = class::is_frozen(self.value());
+
+        Boolean::from(result).to_bool()
+    }
+
     /// Prevents further modifications to the object.
     ///
     /// # Examples
@@ -773,13 +799,17 @@ pub trait Object: From<Value> {
     /// use ruru::{Object, RString, VM};
     /// # VM::init();
     ///
-    /// let string = RString::new("String").freeze();
+    /// let frozen_string = RString::new("String").freeze();
+    ///
+    /// assert!(frozen_string.is_frozen());
     /// ```
     ///
     /// Ruby:
     ///
     /// ```ruby
-    /// string = 'String'.freeze
+    /// frozen_string = 'String'.freeze
+    ///
+    /// frozen_string.frozen? == true
     /// ```
     fn freeze(&mut self) -> Self {
         let result = class::freeze(self.value());
