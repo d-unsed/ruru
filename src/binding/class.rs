@@ -19,6 +19,10 @@ pub fn define_nested_class(outer: Value, name: &str, superclass: Value) -> Value
     unsafe { class::rb_define_class_under(outer, name.as_ptr(), superclass) }
 }
 
+pub fn const_get(klass: Value, name: &str) -> Value {
+    unsafe { class::rb_const_get(klass, binding_util::internal_id(name)) }
+}
+
 pub fn const_set(klass: Value, name: &str, value: Value) {
     let name = util::str_to_cstring(name);
 
