@@ -102,3 +102,7 @@ pub fn get_data<T>(object: Value, wrapper: &DataTypeWrapper<T>) -> &mut T {
         &mut *(data as *mut T)
     }
 }
+
+pub fn freeze(object: Value) -> Value {
+    unsafe { class::rb_obj_freeze(object) }
+}
