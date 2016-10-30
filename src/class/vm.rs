@@ -139,7 +139,7 @@ impl VM {
     ///
     /// ```ruby
     /// class Greeter
-    ///   def self.greet_rust_with(greeting_template)
+    ///   def self.greet_rust_with(&greeting_template)
     ///     greeting_template.call('Rust')
     ///   end
     /// end
@@ -151,6 +151,61 @@ impl VM {
     /// ```
     pub fn block_proc() -> Proc {
         Proc::from(vm::block_proc())
+    }
+
+    /// Checks if a block is given to current method.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// #[macro_use] extern crate ruru;
+    ///
+    /// use ruru::{Class, Fixnum, Object, VM};
+    ///
+    /// class!(Calculator);
+    ///
+    /// methods!(
+    ///     Calculator,
+    ///     itself,
+    ///
+    ///     fn calculate(a: Fixnum, b: Fixnum) -> Fixnum {
+    ///         let a = a.unwrap();
+    ///         let b = b.unwrap();
+    ///
+    ///         if VM::is_block_given() {
+    ///             let result = VM::block_proc().call(vec![a.to_any_object(), b.to_any_object()]);
+    ///
+    ///             result.try_convert_to::<Fixnum>().unwrap()
+    ///         } else {
+    ///             Fixnum::new(a.to_i64() + b.to_i64())
+    ///         }
+    ///     }
+    /// );
+    ///
+    /// fn main() {
+    ///     # VM::init();
+    ///
+    ///     Class::new("Calculator", None).define(|itself| {
+    ///         itself.def("calculate", calculate);
+    ///     });
+    /// }
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class Calculator
+    ///   def calculate(a, b, &block)
+    ///     if block_given?
+    ///       block.call(a, b)
+    ///     else
+    ///       a + b
+    ///     end
+    ///   end
+    /// end
+    /// ```
+    pub fn is_block_given() -> bool {
+        vm::is_block_given()
     }
 
     // TODO: Move to other struct
