@@ -389,6 +389,19 @@ macro_rules! methods {
 /// pub static ref SERVER_WRAPPER: ServerWrapper<Server> = // ...
 /// ```
 ///
+/// # Class
+///
+/// The class which will be used for wrapping data must inherit from
+/// [`Data`](https://ruby-doc.org/core-2.3.1/Data.html) class instead of `Object`.
+///
+/// ```
+/// # use ruru::{Class, VM};
+/// # VM::init();
+/// let data_class = Class::from_existing("Data");
+///
+/// Class::new("TheNewClass", Some(&data_class));
+/// ```
+///
 /// # Examples
 ///
 /// ## Wrap `Server` structs to `RubyServer` objects
@@ -452,7 +465,9 @@ macro_rules! methods {
 ///
 /// fn main() {
 ///     # VM::init();
-///     Class::new("RubyServer", None).define(|itself| {
+///     let data_class = Class::from_existing("Data");
+///
+///     Class::new("RubyServer", Some(&data_class)).define(|itself| {
 ///         itself.def_self("new", ruby_server_new);
 ///
 ///         itself.def("host", ruby_server_host);
