@@ -193,7 +193,9 @@ methods!(
 );
 
 fn main() {
-    Class::new("RubyServer", None).define(|itself| {
+    let data_class = Class::from_existing("Data");
+
+    Class::new("RubyServer", Some(&data_class)).define(|itself| {
         itself.def_self("new", ruby_server_new);
 
         itself.def("host", ruby_server_host);
