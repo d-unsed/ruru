@@ -359,6 +359,22 @@ macro_rules! methods {
 ///     server2.get_data(&*SERVER_WRAPPER); // <-- the same `SERVER_WRAPPER`
 ///     ```
 ///
+///  - (optional) `mark(data) { ... }` is a block which will be called during the "mark"
+///    phase of garbage collection.
+///
+///    This block must be used if the struct contains any Ruby objects. The objects should
+///    be marked with `GC::mark()` to prevent their garbage collection.
+///
+///    `data` argument will be yielded as a mutable reference to the wrapped struct
+///    (`&mut $struct_name`).
+///
+///    **Notes from the official MRI documentation:**
+///
+///      - It is not recommended to store Ruby objects in the structs. Try to avoid that
+///        if possible.
+///
+///      - It is not allowed to allocate new Ruby objects in the `mark` function.
+///
 /// The result of `wrappable_struct!` is:
 ///
 /// ```ignore
@@ -375,7 +391,7 @@ macro_rules! methods {
 ///
 /// # Examples
 ///
-/// Wrap `Server` structs to `RubyServer` objects
+/// ## Wrap `Server` structs to `RubyServer` objects
 ///
 /// ```
 /// #[macro_use] extern crate ruru;
@@ -453,9 +469,131 @@ macro_rules! methods {
 /// server.host == "127.0.0.1"
 /// server.port == 3000
 /// ```
+///
+/// ## `RustyArray`
+///
+/// Custom array implementation using a vector which contains `AnyObject`s.
+///
+/// ```
+/// #[macro_use] extern crate ruru;
+/// #[macro_use] extern crate lazy_static;
+///
+/// use std::ops::{Deref, DerefMut};
+///
+/// use ruru::{AnyObject, Class, Fixnum, GC, NilClass, Object, VM};
+///
+/// pub struct VectorOfObjects {
+///     inner: Vec<AnyObject>,
+/// }
+///
+/// impl VectorOfObjects {
+///     fn new() -> Self {
+///         VectorOfObjects {
+///             inner: Vec::new(),
+///         }
+///     }
+/// }
+///
+/// impl Deref for VectorOfObjects {
+///     type Target = Vec<AnyObject>;
+///
+///     fn deref(&self) -> &Vec<AnyObject> {
+///         &self.inner
+///     }
+/// }
+///
+/// impl DerefMut for VectorOfObjects {
+///     fn deref_mut(&mut self) -> &mut Vec<AnyObject> {
+///         &mut self.inner
+///     }
+/// }
+///
+/// wrappable_struct! {
+///     VectorOfObjects,
+///     VectorOfObjectsWrapper,
+///     VECTOR_OF_OBJECTS_WRAPPER,
+///
+///     // Mark each `AnyObject` element of the `inner` vector to prevent garbage collection.
+///     // `data` is a mutable reference to the wrapped data (`&mut VectorOfObjects`).
+///     mark(data) {
+///         for object in &data.inner {
+///             GC::mark(object);
+///         }
+///     }
+/// }
+///
+/// class!(RustyArray);
+///
+/// methods! {
+///     RustyArray,
+///     itself,
+///
+///     fn new() -> AnyObject {
+///         let vec = VectorOfObjects::new();
+///
+///         Class::from_existing("RustyArray").wrap_data(vec, &*VECTOR_OF_OBJECTS_WRAPPER)
+///     }
+///
+///     fn push(object: AnyObject) -> NilClass {
+///         itself.get_data(&*VECTOR_OF_OBJECTS_WRAPPER).push(object.unwrap());
+///
+///         NilClass::new()
+///     }
+///
+///     fn length() -> Fixnum {
+///         let length = itself.get_data(&*VECTOR_OF_OBJECTS_WRAPPER).len() as i64;
+///
+///         Fixnum::new(length)
+///     }
+/// }
+///
+/// fn main() {
+///     # VM::init();
+///     let data_class = Class::from_existing("Data");
+///
+///     Class::new("RustyArray", Some(&data_class)).define(|itself| {
+///         itself.def_self("new", new);
+///
+///         itself.def("push", push);
+///         itself.def("length", length);
+///     });
+/// }
+/// ```
+///
+/// To use the `RustyArray` class in Ruby:
+///
+/// ```ruby
+/// array = RustyArray.new
+///
+/// array.push(1)
+/// array.push("string")
+/// array.push(:symbol)
+///
+/// array.length == 3
+/// ```
 #[macro_export]
 macro_rules! wrappable_struct {
-    ($struct_name: ty, $wrapper: ident, $static_name: ident) => {
+    (@mark_function_pointer) => {
+        None as Option<extern "C" fn(*mut $crate::types::c_void)>
+    };
+    // Leading comma is the comma between `$static_name: ident` and `mark` in the main macro rule.
+    // Optional comma `$(,)*` is not allowed in the main rule, because it is
+    // followed by `$($tail: tt)*`
+    (@mark_function_pointer , mark($object: ident) $body: block) => {
+        Some(Self::mark as extern "C" fn(*mut $crate::types::c_void))
+    };
+    (@mark_function_definition $struct_name: ty) => {};
+    (@mark_function_definition $struct_name: ty, mark($object: ident) $body: expr) => {
+        #[no_mangle]
+        pub extern "C" fn mark(data: *mut $crate::types::c_void) {
+            let mut data = unsafe { (data as *mut $struct_name).as_mut() };
+
+            if let Some(ref mut $object) = data {
+                $body
+            }
+        }
+    };
+    ($struct_name: ty, $wrapper: ident, $static_name: ident $($tail: tt)*) => {
         pub struct $wrapper<T> {
             data_type: $crate::types::DataType,
             _marker: ::std::marker::PhantomData<T>,
@@ -471,6 +609,8 @@ macro_rules! wrappable_struct {
                 let name = $crate::util::str_to_cstring(name);
                 let reserved_bytes: [*mut $crate::types::c_void; 2] = [::std::ptr::null_mut(); 2];
 
+                let dmark = wrappable_struct!(@mark_function_pointer $($tail)*);
+
                 let data_type = $crate::types::DataType {
                     wrap_struct_name: name.into_raw(),
                     parent: ::std::ptr::null(),
@@ -478,7 +618,7 @@ macro_rules! wrappable_struct {
                     flags: $crate::types::Value::from(0),
 
                     function: $crate::types::DataTypeFunction {
-                        dmark: None,
+                        dmark: dmark,
                         dfree: Some($crate::typed_data::free::<T>),
                         dsize: None,
                         reserved: reserved_bytes,
@@ -490,6 +630,8 @@ macro_rules! wrappable_struct {
                     _marker: ::std::marker::PhantomData,
                 }
             }
+
+            wrappable_struct!(@mark_function_definition $struct_name $($tail)*);
         }
 
         unsafe impl<T> Sync for $wrapper<T> {}
@@ -500,5 +642,5 @@ macro_rules! wrappable_struct {
                 &self.data_type
             }
         }
-    }
+    };
 }
