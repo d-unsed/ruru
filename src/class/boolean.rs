@@ -1,6 +1,6 @@
 use std::convert::From;
 
-use types::{Value, ValueType};
+use types::Value;
 use util;
 
 use {Object, VerifiedObject};
@@ -68,9 +68,9 @@ impl Object for Boolean {
 
 impl VerifiedObject for Boolean {
     fn is_correct_type<T: Object>(object: &T) -> bool {
-        let ty = object.value().ty();
+        let value = object.value();
 
-        ty == ValueType::True || ty == ValueType::False
+        value.is_true() || value.is_false()
     }
 
     fn error_message() -> &'static str {
