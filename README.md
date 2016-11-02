@@ -135,7 +135,7 @@ pub extern fn initialize_server() {
 
 Wrap `Server`s to `RubyServer` objects
 
-```rust
+```rust,no_run
 #[macro_use] extern crate ruru;
 #[macro_use] extern crate lazy_static;
 
@@ -328,6 +328,8 @@ Class::from_existing("Calculator").define(|itself| {
 
 ```rust,no_run
 Class::new("Hello", None).define(|itself| {
+    itself.const_set("GREETING", &RString::new("Hello, World!").freeze());
+
     itself.attr_reader("reader");
 
     itself.def_self("greeting", greeting);
@@ -343,6 +345,8 @@ Which corresponds to the following Ruby code:
 
 ```ruby
 class Hello
+  GREETING = "Hello, World".freeze
+
   attr_reader :reader
 
   def self.greeting
