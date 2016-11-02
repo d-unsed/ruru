@@ -662,7 +662,6 @@ pub trait Object: From<Value> {
     /// extern crate ruru;
     ///
     /// use ruru::{AnyObject, Class, Fixnum, Object, VM};
-    /// use ruru::types::Argc;
     ///
     /// class!(Counter);
     ///
@@ -744,7 +743,6 @@ pub trait Object: From<Value> {
     /// extern crate ruru;
     ///
     /// use ruru::{AnyObject, Class, Fixnum, Object, VM};
-    /// use ruru::types::Argc;
     ///
     /// class!(Counter);
     ///
