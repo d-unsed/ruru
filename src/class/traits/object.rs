@@ -704,6 +704,31 @@ pub trait Object: From<Value> {
     ///     assert_eq!(new_state, Ok(Fixnum::new(1)));
     /// }
     /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class Counter
+    ///   def initialize
+    ///     @state = 0
+    ///   end
+    ///
+    ///   def increment!
+    ///     @state += 1
+    ///   end
+    ///
+    ///   def state
+    ///     @state
+    ///   end
+    /// end
+    ///
+    /// counter = Counter.new
+    /// counter.increment!
+    ///
+    /// new_state = counter.state
+    ///
+    /// new_state == 1
+    /// ```
     fn instance_variable_get(&self, variable: &str) -> AnyObject {
         let result = class::instance_variable_get(self.value(), variable);
 
@@ -760,6 +785,31 @@ pub trait Object: From<Value> {
     ///
     ///     assert_eq!(new_state, Ok(Fixnum::new(1)));
     /// }
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class Counter
+    ///   def initialize
+    ///     @state = 0
+    ///   end
+    ///
+    ///   def increment!
+    ///     @state += 1
+    ///   end
+    ///
+    ///   def state
+    ///     @state
+    ///   end
+    /// end
+    ///
+    /// counter = Counter.new
+    /// counter.increment!
+    ///
+    /// new_state = counter.state
+    ///
+    /// new_state == 1
     /// ```
     fn instance_variable_set<T: Object>(&mut self, variable: &str, value: T) -> AnyObject {
         let result = class::instance_variable_set(self.value(), variable, value.value());
