@@ -6,10 +6,10 @@
 
 ### Added
 
-* `Float` class support (#46)
+* `Float` class (#46)
 * `Array::with_capacity()`
-* `Class::get_constant()`
-* `Class::define_constant()`
+* `Class::const_get()`
+* `Class::const_set()`
 * `Object::is_frozen()`
 * `Object::freeze()`
 * `VM::is_block_given()`
