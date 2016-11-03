@@ -33,6 +33,33 @@ impl Array {
         Self::from(array::new())
     }
 
+    /// Creates a new instance of empty `Array` with reserved space for `capacity` elements.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Array, Fixnum, VM};
+    /// # VM::init();
+    ///
+    /// let mut array = Array::with_capacity(2);
+    ///
+    /// assert_eq!(array.length(), 0);
+    ///
+    /// array.push(Fixnum::new(1));
+    /// array.push(Fixnum::new(2));
+    ///
+    /// assert_eq!(array.length(), 2);
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// []
+    /// ```
+    pub fn with_capacity(capacity: usize) -> Self {
+        Self::from(array::with_capacity(capacity))
+    }
+
     /// Retrieves the length of the array.
     ///
     /// # Examples

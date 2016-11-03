@@ -6,6 +6,10 @@ pub fn new() -> Value {
     unsafe { array::rb_ary_new() }
 }
 
+pub fn with_capacity(capacity: usize) -> Value {
+    unsafe { array::rb_ary_new_capa(capacity as c_long) }
+}
+
 pub fn entry(array: Value, offset: i64) -> Value {
     unsafe { array::rb_ary_entry(array, offset as c_long) }
 }
