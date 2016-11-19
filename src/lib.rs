@@ -26,6 +26,7 @@ pub use class::nil_class::NilClass;
 pub use class::rproc::Proc;
 pub use class::string::RString;
 pub use class::symbol::Symbol;
+pub use class::thread::Thread;
 pub use class::vm::VM;
 
 pub use class::traits::object::Object;

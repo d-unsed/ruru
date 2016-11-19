@@ -8,5 +8,6 @@ pub mod hash;
 pub mod rproc;
 pub mod string;
 pub mod symbol;
+pub mod thread;
 pub mod util;
 pub mod vm;

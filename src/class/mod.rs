@@ -10,5 +10,6 @@ pub mod nil_class;
 pub mod rproc;
 pub mod string;
 pub mod traits;
+pub mod thread;
 pub mod symbol;
 pub mod vm;
