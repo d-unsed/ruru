@@ -98,7 +98,6 @@ extern "C" fn callbox(boxptr: *mut c_void) -> *const c_void {
     fnbox()
 }
 
-
 pub fn protect<F>(func: F) -> Result<Value, c_int>
     where F: FnOnce()
 {

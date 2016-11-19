@@ -61,6 +61,71 @@ impl Thread {
     pub fn wait_fd(fd: RawFd) {
         thread::wait_fd(fd);
     }
+
+    /// Release GVL for current thread.
+    ///
+    /// **Warning!** Due to MRI limitations, interaction with Ruby objects is not allowed while
+    /// GVL is released, it may cause unexpected behaviour.
+    /// [Read more at Ruby documentation](https://github.com/ruby/ruby/blob/2fc5210f31ad23463d7b0a0e36bcfbeee7b41b3e/thread.c#L1314-L1398)
+    ///
+    /// You should extract all the information from Ruby world before invoking
+    /// `thread_call_without_gvl`.
+    ///
+    /// GVL will be re-acquired when the closure is finished.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// #[macro_use] extern crate ruru;
+    ///
+    /// use ruru::{Class, Fixnum, Object, Thread};
+    ///
+    /// class!(Calculator);
+    ///
+    /// methods!(
+    ///     Calculator,
+    ///     itself,
+    ///
+    ///     fn heavy_computation() -> Fixnum {
+    ///         let computation = || { 2 * 2 };
+    ///         let unblocking_function = || {};
+    ///
+    ///         // release GVL for current thread until `computation` is completed
+    ///         let result = Thread::call_without_gvl(
+    ///             computation,
+    ///             Some(unblocking_function)
+    ///         );
+    ///
+    ///         // GVL is re-acquired, we can interact with Ruby-world
+    ///         Fixnum::new(result)
+    ///     }
+    /// );
+    ///
+    /// fn main() {
+    ///     Class::new("Calculator", None).define(|itself| {
+    ///         itself.def("heavy_computation", heavy_computation);
+    ///     });
+    /// }
+    /// ```
+    pub fn call_without_gvl<F, R, G>(func: F, unblock_func: Option<G>) -> R
+        where F: FnOnce() -> R,
+              G: FnOnce()
+    {
+        thread::call_without_gvl(func, unblock_func)
+    }
+
+    pub fn call_without_gvl2<F, R, G>(func: F, unblock_func: Option<G>) -> R
+        where F: FnOnce() -> R,
+              G: FnOnce()
+    {
+        thread::call_without_gvl2(func, unblock_func)
+    }
+
+    pub fn call_with_gvl<F, R>(func: F) -> R
+        where F: FnOnce() -> R
+    {
+        thread::call_with_gvl(func)
+    }
 }
 
 impl From<Value> for Thread {
