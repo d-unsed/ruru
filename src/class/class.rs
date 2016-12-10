@@ -134,7 +134,9 @@ impl Class {
     /// Object.const_get('Record')
     /// ```
     pub fn from_existing(name: &str) -> Self {
-        Self::from(binding_util::get_constant(name, rb_cObject))
+        let object_class = unsafe { rb_cObject };
+
+        Self::from(binding_util::get_constant(name, object_class))
     }
 
     /// Creates a new instance of `Class`
@@ -571,7 +573,7 @@ impl Class {
     fn superclass_to_value(superclass: Option<&Class>) -> Value {
         match superclass {
             Some(class) => class.value(),
-            None => rb_cObject,
+            None => unsafe { rb_cObject },
         }
     }
 }
