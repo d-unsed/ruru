@@ -1,7 +1,10 @@
 use std::convert::From;
 
 use binding::thread;
-use types::{RawFd, Value};
+use types::Value;
+
+#[cfg(unix)]
+use types::RawFd;
 
 use {Class, Object, VerifiedObject};
 
@@ -58,6 +61,7 @@ impl Thread {
     ///
     /// Thread::wait_fd(fd);
     /// ```
+    #[cfg(unix)]
     pub fn wait_fd(fd: RawFd) {
         thread::wait_fd(fd);
     }

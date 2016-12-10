@@ -2,8 +2,11 @@ use std::ptr;
 
 use ruby_sys::thread;
 
-use types::{CallbackPtr, c_void, RawFd, Value};
+use types::{CallbackPtr, c_void, Value};
 use util;
+
+#[cfg(unix)]
+use types::RawFd;
 
 use ::Object;
 
@@ -18,6 +21,7 @@ pub fn create<F, R>(func: F) -> Value
     unsafe { thread::rb_thread_create(thread_create_callbox::<R>, closure_ptr) }
 }
 
+#[cfg(unix)]
 pub fn wait_fd(fd: RawFd) {
     unsafe { thread::rb_thread_wait_fd(fd) };
 }
