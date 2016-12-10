@@ -53,13 +53,16 @@ impl Thread {
     ///
     /// # Examples
     ///
-    /// ```ignore
+    /// ```
+    /// use std::os::unix::io::AsRawFd;
+    /// use std::os::unix::net::UnixStream;
+    ///
     /// use ruru::{Thread, VM};
     /// # VM::init();
     ///
-    /// // let fd = ...;
+    /// let (unix_socket, _) = UnixStream::pair().unwrap();
     ///
-    /// Thread::wait_fd(fd);
+    /// Thread::wait_fd(unix_socket.as_raw_fd());
     /// ```
     #[cfg(unix)]
     pub fn wait_fd(fd: RawFd) {
