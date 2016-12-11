@@ -12,5 +12,5 @@ keywords = ["cruby", "mri", "ruby", "ruru"]
 license = "MIT"
 
 [dependencies]
-ruby-sys = { git = "https://github.com/malept/ruby-sys", branch = "add-hash-functions" }
+ruby-sys = { git = "https://github.com/steveklabnik/ruby-sys" }
 lazy_static = "0.2.1"
