@@ -12,5 +12,5 @@ keywords = ["cruby", "mri", "ruby", "ruru"]
 license = "MIT"
 
 [dependencies]
-ruby-sys = { git = "https://github.com/steveklabnik/ruby-sys" }
+ruby-sys = "0.2.20"
 lazy_static = "0.2.1"
