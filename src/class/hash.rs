@@ -6,7 +6,7 @@ use types::{Value, ValueType};
 use {AnyObject, Object, VerifiedObject};
 
 /// `Hash`
-#[derive(Copy, Debug, PartialEq)]
+#[derive(Debug, PartialEq)]
 pub struct Hash {
     value: Value,
 }
