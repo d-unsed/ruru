@@ -124,6 +124,83 @@ impl Hash {
         hash::length(self.value()) as usize
     }
 
+    /// Removes all key-value pairs.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Hash, Fixnum, Symbol, VM};
+    /// # VM::init();
+    ///
+    /// let mut hash = Hash::new();
+    ///
+    /// hash.store(Symbol::new("key1"), Fixnum::new(1));
+    /// hash.store(Symbol::new("key2"), Fixnum::new(2));
+    /// assert_eq!(hash.length(), 2);
+    ///
+    /// hash.clear();
+    /// assert_eq!(hash.length(), 0);
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// hash = {}
+    ///
+    /// hash[:key1] = 1
+    /// hash[:key2] = 2
+    /// hash.length == 2
+    ///
+    /// hash.clear
+    ///
+    /// hash.length == 0
+    /// ```
+    pub fn clear(&self) {
+        hash::clear(self.value())
+    }
+
+    /// Deletes the key-value pair and returns the value from hsh whose key is equal to key. If the
+    /// key is not found, it returns nil.
+    ///
+    /// `key` must be a type which implements the `Object` trait.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Fixnum, Hash, Object, Symbol, VM};
+    /// # VM::init();
+    ///
+    /// let mut hash = Hash::new();
+    ///
+    /// hash.store(Symbol::new("key1"), Fixnum::new(1));
+    /// hash.store(Symbol::new("key2"), Fixnum::new(2));
+    /// assert_eq!(hash.length(), 2);
+    ///
+    /// let deleted = hash.delete(Symbol::new("key2"));
+    /// assert_eq!(hash.length(), 1);
+    /// assert_eq!(deleted.try_convert_to::<Fixnum>(), Ok(Fixnum::new(2)));
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// hash = {}
+    ///
+    /// hash[:key1] = 1
+    /// hash[:key2] = 2
+    /// hash.length == 2
+    ///
+    /// deleted = hash.delete(:key2)
+    ///
+    /// hash.length == 1
+    /// deleted == 2
+    /// ```
+    pub fn delete<K: Object>(&self, key: K) -> AnyObject {
+        let result = hash::delete(self.value(), key.value());
+
+        AnyObject::from(result)
+    }
+
     /// Runs a closure for each `key` and `value` pair.
     ///
     /// Key and value have `AnyObject` type.
@@ -170,6 +247,12 @@ impl Hash {
         where F: FnMut(AnyObject, AnyObject)
     {
         hash::each(self.value(), closure);
+    }
+}
+
+impl Clone for Hash {
+    fn clone(&self) -> Hash {
+        Hash { value: hash::dup(self.value()) }
     }
 }
 

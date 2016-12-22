@@ -16,6 +16,18 @@ pub fn aset(hash: Value, key: Value, value: Value) -> Value {
     unsafe { hash::rb_hash_aset(hash, key, value) }
 }
 
+pub fn clear(hash: Value) {
+    let _ = unsafe { hash::rb_hash_clear(hash) };
+}
+
+pub fn delete(hash: Value, key: Value) -> Value {
+    unsafe { hash::rb_hash_delete(hash, key) }
+}
+
+pub fn dup(hash: Value) -> Value {
+    unsafe { hash::rb_hash_dup(hash) }
+}
+
 pub fn length(hash: Value) -> i64 {
     unsafe {
         let size = hash::rb_hash_size(hash);
