@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `VM` struct in crate `ruru`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, VM">
+
+    <title>ruru::VM - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='index.html'>ruru</a></p><script>window.sidebarCurrent = {name: 'VM', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>ruru</a>::<wbr><a class='struct' href=''>VM</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-880' class='srclink' href='../src/ruru/src/class/vm.rs.html#9' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct VM;</pre><div class='docblock'><p>Virtual Machine and helpers</p>
+</div><h2 id='methods'>Methods</h2><h3 class='impl'><span class='in-band'><code>impl <a class='struct' href='../ruru/struct.VM.html' title='ruru::VM'>VM</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-882' class='srclink' href='../src/ruru/src/class/vm.rs.html#11-316' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.init' class='method'><span id='init.v' class='invisible'><code>fn <a href='#method.init' class='fnname'>init</a>()</code></span></h4>
+<div class='docblock'><p>Initializes Ruby virtual machine.</p>
+
+<p>This function should <strong>ONLY</strong> be used if you write a standalone application which calls
+Ruby itself, for example:</p>
+
+<ul>
+<li><p>Sidekiq-like background processing</p></li>
+<li><p>Unicorn-like web server</p></li>
+</ul>
+
+<p>In these cases it should be called before any interaction with Ruby.</p>
+
+<p>If you write a library which is being connected to Ruby in runtime (e.g. some gem), this
+function should not be used.</p>
+
+<h1 id='examples' class='section-header'><a href='#examples'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Class</span>, <span class='ident'>VM</span>};
+
+<span class='ident'>VM</span>::<span class='ident'>init</span>();
+
+<span class='comment'>// VM started, able to use Ruby now</span>
+<span class='comment'>// ...</span>
+
+<span class='ident'>Class</span>::<span class='ident'>new</span>(<span class='string'>&quot;SomeClass&quot;</span>, <span class='prelude-val'>None</span>); <span class='comment'>// etc</span></pre>
+</div><h4 id='method.require' class='method'><span id='require.v' class='invisible'><code>fn <a href='#method.require' class='fnname'>require</a>(name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>)</code></span></h4>
+<div class='docblock'><p>Requires Ruby source file.</p>
+
+<h1 id='examples-1' class='section-header'><a href='#examples-1'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>ruru</span>::<span class='ident'>VM</span>;
+
+<span class='ident'>VM</span>::<span class='ident'>require</span>(<span class='string'>&quot;some_ruby_file&quot;</span>);</pre>
+
+<p>Ruby:</p>
+
+<pre><code class="language-ruby">require &#39;some_ruby_file&#39;
+</code></pre>
+</div><h4 id='method.raise' class='method'><span id='raise.v' class='invisible'><code>fn <a href='#method.raise' class='fnname'>raise</a>(exception: <a class='struct' href='../ruru/struct.Class.html' title='ruru::Class'>Class</a>, message: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>)</code></span></h4>
+<div class='docblock'><p>Raises an exception.</p>
+
+<h1 id='examples-2' class='section-header'><a href='#examples-2'>Examples</a></h1>
+<h3 id='built-in-exceptions' class='section-header'><a href='#built-in-exceptions'>Built-in exceptions</a></h3>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Class</span>, <span class='ident'>VM</span>};
+
+<span class='ident'>VM</span>::<span class='ident'>raise</span>(<span class='ident'>Class</span>::<span class='ident'>from_existing</span>(<span class='string'>&quot;ArgumentError&quot;</span>), <span class='string'>&quot;Wrong argument&quot;</span>);</pre>
+
+<p>Ruby:</p>
+
+<pre><code class="language-ruby">raise ArgumentError, &#39;Wrong argument&#39;
+</code></pre>
+
+<h3 id='custom-exceptions' class='section-header'><a href='#custom-exceptions'>Custom exceptions</a></h3>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Class</span>, <span class='ident'>VM</span>};
+
+<span class='kw'>let</span> <span class='ident'>standard_error</span> <span class='op'>=</span> <span class='ident'>Class</span>::<span class='ident'>from_existing</span>(<span class='string'>&quot;StandardError&quot;</span>);
+<span class='kw'>let</span> <span class='ident'>custom_exception</span> <span class='op'>=</span> <span class='ident'>Class</span>::<span class='ident'>new</span>(<span class='string'>&quot;CustomException&quot;</span>, <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>standard_error</span>));
+
+<span class='ident'>VM</span>::<span class='ident'>raise</span>(<span class='ident'>custom_exception</span>, <span class='string'>&quot;Something went wrong&quot;</span>);</pre>
+
+<p>Ruby:</p>
+
+<pre><code class="language-ruby">class CustomException &lt; StandardError
+end
+
+raise CustomException, &#39;Something went wrong&#39;
+</code></pre>
+</div><h4 id='method.block_proc' class='method'><span id='block_proc.v' class='invisible'><code>fn <a href='#method.block_proc' class='fnname'>block_proc</a>() -&gt; <a class='struct' href='../ruru/struct.Proc.html' title='ruru::Proc'>Proc</a></code></span></h4>
+<div class='docblock'><p>Converts a block given to current method to a <code>Proc</code></p>
+
+<p>It works similarly to <code>def method(&amp;block)</code> which converts block to <code>Proc</code></p>
+
+<h1 id='examples-3' class='section-header'><a href='#examples-3'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>ruru</span>;
+
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Class</span>, <span class='ident'>Object</span>, <span class='ident'>Proc</span>, <span class='ident'>RString</span>, <span class='ident'>VM</span>};
+
+<span class='macro'>class</span><span class='macro'>!</span>(<span class='ident'>Greeter</span>);
+
+<span class='macro'>methods</span><span class='macro'>!</span>(
+    <span class='ident'>Greeter</span>,
+    <span class='ident'>itself</span>,
+
+    <span class='kw'>fn</span> <span class='ident'>greet_rust_with</span>() <span class='op'>-&gt;</span> <span class='ident'>RString</span> {
+        <span class='kw'>let</span> <span class='ident'>greeting_template</span> <span class='op'>=</span> <span class='ident'>VM</span>::<span class='ident'>block_proc</span>();
+        <span class='kw'>let</span> <span class='ident'>name</span> <span class='op'>=</span> <span class='ident'>RString</span>::<span class='ident'>new</span>(<span class='string'>&quot;Rust&quot;</span>).<span class='ident'>to_any_object</span>();
+
+        <span class='ident'>greeting_template</span>.<span class='ident'>call</span>(<span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>name</span>]).<span class='ident'>try_convert_to</span>::<span class='op'>&lt;</span><span class='ident'>RString</span><span class='op'>&gt;</span>().<span class='ident'>unwrap</span>()
+    }
+);
+
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+    <span class='ident'>Class</span>::<span class='ident'>new</span>(<span class='string'>&quot;Greeter&quot;</span>, <span class='prelude-val'>None</span>).<span class='ident'>define</span>(<span class='op'>|</span><span class='ident'>itself</span><span class='op'>|</span> {
+        <span class='ident'>itself</span>.<span class='ident'>def_self</span>(<span class='string'>&quot;greet_rust_with&quot;</span>, <span class='ident'>greet_rust_with</span>);
+    });
+}</pre>
+
+<p>Ruby:</p>
+
+<pre><code class="language-ruby">class Greeter
+  def self.greet_rust_with(&amp;greeting_template)
+    greeting_template.call(&#39;Rust&#39;)
+  end
+end
+
+Greeter.greet_rust_with do |name|
+  &quot;Hello, #{name}!&quot;
+end
+# =&gt; &quot;Hello, Rust!&quot;
+</code></pre>
+</div><h4 id='method.is_block_given' class='method'><span id='is_block_given.v' class='invisible'><code>fn <a href='#method.is_block_given' class='fnname'>is_block_given</a>() -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
+<div class='docblock'><p>Checks if a block is given to current method.</p>
+
+<h1 id='examples-4' class='section-header'><a href='#examples-4'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>ruru</span>;
+
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Class</span>, <span class='ident'>Fixnum</span>, <span class='ident'>Object</span>, <span class='ident'>VM</span>};
+
+<span class='macro'>class</span><span class='macro'>!</span>(<span class='ident'>Calculator</span>);
+
+<span class='macro'>methods</span><span class='macro'>!</span>(
+    <span class='ident'>Calculator</span>,
+    <span class='ident'>itself</span>,
+
+    <span class='kw'>fn</span> <span class='ident'>calculate</span>(<span class='ident'>a</span>: <span class='ident'>Fixnum</span>, <span class='ident'>b</span>: <span class='ident'>Fixnum</span>) <span class='op'>-&gt;</span> <span class='ident'>Fixnum</span> {
+        <span class='kw'>let</span> <span class='ident'>a</span> <span class='op'>=</span> <span class='ident'>a</span>.<span class='ident'>unwrap</span>();
+        <span class='kw'>let</span> <span class='ident'>b</span> <span class='op'>=</span> <span class='ident'>b</span>.<span class='ident'>unwrap</span>();
+
+        <span class='kw'>if</span> <span class='ident'>VM</span>::<span class='ident'>is_block_given</span>() {
+            <span class='kw'>let</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>VM</span>::<span class='ident'>block_proc</span>().<span class='ident'>call</span>(<span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>a</span>.<span class='ident'>to_any_object</span>(), <span class='ident'>b</span>.<span class='ident'>to_any_object</span>()]);
+
+            <span class='ident'>result</span>.<span class='ident'>try_convert_to</span>::<span class='op'>&lt;</span><span class='ident'>Fixnum</span><span class='op'>&gt;</span>().<span class='ident'>unwrap</span>()
+        } <span class='kw'>else</span> {
+            <span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='ident'>a</span>.<span class='ident'>to_i64</span>() <span class='op'>+</span> <span class='ident'>b</span>.<span class='ident'>to_i64</span>())
+        }
+    }
+);
+
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+
+    <span class='ident'>Class</span>::<span class='ident'>new</span>(<span class='string'>&quot;Calculator&quot;</span>, <span class='prelude-val'>None</span>).<span class='ident'>define</span>(<span class='op'>|</span><span class='ident'>itself</span><span class='op'>|</span> {
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;calculate&quot;</span>, <span class='ident'>calculate</span>);
+    });
+}</pre>
+
+<p>Ruby:</p>
+
+<pre><code class="language-ruby">class Calculator
+  def calculate(a, b, &amp;block)
+    if block_given?
+      block.call(a, b)
+    else
+      a + b
+    end
+  end
+end
+</code></pre>
+</div><h4 id='method.parse_arguments' class='method'><span id='parse_arguments.v' class='invisible'><code>fn <a href='#method.parse_arguments' class='fnname'>parse_arguments</a>(argc: <a class='type' href='../ruru/types/type.Argc.html' title='ruru::types::Argc'>Argc</a>, arguments: <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.pointer.html'>*const </a><a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a>) -&gt; <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a>&gt;</code></span></h4>
+<div class='docblock'><p>Converts a pointer to array of <code>AnyObject</code>s to <code>Vec&lt;AnyObject&gt;</code>.</p>
+
+<p>This function is a helper for callbacks, do not use it directly.</p>
+
+<p>It will be moved to other struct, because it is not related to VM itself.</p>
+
+<h1 id='examples-5' class='section-header'><a href='#examples-5'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>ruru</span>::<span class='ident'>types</span>::<span class='ident'>Argc</span>;
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>AnyObject</span>, <span class='ident'>Boolean</span>, <span class='ident'>Class</span>, <span class='ident'>Object</span>, <span class='ident'>RString</span>, <span class='ident'>VM</span>};
+
+<span class='attribute'>#[<span class='ident'>no_mangle</span>]</span>
+<span class='kw'>pub</span> <span class='kw'>extern</span> <span class='kw'>fn</span> <span class='ident'>string_eq</span>(<span class='ident'>argc</span>: <span class='ident'>Argc</span>, <span class='ident'>argv</span>: <span class='op'>*</span><span class='kw'>const</span> <span class='ident'>AnyObject</span>, <span class='ident'>itself</span>: <span class='ident'>RString</span>) <span class='op'>-&gt;</span> <span class='ident'>Boolean</span> {
+    <span class='kw'>let</span> <span class='ident'>argv</span> <span class='op'>=</span> <span class='ident'>VM</span>::<span class='ident'>parse_arguments</span>(<span class='ident'>argc</span>, <span class='ident'>argv</span>);
+    <span class='kw'>let</span> <span class='ident'>other_string</span> <span class='op'>=</span> <span class='ident'>argv</span>[<span class='number'>0</span>].<span class='ident'>try_convert_to</span>::<span class='op'>&lt;</span><span class='ident'>RString</span><span class='op'>&gt;</span>().<span class='ident'>unwrap</span>();
+
+    <span class='ident'>Boolean</span>::<span class='ident'>new</span>(<span class='ident'>itself</span>.<span class='ident'>to_string</span>() <span class='op'>==</span> <span class='ident'>other_string</span>.<span class='ident'>to_string</span>())
+}
+
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+    <span class='ident'>Class</span>::<span class='ident'>from_existing</span>(<span class='string'>&quot;String&quot;</span>).<span class='ident'>define_method</span>(<span class='string'>&quot;==&quot;</span>, <span class='ident'>string_eq</span>);
+}</pre>
+</div><h4 id='method.thread_call_without_gvl' class='method'><span id='thread_call_without_gvl.v' class='invisible'><code>fn <a href='#method.thread_call_without_gvl' class='fnname'>thread_call_without_gvl</a>&lt;F, R, G&gt;(func: F, unblock_func: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;G&gt;) -&gt; R <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>() -&gt; R, G: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>()</span></code></span></h4>
+<div class='stability'><em class='stab deprecated'>Deprecated since 0.9.2<p>: Use <code>Thread::call_without_gvl()</code> instead</p>
+</em></div><div class='docblock'><p>Release GVL for current thread.</p>
+
+<p><strong>Warning!</strong> Due to MRI limitations, interaction with Ruby objects is not allowed while
+GVL is released, it may cause unexpected behaviour.
+<a href="https://github.com/ruby/ruby/blob/2fc5210f31ad23463d7b0a0e36bcfbeee7b41b3e/thread.c#L1314-L1398">Read more at Ruby documentation</a></p>
+
+<p>You should extract all the information from Ruby world before invoking
+<code>thread_call_without_gvl</code>.</p>
+
+<p>GVL will be re-acquired when the closure is finished.</p>
+
+<h1 id='examples-6' class='section-header'><a href='#examples-6'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>ruru</span>;
+
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Class</span>, <span class='ident'>Fixnum</span>, <span class='ident'>Object</span>, <span class='ident'>VM</span>};
+
+<span class='macro'>class</span><span class='macro'>!</span>(<span class='ident'>Calculator</span>);
+
+<span class='macro'>methods</span><span class='macro'>!</span>(
+    <span class='ident'>Calculator</span>,
+    <span class='ident'>itself</span>,
+
+    <span class='kw'>fn</span> <span class='ident'>heavy_computation</span>() <span class='op'>-&gt;</span> <span class='ident'>Fixnum</span> {
+        <span class='kw'>let</span> <span class='ident'>computation</span> <span class='op'>=</span> <span class='op'>||</span> { <span class='number'>2</span> <span class='op'>*</span> <span class='number'>2</span> };
+        <span class='kw'>let</span> <span class='ident'>unblocking_function</span> <span class='op'>=</span> <span class='op'>||</span> {};
+
+        <span class='comment'>// release GVL for current thread until `computation` is completed</span>
+        <span class='kw'>let</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>VM</span>::<span class='ident'>thread_call_without_gvl</span>(
+            <span class='ident'>computation</span>,
+            <span class='prelude-val'>Some</span>(<span class='ident'>unblocking_function</span>)
+        );
+
+        <span class='comment'>// GVL is re-acquired, we can interact with Ruby-world</span>
+        <span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='ident'>result</span>)
+    }
+);
+
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+    <span class='ident'>Class</span>::<span class='ident'>new</span>(<span class='string'>&quot;Calculator&quot;</span>, <span class='prelude-val'>None</span>).<span class='ident'>define</span>(<span class='op'>|</span><span class='ident'>itself</span><span class='op'>|</span> {
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;heavy_computation&quot;</span>, <span class='ident'>heavy_computation</span>);
+    });
+}</pre>
+</div><h4 id='method.thread_call_without_gvl2' class='method'><span id='thread_call_without_gvl2.v' class='invisible'><code>fn <a href='#method.thread_call_without_gvl2' class='fnname'>thread_call_without_gvl2</a>&lt;F, R, G&gt;(func: F, unblock_func: <a class='enum' href='https://doc.rust-lang.org/nightly/core/option/enum.Option.html' title='core::option::Option'>Option</a>&lt;G&gt;) -&gt; R <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>() -&gt; R, G: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>()</span></code></span></h4>
+<div class='stability'><em class='stab deprecated'>Deprecated since 0.9.2<p>: Use <code>Thread::call_without_gvl2()</code> instead</p>
+</em></div><h4 id='method.thread_call_with_gvl' class='method'><span id='thread_call_with_gvl.v' class='invisible'><code>fn <a href='#method.thread_call_with_gvl' class='fnname'>thread_call_with_gvl</a>&lt;F, R&gt;(func: F) -&gt; R <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>() -&gt; R</span></code></span></h4>
+<div class='stability'><em class='stab deprecated'>Deprecated since 0.9.2<p>: Use <code>Thread::call_with_gvl()</code> instead</p>
+</em></div><h4 id='method.protect' class='method'><span id='protect.v' class='invisible'><code>fn <a href='#method.protect' class='fnname'>protect</a>&lt;F&gt;(func: F) -&gt; <a class='enum' href='https://doc.rust-lang.org/nightly/core/result/enum.Result.html' title='core::result::Result'>Result</a>&lt;<a class='struct' href='../ruru/types/struct.Value.html' title='ruru::types::Value'>Value</a>, <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.i32.html'>i32</a>&gt; <span class='where'>where F: <a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.FnOnce.html' title='core::ops::FnOnce'>FnOnce</a>()</span></code></span></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "ruru";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

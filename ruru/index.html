@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `ruru` crate.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, ruru">
+
+    <title>ruru - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'></p><script>window.sidebarCurrent = {name: 'ruru', ty: 'mod', relpath: '../'};</script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content mod">
+<h1 class='fqn'><span class='in-band'>Crate <a class='mod' href=''>ruru</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-0' class='srclink' href='../src/ruru/src/lib.rs.html#1-36' title='goto source code'>[src]</a></span></h1>
+<h2 id='modules' class='section-header'><a href="#modules">Modules</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='result/index.html'
+                                  title='ruru::result'>result</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='typed_data/index.html'
+                                  title='ruru::typed_data'>typed_data</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='types/index.html'
+                                  title='ruru::types'>types</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='mod' href='util/index.html'
+                                  title='ruru::util'>util</a></td>
+                           <td class='docblock-short'>
+                                
+                           </td>
+                       </tr></table><h2 id='macros' class='section-header'><a href="#macros">Macros</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='macro' href='macro.class.html'
+                                  title='ruru::class'>class</a></td>
+                           <td class='docblock-short'>
+                                <p>Creates Rust structure for new Ruby class</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='macro' href='macro.methods.html'
+                                  title='ruru::methods'>methods</a></td>
+                           <td class='docblock-short'>
+                                <p>Creates callbacks for Ruby methods</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='macro' href='macro.unsafe_methods.html'
+                                  title='ruru::unsafe_methods'>unsafe_methods</a></td>
+                           <td class='docblock-short'>
+                                <p>Creates unsafe callbacks for Ruby methods</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='macro' href='macro.wrappable_struct.html'
+                                  title='ruru::wrappable_struct'>wrappable_struct</a></td>
+                           <td class='docblock-short'>
+                                <p>Makes a Rust struct wrappable for Ruby objects.</p>
+                           </td>
+                       </tr></table><h2 id='structs' class='section-header'><a href="#structs">Structs</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.AnyObject.html'
+                                  title='ruru::AnyObject'>AnyObject</a></td>
+                           <td class='docblock-short'>
+                                <p>Representation of any Ruby object while its type is unknown</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Array.html'
+                                  title='ruru::Array'>Array</a></td>
+                           <td class='docblock-short'>
+                                <p><code>Array</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Boolean.html'
+                                  title='ruru::Boolean'>Boolean</a></td>
+                           <td class='docblock-short'>
+                                <p><code>TrueClass</code> and <code>FalseClass</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Class.html'
+                                  title='ruru::Class'>Class</a></td>
+                           <td class='docblock-short'>
+                                <p><code>Class</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Fixnum.html'
+                                  title='ruru::Fixnum'>Fixnum</a></td>
+                           <td class='docblock-short'>
+                                <p><code>Fixnum</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Float.html'
+                                  title='ruru::Float'>Float</a></td>
+                           <td class='docblock-short'>
+                                <p><code>Float</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.GC.html'
+                                  title='ruru::GC'>GC</a></td>
+                           <td class='docblock-short'>
+                                <p>Garbage collection</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Hash.html'
+                                  title='ruru::Hash'>Hash</a></td>
+                           <td class='docblock-short'>
+                                <p><code>Hash</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.NilClass.html'
+                                  title='ruru::NilClass'>NilClass</a></td>
+                           <td class='docblock-short'>
+                                <p><code>NilClass</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Proc.html'
+                                  title='ruru::Proc'>Proc</a></td>
+                           <td class='docblock-short'>
+                                <p><code>Proc</code> (works with <code>Lambda</code> as well)</p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.RString.html'
+                                  title='ruru::RString'>RString</a></td>
+                           <td class='docblock-short'>
+                                <p><code>String</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Symbol.html'
+                                  title='ruru::Symbol'>Symbol</a></td>
+                           <td class='docblock-short'>
+                                <p><code>Symbol</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.Thread.html'
+                                  title='ruru::Thread'>Thread</a></td>
+                           <td class='docblock-short'>
+                                <p><code>Thread</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='struct' href='struct.VM.html'
+                                  title='ruru::VM'>VM</a></td>
+                           <td class='docblock-short'>
+                                <p>Virtual Machine and helpers</p>
+                           </td>
+                       </tr></table><h2 id='traits' class='section-header'><a href="#traits">Traits</a></h2>
+<table>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.Object.html'
+                                  title='ruru::Object'>Object</a></td>
+                           <td class='docblock-short'>
+                                <p><code>Object</code></p>
+                           </td>
+                       </tr>
+                       <tr class=' module-item'>
+                           <td><a class='trait' href='trait.VerifiedObject.html'
+                                  title='ruru::VerifiedObject'>VerifiedObject</a></td>
+                           <td class='docblock-short'>
+                                <p>Interface for safe conversions between types</p>
+                           </td>
+                       </tr></table></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "ruru";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

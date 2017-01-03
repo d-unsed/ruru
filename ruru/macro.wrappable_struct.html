@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `wrappable_struct` macro in crate `ruru`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, wrappable_struct">
+
+    <title>ruru::wrappable_struct - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='index.html'>ruru</a></p><script>window.sidebarCurrent = {name: 'wrappable_struct', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content macro">
+<h1 class='fqn'><span class='in-band'>Macro <a href='index.html'>ruru</a>::<wbr><a class='macro' href=''>wrappable_struct</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-1275' class='srclink' href='../src/ruru/src/dsl.rs.html#590-661' title='goto source code'>[src]</a></span></h1>
+<pre class='rust macro'>
+<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>wrappable_struct</span> {
+    (@<span class='ident'>mark_function_pointer</span>) <span class='op'>=&gt;</span> { ... };
+    (@<span class='ident'>mark_function_pointer</span> , <span class='ident'>mark</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>object</span>: <span class='ident'>ident</span>) <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>: <span class='ident'>block</span>) <span class='op'>=&gt;</span> { ... };
+    (@<span class='ident'>mark_function_definition</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>struct_name</span>: <span class='ident'>ty</span>) <span class='op'>=&gt;</span> { ... };
+    (@<span class='ident'>mark_function_definition</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>struct_name</span>: <span class='ident'>ty</span>, <span class='ident'>mark</span>(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>object</span>: <span class='ident'>ident</span>) <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>: <span class='ident'>expr</span>) <span class='op'>=&gt;</span> { ... };
+    (<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>struct_name</span>: <span class='ident'>ty</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>wrapper</span>: <span class='ident'>ident</span>, <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>static_name</span>: <span class='ident'>ident</span> $(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>tail</span>: <span class='ident'>tt</span>)<span class='op'>*</span>) <span class='op'>=&gt;</span> { ... };
+}</pre>
+<div class='docblock'><p>Makes a Rust struct wrappable for Ruby objects.</p>
+
+<p><strong>Note:</strong> Currently to be able to use <code>wrappable_struct!</code> macro, you should include
+<code>lazy_static</code> crate to the crate you are working on.</p>
+
+<p><code>Cargo.toml</code></p>
+
+<pre><code class="language-toml">lazy_static = &quot;0.2.1&quot; # the version is not a strict requirement
+</code></pre>
+
+<p>Crate root <code>lib.rs</code> or <code>main.rs</code></p>
+
+<pre class='rust rust-example-rendered'>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>lazy_static</span>;</pre>
+
+<h1 id='arguments' class='section-header'><a href='#arguments'>Arguments</a></h1>
+<ul>
+<li><p><code>$struct_name</code> is name of the actual Rust struct. This structure has to be public (<code>pub</code>).</p></li>
+<li><p><code>$wrapper</code> is a name for the structcure which will be created to wrap the <code>$struct_name</code>.</p>
+
+<p>The wrapper will be created automatically by the macro.</p></li>
+<li><p><code>$static_name</code> is a name for a static variable which will contain the wrapper.</p>
+
+<p>The static variable will be created automatically by the macro.</p>
+
+<p>This variable has to be passed to <code>wrap_data()</code> and <code>get_data()</code> functions (see examples).</p>
+
+<p>Also, these variables describe the structure in general, but not some specific object.
+So you should pass the same wrapper static variable when wrapping/getting data of the same
+kind for different ruby objects.</p>
+
+<p>For example,</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='ident'>server1</span>.<span class='ident'>get_data</span>(<span class='kw-2'>&amp;</span><span class='op'>*</span><span class='ident'>SERVER_WRAPPER</span>);
+<span class='ident'>server2</span>.<span class='ident'>get_data</span>(<span class='kw-2'>&amp;</span><span class='op'>*</span><span class='ident'>SERVER_WRAPPER</span>); <span class='comment'>// &lt;-- the same `SERVER_WRAPPER`</span></pre></li>
+<li><p>(optional) <code>mark(data) { ... }</code> is a block which will be called during the &quot;mark&quot;
+phase of garbage collection.</p>
+
+<p>This block must be used if the struct contains any Ruby objects. The objects should
+be marked with <code>GC::mark()</code> to prevent their garbage collection.</p>
+
+<p><code>data</code> argument will be yielded as a mutable reference to the wrapped struct
+(<code>&amp;mut $struct_name</code>).</p>
+
+<p><strong>Notes from the official MRI documentation:</strong></p>
+
+<ul>
+<li><p>It is not recommended to store Ruby objects in the structs. Try to avoid that
+if possible.</p></li>
+<li><p>It is not allowed to allocate new Ruby objects in the <code>mark</code> function.</p></li>
+</ul></li>
+</ul>
+
+<p>The result of <code>wrappable_struct!</code> is:</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='macro'>wrappable_struct</span><span class='macro'>!</span>(<span class='ident'>Server</span>, <span class='ident'>ServerWrapper</span>, <span class='ident'>SERVER_WRAPPER</span>);
+
+<span class='comment'>// produces</span>
+
+<span class='kw'>struct</span> <span class='ident'>ServerWrapper</span> {
+    <span class='comment'>// ...</span>
+}
+
+<span class='kw'>pub</span> <span class='kw'>static</span> <span class='kw-2'>ref</span> <span class='ident'>SERVER_WRAPPER</span>: <span class='ident'>ServerWrapper</span><span class='op'>&lt;</span><span class='ident'>Server</span><span class='op'>&gt;</span> <span class='op'>=</span> <span class='comment'>// ...</span></pre>
+
+<h1 id='class' class='section-header'><a href='#class'>Class</a></h1>
+<p>The class which will be used for wrapping data must inherit from
+<a href="https://ruby-doc.org/core-2.3.1/Data.html"><code>Data</code></a> class instead of <code>Object</code>.</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='kw'>let</span> <span class='ident'>data_class</span> <span class='op'>=</span> <span class='ident'>Class</span>::<span class='ident'>from_existing</span>(<span class='string'>&quot;Data&quot;</span>);
+
+<span class='ident'>Class</span>::<span class='ident'>new</span>(<span class='string'>&quot;TheNewClass&quot;</span>, <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>data_class</span>));</pre>
+
+<h1 id='examples' class='section-header'><a href='#examples'>Examples</a></h1>
+<h2 id='wrap-server-structs-to-rubyserver-objects' class='section-header'><a href='#wrap-server-structs-to-rubyserver-objects'>Wrap <code>Server</code> structs to <code>RubyServer</code> objects</a></h2>
+<pre class='rust rust-example-rendered'>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>ruru</span>;
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>lazy_static</span>;
+
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>AnyObject</span>, <span class='ident'>Class</span>, <span class='ident'>Fixnum</span>, <span class='ident'>Object</span>, <span class='ident'>RString</span>, <span class='ident'>VM</span>};
+
+<span class='comment'>// The structure which we want to wrap</span>
+<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Server</span> {
+    <span class='ident'>host</span>: <span class='ident'>String</span>,
+    <span class='ident'>port</span>: <span class='ident'>u16</span>,
+}
+
+<span class='kw'>impl</span> <span class='ident'>Server</span> {
+    <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>host</span>: <span class='ident'>String</span>, <span class='ident'>port</span>: <span class='ident'>u16</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
+        <span class='ident'>Server</span> {
+            <span class='ident'>host</span>: <span class='ident'>host</span>,
+            <span class='ident'>port</span>: <span class='ident'>port</span>,
+        }
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>host</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='ident'>str</span> {
+        <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>host</span>
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>port</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>u16</span> {
+        <span class='self'>self</span>.<span class='ident'>port</span>
+    }
+}
+
+<span class='macro'>wrappable_struct</span><span class='macro'>!</span>(<span class='ident'>Server</span>, <span class='ident'>ServerWrapper</span>, <span class='ident'>SERVER_WRAPPER</span>);
+
+<span class='macro'>class</span><span class='macro'>!</span>(<span class='ident'>RubyServer</span>);
+
+<span class='macro'>methods</span><span class='macro'>!</span>(
+    <span class='ident'>RubyServer</span>,
+    <span class='ident'>itself</span>,
+
+    <span class='kw'>fn</span> <span class='ident'>ruby_server_new</span>(<span class='ident'>host</span>: <span class='ident'>RString</span>, <span class='ident'>port</span>: <span class='ident'>Fixnum</span>) <span class='op'>-&gt;</span> <span class='ident'>AnyObject</span> {
+        <span class='kw'>let</span> <span class='ident'>server</span> <span class='op'>=</span> <span class='ident'>Server</span>::<span class='ident'>new</span>(<span class='ident'>host</span>.<span class='ident'>unwrap</span>().<span class='ident'>to_string</span>(),
+                                 <span class='ident'>port</span>.<span class='ident'>unwrap</span>().<span class='ident'>to_i64</span>() <span class='kw'>as</span> <span class='ident'>u16</span>);
+
+        <span class='ident'>Class</span>::<span class='ident'>from_existing</span>(<span class='string'>&quot;RubyServer&quot;</span>).<span class='ident'>wrap_data</span>(<span class='ident'>server</span>, <span class='kw-2'>&amp;</span><span class='op'>*</span><span class='ident'>SERVER_WRAPPER</span>)
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>ruby_server_host</span>() <span class='op'>-&gt;</span> <span class='ident'>RString</span> {
+        <span class='kw'>let</span> <span class='ident'>host</span> <span class='op'>=</span> <span class='ident'>itself</span>.<span class='ident'>get_data</span>(<span class='kw-2'>&amp;</span><span class='op'>*</span><span class='ident'>SERVER_WRAPPER</span>).<span class='ident'>host</span>();
+
+        <span class='ident'>RString</span>::<span class='ident'>new</span>(<span class='ident'>host</span>)
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>ruby_server_port</span>() <span class='op'>-&gt;</span> <span class='ident'>Fixnum</span> {
+        <span class='kw'>let</span> <span class='ident'>port</span> <span class='op'>=</span> <span class='ident'>itself</span>.<span class='ident'>get_data</span>(<span class='kw-2'>&amp;</span><span class='op'>*</span><span class='ident'>SERVER_WRAPPER</span>).<span class='ident'>port</span>();
+
+        <span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='ident'>port</span> <span class='kw'>as</span> <span class='ident'>i64</span>)
+    }
+);
+
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+    <span class='kw'>let</span> <span class='ident'>data_class</span> <span class='op'>=</span> <span class='ident'>Class</span>::<span class='ident'>from_existing</span>(<span class='string'>&quot;Data&quot;</span>);
+
+    <span class='ident'>Class</span>::<span class='ident'>new</span>(<span class='string'>&quot;RubyServer&quot;</span>, <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>data_class</span>)).<span class='ident'>define</span>(<span class='op'>|</span><span class='ident'>itself</span><span class='op'>|</span> {
+        <span class='ident'>itself</span>.<span class='ident'>def_self</span>(<span class='string'>&quot;new&quot;</span>, <span class='ident'>ruby_server_new</span>);
+
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;host&quot;</span>, <span class='ident'>ruby_server_host</span>);
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;port&quot;</span>, <span class='ident'>ruby_server_port</span>);
+    });
+}</pre>
+
+<p>To use the <code>RubyServer</code> class in Ruby:</p>
+
+<pre><code class="language-ruby">server = RubyServer.new(&quot;127.0.0.1&quot;, 3000)
+
+server.host == &quot;127.0.0.1&quot;
+server.port == 3000
+</code></pre>
+
+<h2 id='rustyarray' class='section-header'><a href='#rustyarray'><code>RustyArray</code></a></h2>
+<p>Custom array implementation using a vector which contains <code>AnyObject</code>s.</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>ruru</span>;
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>lazy_static</span>;
+
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>ops</span>::{<span class='ident'>Deref</span>, <span class='ident'>DerefMut</span>};
+
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>AnyObject</span>, <span class='ident'>Class</span>, <span class='ident'>Fixnum</span>, <span class='ident'>GC</span>, <span class='ident'>NilClass</span>, <span class='ident'>Object</span>, <span class='ident'>VM</span>};
+
+<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>VectorOfObjects</span> {
+    <span class='ident'>inner</span>: <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>AnyObject</span><span class='op'>&gt;</span>,
+}
+
+<span class='kw'>impl</span> <span class='ident'>VectorOfObjects</span> {
+    <span class='kw'>fn</span> <span class='ident'>new</span>() <span class='op'>-&gt;</span> <span class='self'>Self</span> {
+        <span class='ident'>VectorOfObjects</span> {
+            <span class='ident'>inner</span>: <span class='ident'>Vec</span>::<span class='ident'>new</span>(),
+        }
+    }
+}
+
+<span class='kw'>impl</span> <span class='ident'>Deref</span> <span class='kw'>for</span> <span class='ident'>VectorOfObjects</span> {
+    <span class='kw'>type</span> <span class='ident'>Target</span> <span class='op'>=</span> <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>AnyObject</span><span class='op'>&gt;</span>;
+
+    <span class='kw'>fn</span> <span class='ident'>deref</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>AnyObject</span><span class='op'>&gt;</span> {
+        <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>inner</span>
+    }
+}
+
+<span class='kw'>impl</span> <span class='ident'>DerefMut</span> <span class='kw'>for</span> <span class='ident'>VectorOfObjects</span> {
+    <span class='kw'>fn</span> <span class='ident'>deref_mut</span>(<span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='ident'>Vec</span><span class='op'>&lt;</span><span class='ident'>AnyObject</span><span class='op'>&gt;</span> {
+        <span class='kw-2'>&amp;</span><span class='kw-2'>mut</span> <span class='self'>self</span>.<span class='ident'>inner</span>
+    }
+}
+
+<span class='macro'>wrappable_struct</span><span class='macro'>!</span> {
+    <span class='ident'>VectorOfObjects</span>,
+    <span class='ident'>VectorOfObjectsWrapper</span>,
+    <span class='ident'>VECTOR_OF_OBJECTS_WRAPPER</span>,
+
+    <span class='comment'>// Mark each `AnyObject` element of the `inner` vector to prevent garbage collection.</span>
+    <span class='comment'>// `data` is a mutable reference to the wrapped data (`&amp;mut VectorOfObjects`).</span>
+    <span class='ident'>mark</span>(<span class='ident'>data</span>) {
+        <span class='kw'>for</span> <span class='ident'>object</span> <span class='kw'>in</span> <span class='kw-2'>&amp;</span><span class='ident'>data</span>.<span class='ident'>inner</span> {
+            <span class='ident'>GC</span>::<span class='ident'>mark</span>(<span class='ident'>object</span>);
+        }
+    }
+}
+
+<span class='macro'>class</span><span class='macro'>!</span>(<span class='ident'>RustyArray</span>);
+
+<span class='macro'>methods</span><span class='macro'>!</span> {
+    <span class='ident'>RustyArray</span>,
+    <span class='ident'>itself</span>,
+
+    <span class='kw'>fn</span> <span class='ident'>new</span>() <span class='op'>-&gt;</span> <span class='ident'>AnyObject</span> {
+        <span class='kw'>let</span> <span class='ident'>vec</span> <span class='op'>=</span> <span class='ident'>VectorOfObjects</span>::<span class='ident'>new</span>();
+
+        <span class='ident'>Class</span>::<span class='ident'>from_existing</span>(<span class='string'>&quot;RustyArray&quot;</span>).<span class='ident'>wrap_data</span>(<span class='ident'>vec</span>, <span class='kw-2'>&amp;</span><span class='op'>*</span><span class='ident'>VECTOR_OF_OBJECTS_WRAPPER</span>)
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>push</span>(<span class='ident'>object</span>: <span class='ident'>AnyObject</span>) <span class='op'>-&gt;</span> <span class='ident'>NilClass</span> {
+        <span class='ident'>itself</span>.<span class='ident'>get_data</span>(<span class='kw-2'>&amp;</span><span class='op'>*</span><span class='ident'>VECTOR_OF_OBJECTS_WRAPPER</span>).<span class='ident'>push</span>(<span class='ident'>object</span>.<span class='ident'>unwrap</span>());
+
+        <span class='ident'>NilClass</span>::<span class='ident'>new</span>()
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>length</span>() <span class='op'>-&gt;</span> <span class='ident'>Fixnum</span> {
+        <span class='kw'>let</span> <span class='ident'>length</span> <span class='op'>=</span> <span class='ident'>itself</span>.<span class='ident'>get_data</span>(<span class='kw-2'>&amp;</span><span class='op'>*</span><span class='ident'>VECTOR_OF_OBJECTS_WRAPPER</span>).<span class='ident'>len</span>() <span class='kw'>as</span> <span class='ident'>i64</span>;
+
+        <span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='ident'>length</span>)
+    }
+}
+
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+    <span class='kw'>let</span> <span class='ident'>data_class</span> <span class='op'>=</span> <span class='ident'>Class</span>::<span class='ident'>from_existing</span>(<span class='string'>&quot;Data&quot;</span>);
+
+    <span class='ident'>Class</span>::<span class='ident'>new</span>(<span class='string'>&quot;RustyArray&quot;</span>, <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>data_class</span>)).<span class='ident'>define</span>(<span class='op'>|</span><span class='ident'>itself</span><span class='op'>|</span> {
+        <span class='ident'>itself</span>.<span class='ident'>def_self</span>(<span class='string'>&quot;new&quot;</span>, <span class='ident'>new</span>);
+
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;push&quot;</span>, <span class='ident'>push</span>);
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;length&quot;</span>, <span class='ident'>length</span>);
+    });
+}</pre>
+
+<p>To use the <code>RustyArray</code> class in Ruby:</p>
+
+<pre><code class="language-ruby">array = RustyArray.new
+
+array.push(1)
+array.push(&quot;string&quot;)
+array.push(:symbol)
+
+array.length == 3
+</code></pre>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "ruru";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

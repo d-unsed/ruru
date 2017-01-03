@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `Object` trait in crate `ruru`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, Object">
+
+    <title>ruru::Object - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='index.html'>ruru</a></p><script>window.sidebarCurrent = {name: 'Object', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content trait">
+<h1 class='fqn'><span class='in-band'>Trait <a href='index.html'>ruru</a>::<wbr><a class='trait' href=''>Object</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-723' class='srclink' href='../src/ruru/src/class/traits/object.rs.html#19-1033' title='goto source code'>[src]</a></span></h1>
+<pre class='rust trait'>pub trait Object: <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='struct' href='../ruru/types/struct.Value.html' title='ruru::types::Value'>Value</a>&gt; {
+    fn <a href='#tymethod.value' class='fnname'>value</a>(&amp;self) -&gt; <a class='struct' href='../ruru/types/struct.Value.html' title='ruru::types::Value'>Value</a>;
+
+    fn <a href='#method.class' class='fnname'>class</a>(&amp;self) -&gt; <a class='struct' href='../ruru/struct.Class.html' title='ruru::Class'>Class</a> { ... }
+    fn <a href='#method.singleton_class' class='fnname'>singleton_class</a>(&amp;self) -&gt; <a class='struct' href='../ruru/struct.Class.html' title='ruru::Class'>Class</a> { ... }
+    fn <a href='#method.get_data' class='fnname'>get_data</a>&lt;'a, T&gt;(&amp;'a self, wrapper: &amp;'a <a class='trait' href='../ruru/typed_data/trait.DataTypeWrapper.html' title='ruru::typed_data::DataTypeWrapper'>DataTypeWrapper</a>&lt;T&gt;) -&gt; &amp;mut T { ... }
+    fn <a href='#method.define' class='fnname'>define</a>&lt;F:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Fn.html' title='core::ops::Fn'>Fn</a>(&amp;mut Self)&gt;(&amp;mut self, f: F) -&gt; &amp;Self { ... }
+    fn <a href='#method.define_method' class='fnname'>define_method</a>&lt;I:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>, O:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>&gt;(&amp;mut self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; callback: <a class='type' href='../ruru/types/type.Callback.html' title='ruru::types::Callback'>Callback</a>&lt;I, O&gt;) { ... }
+    fn <a href='#method.define_singleton_method' class='fnname'>define_singleton_method</a>&lt;I:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>, O:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>&gt;(&amp;mut self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; callback: <a class='type' href='../ruru/types/type.Callback.html' title='ruru::types::Callback'>Callback</a>&lt;I, O&gt;) { ... }
+    fn <a href='#method.def' class='fnname'>def</a>&lt;I:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>, O:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>&gt;(&amp;mut self, name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, callback: <a class='type' href='../ruru/types/type.Callback.html' title='ruru::types::Callback'>Callback</a>&lt;I, O&gt;) { ... }
+    fn <a href='#method.def_self' class='fnname'>def_self</a>&lt;I:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>, O:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>&gt;(&amp;mut self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; callback: <a class='type' href='../ruru/types/type.Callback.html' title='ruru::types::Callback'>Callback</a>&lt;I, O&gt;) { ... }
+    fn <a href='#method.send' class='fnname'>send</a>(&amp;self, method: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, arguments: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a>&gt;) -&gt; <a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a> { ... }
+    fn <a href='#method.respond_to' class='fnname'>respond_to</a>(&amp;self, method: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a> { ... }
+    fn <a href='#method.is_nil' class='fnname'>is_nil</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a> { ... }
+    fn <a href='#method.to_any_object' class='fnname'>to_any_object</a>(&amp;self) -&gt; <a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a> { ... }
+    fn <a href='#method.instance_variable_get' class='fnname'>instance_variable_get</a>(&amp;self, variable: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a> { ... }
+    fn <a href='#method.instance_variable_set' class='fnname'>instance_variable_set</a>&lt;T:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>&gt;(&amp;mut self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; variable: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value: T)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a> { ... }
+    fn <a href='#method.is_frozen' class='fnname'>is_frozen</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a> { ... }
+    fn <a href='#method.freeze' class='fnname'>freeze</a>(&amp;mut self) -&gt; Self { ... }
+    unsafe fn <a href='#method.to' class='fnname'>to</a>&lt;T:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>&gt;(&amp;self) -&gt; T { ... }
+    fn <a href='#method.try_convert_to' class='fnname'>try_convert_to</a>&lt;T:&nbsp;<a class='trait' href='../ruru/trait.VerifiedObject.html' title='ruru::VerifiedObject'>VerifiedObject</a>&gt;(&amp;self) -&gt; <a class='type' href='../ruru/result/type.Result.html' title='ruru::result::Result'>Result</a>&lt;T&gt; { ... }
+    fn <a href='#method.ty' class='fnname'>ty</a>(&amp;self) -&gt; <a class='enum' href='../ruru/types/enum.ValueType.html' title='ruru::types::ValueType'>ValueType</a> { ... }
+}</pre><div class='docblock'><p><code>Object</code></p>
+
+<p>Trait consists methods of Ruby <code>Object</code> class. Every struct like <code>Array</code>, <code>Hash</code> etc implements
+this trait.</p>
+
+<p><code>class!</code> macro automatically implements this trait for custom classes.</p>
+</div>
+            <h2 id='required-methods'>Required Methods</h2>
+            <div class='methods'>
+        <h3 id='tymethod.value' class='method stab '><span id='value.v' class='invisible'><code>fn <a href='#tymethod.value' class='fnname'>value</a>(&amp;self) -&gt; <a class='struct' href='../ruru/types/struct.Value.html' title='ruru::types::Value'>Value</a></code></span></h3><div class='docblock'><p>Returns internal <code>value</code> of current object.</p>
+
+<h1 id='examples' class='section-header'><a href='#examples'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>ruru</span>::<span class='ident'>types</span>::<span class='ident'>Value</span>;
+<span class='kw'>use</span> <span class='ident'>ruru</span>::<span class='ident'>Object</span>;
+
+<span class='kw'>struct</span> <span class='ident'>Array</span> {
+    <span class='ident'>value</span>: <span class='ident'>Value</span>
+}
+
+<span class='kw'>impl</span> <span class='ident'>From</span><span class='op'>&lt;</span><span class='ident'>Value</span><span class='op'>&gt;</span> <span class='kw'>for</span> <span class='ident'>Array</span> {
+    <span class='kw'>fn</span> <span class='ident'>from</span>(<span class='ident'>value</span>: <span class='ident'>Value</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
+        <span class='ident'>Array</span> {
+            <span class='ident'>value</span>: <span class='ident'>value</span>
+        }
+    }
+}
+
+<span class='kw'>impl</span> <span class='ident'>Object</span> <span class='kw'>for</span> <span class='ident'>Array</span> {
+    <span class='kw'>fn</span> <span class='ident'>value</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>Value</span> {
+        <span class='self'>self</span>.<span class='ident'>value</span>
+    }
+}</pre>
+</div></div>
+            <h2 id='provided-methods'>Provided Methods</h2>
+            <div class='methods'>
+        <h3 id='method.class' class='method stab '><span id='class.v' class='invisible'><code>fn <a href='#method.class' class='fnname'>class</a>(&amp;self) -&gt; <a class='struct' href='../ruru/struct.Class.html' title='ruru::Class'>Class</a></code></span></h3><div class='docblock'><p>Returns a class of current object.</p>
+
+<h1 id='examples-1' class='section-header'><a href='#examples-1'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Array</span>, <span class='ident'>Object</span>, <span class='ident'>VM</span>};
+
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>Array</span>::<span class='ident'>new</span>().<span class='ident'>class</span>(), <span class='ident'>Array</span>::<span class='ident'>new</span>().<span class='ident'>class</span>());</pre>
+</div><h3 id='method.singleton_class' class='method stab '><span id='singleton_class.v' class='invisible'><code>fn <a href='#method.singleton_class' class='fnname'>singleton_class</a>(&amp;self) -&gt; <a class='struct' href='../ruru/struct.Class.html' title='ruru::Class'>Class</a></code></span></h3><div class='docblock'><p>Returns a singleton class of current object.</p>
+
+<h1 id='examples-2' class='section-header'><a href='#examples-2'>Examples</a></h1>
+<h3 id='getting-singleton-class' class='section-header'><a href='#getting-singleton-class'>Getting singleton class</a></h3>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Array</span>, <span class='ident'>Object</span>, <span class='ident'>VM</span>};
+
+<span class='kw'>let</span> <span class='ident'>array</span> <span class='op'>=</span> <span class='ident'>Array</span>::<span class='ident'>new</span>();
+<span class='kw'>let</span> <span class='ident'>another_array</span> <span class='op'>=</span> <span class='ident'>Array</span>::<span class='ident'>new</span>();
+
+<span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>array</span>.<span class='ident'>singleton_class</span>() <span class='op'>!=</span> <span class='ident'>another_array</span>.<span class='ident'>singleton_class</span>());</pre>
+
+<p>Ruby:</p>
+
+<pre><code class="language-ruby">array = []
+another_array = []
+
+array.singleton_class != another_array.singleton_class
+</code></pre>
+
+<h3 id='modifying-singleton-class' class='section-header'><a href='#modifying-singleton-class'>Modifying singleton class</a></h3>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Array</span>, <span class='ident'>Object</span>, <span class='ident'>VM</span>};
+
+<span class='kw'>let</span> <span class='ident'>array</span> <span class='op'>=</span> <span class='ident'>Array</span>::<span class='ident'>new</span>();
+<span class='kw'>let</span> <span class='ident'>another_array</span> <span class='op'>=</span> <span class='ident'>Array</span>::<span class='ident'>new</span>();
+
+<span class='ident'>array</span>.<span class='ident'>singleton_class</span>().<span class='ident'>define</span>(<span class='op'>|</span><span class='ident'>itself</span><span class='op'>|</span> {
+    <span class='ident'>itself</span>.<span class='ident'>attr_reader</span>(<span class='string'>&quot;modified&quot;</span>);
+});
+
+<span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>array</span>.<span class='ident'>respond_to</span>(<span class='string'>&quot;modified&quot;</span>));
+<span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>another_array</span>.<span class='ident'>respond_to</span>(<span class='string'>&quot;modified&quot;</span>));</pre>
+
+<p>Ruby:</p>
+
+<pre><code class="language-ruby">array = []
+
+class &lt;&lt; array
+  attr_reader :modified
+end
+
+array.respond_to?(:modified)
+</code></pre>
+</div><h3 id='method.get_data' class='method stab '><span id='get_data.v' class='invisible'><code>fn <a href='#method.get_data' class='fnname'>get_data</a>&lt;'a, T&gt;(&amp;'a self, wrapper: &amp;'a <a class='trait' href='../ruru/typed_data/trait.DataTypeWrapper.html' title='ruru::typed_data::DataTypeWrapper'>DataTypeWrapper</a>&lt;T&gt;) -&gt; &amp;mut T</code></span></h3><div class='docblock'><p>Gets a Rust structure that is wrapped into a Ruby object.</p>
+
+<p>See the documentation for <code>wrappable_struct!</code> macro for more information.</p>
+
+<h1 id='examples-3' class='section-header'><a href='#examples-3'>Examples</a></h1>
+<p>Wrap <code>Server</code> structs to <code>RubyServer</code> objects</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>ruru</span>;
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>lazy_static</span>;
+
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>AnyObject</span>, <span class='ident'>Class</span>, <span class='ident'>Fixnum</span>, <span class='ident'>Object</span>, <span class='ident'>RString</span>, <span class='ident'>VM</span>};
+
+<span class='comment'>// The structure which we want to wrap</span>
+<span class='kw'>pub</span> <span class='kw'>struct</span> <span class='ident'>Server</span> {
+    <span class='ident'>host</span>: <span class='ident'>String</span>,
+    <span class='ident'>port</span>: <span class='ident'>u16</span>,
+}
+
+<span class='kw'>impl</span> <span class='ident'>Server</span> {
+    <span class='kw'>fn</span> <span class='ident'>new</span>(<span class='ident'>host</span>: <span class='ident'>String</span>, <span class='ident'>port</span>: <span class='ident'>u16</span>) <span class='op'>-&gt;</span> <span class='self'>Self</span> {
+        <span class='ident'>Server</span> {
+            <span class='ident'>host</span>: <span class='ident'>host</span>,
+            <span class='ident'>port</span>: <span class='ident'>port</span>,
+        }
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>host</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='ident'>str</span> {
+        <span class='kw-2'>&amp;</span><span class='self'>self</span>.<span class='ident'>host</span>
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>port</span>(<span class='kw-2'>&amp;</span><span class='self'>self</span>) <span class='op'>-&gt;</span> <span class='ident'>u16</span> {
+        <span class='self'>self</span>.<span class='ident'>port</span>
+    }
+}
+
+<span class='macro'>wrappable_struct</span><span class='macro'>!</span>(<span class='ident'>Server</span>, <span class='ident'>ServerWrapper</span>, <span class='ident'>SERVER_WRAPPER</span>);
+
+<span class='macro'>class</span><span class='macro'>!</span>(<span class='ident'>RubyServer</span>);
+
+<span class='macro'>methods</span><span class='macro'>!</span>(
+    <span class='ident'>RubyServer</span>,
+    <span class='ident'>itself</span>,
+
+    <span class='kw'>fn</span> <span class='ident'>ruby_server_new</span>(<span class='ident'>host</span>: <span class='ident'>RString</span>, <span class='ident'>port</span>: <span class='ident'>Fixnum</span>) <span class='op'>-&gt;</span> <span class='ident'>AnyObject</span> {
+        <span class='kw'>let</span> <span class='ident'>server</span> <span class='op'>=</span> <span class='ident'>Server</span>::<span class='ident'>new</span>(<span class='ident'>host</span>.<span class='ident'>unwrap</span>().<span class='ident'>to_string</span>(),
+                                 <span class='ident'>port</span>.<span class='ident'>unwrap</span>().<span class='ident'>to_i64</span>() <span class='kw'>as</span> <span class='ident'>u16</span>);
+
+        <span class='ident'>Class</span>::<span class='ident'>from_existing</span>(<span class='string'>&quot;RubyServer&quot;</span>).<span class='ident'>wrap_data</span>(<span class='ident'>server</span>, <span class='kw-2'>&amp;</span><span class='op'>*</span><span class='ident'>SERVER_WRAPPER</span>)
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>ruby_server_host</span>() <span class='op'>-&gt;</span> <span class='ident'>RString</span> {
+        <span class='kw'>let</span> <span class='ident'>host</span> <span class='op'>=</span> <span class='ident'>itself</span>.<span class='ident'>get_data</span>(<span class='kw-2'>&amp;</span><span class='op'>*</span><span class='ident'>SERVER_WRAPPER</span>).<span class='ident'>host</span>();
+
+        <span class='ident'>RString</span>::<span class='ident'>new</span>(<span class='ident'>host</span>)
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>ruby_server_port</span>() <span class='op'>-&gt;</span> <span class='ident'>Fixnum</span> {
+        <span class='kw'>let</span> <span class='ident'>port</span> <span class='op'>=</span> <span class='ident'>itself</span>.<span class='ident'>get_data</span>(<span class='kw-2'>&amp;</span><span class='op'>*</span><span class='ident'>SERVER_WRAPPER</span>).<span class='ident'>port</span>();
+
+        <span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='ident'>port</span> <span class='kw'>as</span> <span class='ident'>i64</span>)
+    }
+);
+
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+    <span class='kw'>let</span> <span class='ident'>data_class</span> <span class='op'>=</span> <span class='ident'>Class</span>::<span class='ident'>from_existing</span>(<span class='string'>&quot;Data&quot;</span>);
+
+    <span class='ident'>Class</span>::<span class='ident'>new</span>(<span class='string'>&quot;RubyServer&quot;</span>, <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>data_class</span>)).<span class='ident'>define</span>(<span class='op'>|</span><span class='ident'>itself</span><span class='op'>|</span> {
+        <span class='ident'>itself</span>.<span class='ident'>def_self</span>(<span class='string'>&quot;new&quot;</span>, <span class='ident'>ruby_server_new</span>);
+
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;host&quot;</span>, <span class='ident'>ruby_server_host</span>);
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;port&quot;</span>, <span class='ident'>ruby_server_port</span>);
+    });
+}</pre>
+
+<p>To use the <code>RubyServer</code> class in Ruby:</p>
+
+<pre><code class="language-ruby">server = RubyServer.new(&quot;127.0.0.1&quot;, 3000)
+
+server.host == &quot;127.0.0.1&quot;
+server.port == 3000
+</code></pre>
+</div><h3 id='method.define' class='method stab '><span id='define.v' class='invisible'><code>fn <a href='#method.define' class='fnname'>define</a>&lt;F:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Fn.html' title='core::ops::Fn'>Fn</a>(&amp;mut Self)&gt;(&amp;mut self, f: F) -&gt; &amp;Self</code></span></h3><div class='docblock'><p>Wraps calls to the object.</p>
+
+<p>Mostly used to have Ruby-like class definition DSL.</p>
+
+<h1 id='examples-4' class='section-header'><a href='#examples-4'>Examples</a></h1>
+<h3 id='defining-class' class='section-header'><a href='#defining-class'>Defining class</a></h3>
+<pre class='rust rust-example-rendered'>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>ruru</span>;
+
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Class</span>, <span class='ident'>Fixnum</span>, <span class='ident'>Object</span>, <span class='ident'>RString</span>};
+
+<span class='macro'>class</span><span class='macro'>!</span>(<span class='ident'>Hello</span>);
+<span class='macro'>class</span><span class='macro'>!</span>(<span class='ident'>Nested</span>);
+
+<span class='macro'>methods</span><span class='macro'>!</span>(
+    <span class='ident'>Hello</span>,
+    <span class='ident'>itself</span>,
+
+    <span class='kw'>fn</span> <span class='ident'>greeting</span>() <span class='op'>-&gt;</span> <span class='ident'>RString</span> {
+        <span class='ident'>RString</span>::<span class='ident'>new</span>(<span class='string'>&quot;Greeting from class&quot;</span>)
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>many_greetings</span>() <span class='op'>-&gt;</span> <span class='ident'>RString</span> {
+        <span class='ident'>RString</span>::<span class='ident'>new</span>(<span class='string'>&quot;Many greetings from instance&quot;</span>)
+    }
+);
+
+<span class='macro'>methods</span><span class='macro'>!</span>(
+    <span class='ident'>Nested</span>,
+    <span class='ident'>itself</span>,
+
+    <span class='kw'>fn</span> <span class='ident'>nested_greeting</span>() <span class='op'>-&gt;</span> <span class='ident'>RString</span> {
+        <span class='ident'>RString</span>::<span class='ident'>new</span>(<span class='string'>&quot;Greeting from nested class&quot;</span>)
+    }
+);
+
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+    <span class='ident'>Class</span>::<span class='ident'>new</span>(<span class='string'>&quot;Hello&quot;</span>, <span class='prelude-val'>None</span>).<span class='ident'>define</span>(<span class='op'>|</span><span class='ident'>itself</span><span class='op'>|</span> {
+        <span class='ident'>itself</span>.<span class='ident'>attr_reader</span>(<span class='string'>&quot;reader&quot;</span>);
+
+        <span class='ident'>itself</span>.<span class='ident'>def_self</span>(<span class='string'>&quot;greeting&quot;</span>, <span class='ident'>greeting</span>);
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;many_greetings&quot;</span>, <span class='ident'>many_greetings</span>);
+
+        <span class='ident'>itself</span>.<span class='ident'>define_nested_class</span>(<span class='string'>&quot;Nested&quot;</span>, <span class='prelude-val'>None</span>).<span class='ident'>define</span>(<span class='op'>|</span><span class='ident'>itself</span><span class='op'>|</span> {
+            <span class='ident'>itself</span>.<span class='ident'>def_self</span>(<span class='string'>&quot;nested_greeting&quot;</span>, <span class='ident'>nested_greeting</span>);
+        });
+    });
+}</pre>
+
+<p>Ruby:</p>
+
+<pre><code class="language-ruby">class Hello
+  attr_reader :reader
+
+  def self.greeting
+    &#39;Greeting from class&#39;
+  end
+
+  def many_greetings
+    &#39;Many greetings from instance&#39;
+  end
+
+  class Nested
+    def self.nested_greeting
+      &#39;Greeting from nested class&#39;
+    end
+  end
+end
+</code></pre>
+
+<h3 id='defining-singleton-method-for-an-object' class='section-header'><a href='#defining-singleton-method-for-an-object'>Defining singleton method for an object</a></h3>
+<pre class='rust rust-example-rendered'>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>ruru</span>;
+
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>AnyObject</span>, <span class='ident'>Class</span>, <span class='ident'>Fixnum</span>, <span class='ident'>Object</span>, <span class='ident'>RString</span>, <span class='ident'>VM</span>};
+
+<span class='macro'>methods</span><span class='macro'>!</span>(
+    <span class='ident'>RString</span>,
+    <span class='ident'>itself</span>,
+
+    <span class='kw'>fn</span> <span class='ident'>greeting</span>() <span class='op'>-&gt;</span> <span class='ident'>RString</span> {
+        <span class='ident'>RString</span>::<span class='ident'>new</span>(<span class='string'>&quot;Greeting!&quot;</span>)
+    }
+);
+
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>string</span> <span class='op'>=</span> <span class='ident'>RString</span>::<span class='ident'>new</span>(<span class='string'>&quot;Some string&quot;</span>);
+
+    <span class='comment'>// The same can be done by modifying `string.singleton_class()`</span>
+    <span class='comment'>// or using `string.define_singleton_method(&quot;greeting&quot;, greeting)`</span>
+    <span class='ident'>string</span>.<span class='ident'>define</span>(<span class='op'>|</span><span class='ident'>itself</span><span class='op'>|</span> {
+        <span class='ident'>itself</span>.<span class='ident'>define_singleton_method</span>(<span class='string'>&quot;greeting&quot;</span>, <span class='ident'>greeting</span>);
+    });
+
+    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>string</span>.<span class='ident'>respond_to</span>(<span class='string'>&quot;greeting&quot;</span>));
+}</pre>
+
+<p>Ruby:</p>
+
+<pre><code class="language-ruby">string = &quot;Some string&quot;
+
+class &lt;&lt; string
+  def greeting
+    &#39;Greeting!&#39;
+  end
+end
+
+string.respond_to?(&quot;greeting&quot;)
+</code></pre>
+</div><h3 id='method.define_method' class='method stab '><span id='define_method.v' class='invisible'><code>fn <a href='#method.define_method' class='fnname'>define_method</a>&lt;I:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>, O:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>&gt;(&amp;mut self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; callback: <a class='type' href='../ruru/types/type.Callback.html' title='ruru::types::Callback'>Callback</a>&lt;I, O&gt;)</code></span></h3><div class='docblock'><p>Defines an instance method for the given class or object.</p>
+
+<p>Use <code>methods!</code> macro to define a <code>callback</code>.</p>
+
+<p>You can also use <code>def()</code> alias for this function combined with <code>Class::define()</code> a for
+nicer DSL.</p>
+
+<h1 id='panics' class='section-header'><a href='#panics'>Panics</a></h1>
+<p>Ruby can raise an exception if you try to define instance method directly on an instance
+of some class (like <code>Fixnum</code>, <code>String</code>, <code>Array</code> etc).</p>
+
+<p>Use this method only on classes (or singleton classes of objects).</p>
+
+<h1 id='examples-5' class='section-header'><a href='#examples-5'>Examples</a></h1>
+<h3 id='the-famous-stringblank-method' class='section-header'><a href='#the-famous-stringblank-method'>The famous String#blank? method</a></h3>
+<pre class='rust rust-example-rendered'>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>ruru</span>;
+
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Boolean</span>, <span class='ident'>Class</span>, <span class='ident'>Object</span>, <span class='ident'>RString</span>, <span class='ident'>VM</span>};
+
+<span class='macro'>methods</span><span class='macro'>!</span>(
+   <span class='ident'>RString</span>,
+   <span class='ident'>itself</span>,
+
+   <span class='kw'>fn</span> <span class='ident'>is_blank</span>() <span class='op'>-&gt;</span> <span class='ident'>Boolean</span> {
+       <span class='ident'>Boolean</span>::<span class='ident'>new</span>(<span class='ident'>itself</span>.<span class='ident'>to_string</span>().<span class='ident'>chars</span>().<span class='ident'>all</span>(<span class='op'>|</span><span class='ident'>c</span><span class='op'>|</span> <span class='ident'>c</span>.<span class='ident'>is_whitespace</span>()))
+   }
+);
+
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+    <span class='ident'>Class</span>::<span class='ident'>from_existing</span>(<span class='string'>&quot;String&quot;</span>).<span class='ident'>define</span>(<span class='op'>|</span><span class='ident'>itself</span><span class='op'>|</span> {
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;blank?&quot;</span>, <span class='ident'>is_blank</span>);
+    });
+}</pre>
+
+<p>Ruby:</p>
+
+<pre><code class="language-ruby">class String
+  def blank?
+    # simplified
+    self.chars.all? { |c| c == &#39; &#39; }
+  end
+end
+</code></pre>
+
+<h3 id='receiving-arguments' class='section-header'><a href='#receiving-arguments'>Receiving arguments</a></h3>
+<p>Raise <code>Fixnum</code> to the power of <code>exp</code>.</p>
+
+<pre class='rust rust-example-rendered'>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>ruru</span>;
+
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>error</span>::<span class='ident'>Error</span>;
+
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Class</span>, <span class='ident'>Fixnum</span>, <span class='ident'>Object</span>, <span class='ident'>VM</span>};
+
+<span class='macro'>methods</span><span class='macro'>!</span>(
+    <span class='ident'>Fixnum</span>,
+    <span class='ident'>itself</span>,
+
+    <span class='kw'>fn</span> <span class='ident'>pow</span>(<span class='ident'>exp</span>: <span class='ident'>Fixnum</span>) <span class='op'>-&gt;</span> <span class='ident'>Fixnum</span> {
+        <span class='comment'>// `exp` is not a valid `Fixnum`, raise an exception</span>
+        <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Err</span>(<span class='kw-2'>ref</span> <span class='ident'>error</span>) <span class='op'>=</span> <span class='ident'>exp</span> {
+            <span class='ident'>VM</span>::<span class='ident'>raise</span>(<span class='ident'>error</span>.<span class='ident'>to_exception</span>(), <span class='ident'>error</span>.<span class='ident'>description</span>());
+        }
+
+        <span class='comment'>// We can safely unwrap here, because an exception was raised if `exp` is `Err`</span>
+        <span class='kw'>let</span> <span class='ident'>exp</span> <span class='op'>=</span> <span class='ident'>exp</span>.<span class='ident'>unwrap</span>().<span class='ident'>to_i64</span>() <span class='kw'>as</span> <span class='ident'>u32</span>;
+
+        <span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='ident'>itself</span>.<span class='ident'>to_i64</span>().<span class='ident'>pow</span>(<span class='ident'>exp</span>))
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>pow_with_default_argument</span>(<span class='ident'>exp</span>: <span class='ident'>Fixnum</span>) <span class='op'>-&gt;</span> <span class='ident'>Fixnum</span> {
+        <span class='kw'>let</span> <span class='ident'>default_exp</span> <span class='op'>=</span> <span class='number'>0</span>;
+        <span class='kw'>let</span> <span class='ident'>exp</span> <span class='op'>=</span> <span class='ident'>exp</span>.<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>exp</span><span class='op'>|</span> <span class='ident'>exp</span>.<span class='ident'>to_i64</span>()).<span class='ident'>unwrap_or</span>(<span class='ident'>default_exp</span>);
+
+        <span class='kw'>let</span> <span class='ident'>result</span> <span class='op'>=</span> <span class='ident'>itself</span>.<span class='ident'>to_i64</span>().<span class='ident'>pow</span>(<span class='ident'>exp</span> <span class='kw'>as</span> <span class='ident'>u32</span>);
+
+        <span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='ident'>result</span>)
+    }
+);
+
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+    <span class='ident'>Class</span>::<span class='ident'>from_existing</span>(<span class='string'>&quot;Fixnum&quot;</span>).<span class='ident'>define</span>(<span class='op'>|</span><span class='ident'>itself</span><span class='op'>|</span> {
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;pow&quot;</span>, <span class='ident'>pow</span>);
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;pow_with_default_argument&quot;</span>, <span class='ident'>pow_with_default_argument</span>);
+    });
+}</pre>
+
+<p>Ruby:</p>
+
+<pre><code class="language-ruby">class Fixnum
+  def pow(exp)
+    raise ArgumentError unless exp.is_a?(Fixnum)
+
+    self ** exp
+  end
+
+  def pow_with_default_argument(exp)
+    default_exp = 0
+    exp = default_exp unless exp.is_a?(Fixnum)
+
+    self ** exp
+  end
+end
+</code></pre>
+</div><h3 id='method.define_singleton_method' class='method stab '><span id='define_singleton_method.v' class='invisible'><code>fn <a href='#method.define_singleton_method' class='fnname'>define_singleton_method</a>&lt;I:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>, O:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>&gt;(&amp;mut self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; callback: <a class='type' href='../ruru/types/type.Callback.html' title='ruru::types::Callback'>Callback</a>&lt;I, O&gt;)</code></span></h3><div class='docblock'><p>Defines a class method for given class or singleton method for object.</p>
+
+<p>Use <code>methods!</code> macro to define a <code>callback</code>.</p>
+
+<p>You can also use <code>def_self()</code> alias for this function combined with <code>Class::define()</code> a for
+nicer DSL.</p>
+
+<h1 id='examples-6' class='section-header'><a href='#examples-6'>Examples</a></h1>
+<h3 id='defining-a-class-method' class='section-header'><a href='#defining-a-class-method'>Defining a class method</a></h3>
+<pre class='rust rust-example-rendered'>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>ruru</span>;
+
+<span class='kw'>use</span> <span class='ident'>std</span>::<span class='ident'>error</span>::<span class='ident'>Error</span>;
+
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Class</span>, <span class='ident'>Object</span>, <span class='ident'>RString</span>, <span class='ident'>Symbol</span>, <span class='ident'>VM</span>};
+
+<span class='macro'>methods</span><span class='macro'>!</span>(
+    <span class='ident'>Symbol</span>,
+    <span class='ident'>itself</span>,
+
+    <span class='kw'>fn</span> <span class='ident'>from_string</span>(<span class='ident'>string</span>: <span class='ident'>RString</span>) <span class='op'>-&gt;</span> <span class='ident'>Symbol</span> {
+        <span class='comment'>// `string` is not a valid `String`, raise an exception</span>
+        <span class='kw'>if</span> <span class='kw'>let</span> <span class='prelude-val'>Err</span>(<span class='kw-2'>ref</span> <span class='ident'>error</span>) <span class='op'>=</span> <span class='ident'>string</span> {
+            <span class='ident'>VM</span>::<span class='ident'>raise</span>(<span class='ident'>error</span>.<span class='ident'>to_exception</span>(), <span class='ident'>error</span>.<span class='ident'>description</span>());
+        }
+
+        <span class='ident'>Symbol</span>::<span class='ident'>new</span>(<span class='kw-2'>&amp;</span><span class='ident'>string</span>.<span class='ident'>unwrap</span>().<span class='ident'>to_string</span>())
+    }
+);
+
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+    <span class='ident'>Class</span>::<span class='ident'>from_existing</span>(<span class='string'>&quot;Symbol&quot;</span>).<span class='ident'>define</span>(<span class='op'>|</span><span class='ident'>itself</span><span class='op'>|</span> {
+        <span class='ident'>itself</span>.<span class='ident'>def_self</span>(<span class='string'>&quot;from_string&quot;</span>, <span class='ident'>from_string</span>);
+    });
+}</pre>
+
+<p>Ruby:</p>
+
+<pre><code class="language-ruby">class Symbol
+  def self.from_string(string)
+    raise ArgumentError unless string.is_a?(String)
+
+    # simplified
+    string.to_sym
+  end
+end
+</code></pre>
+
+<h3 id='defining-a-singleton-method-for-an-object' class='section-header'><a href='#defining-a-singleton-method-for-an-object'>Defining a singleton method for an object</a></h3>
+<pre class='rust rust-example-rendered'>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span> <span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>ruru</span>;
+
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>AnyObject</span>, <span class='ident'>Class</span>, <span class='ident'>Fixnum</span>, <span class='ident'>Object</span>, <span class='ident'>RString</span>, <span class='ident'>VM</span>};
+
+<span class='macro'>methods</span><span class='macro'>!</span>(
+    <span class='ident'>RString</span>,
+    <span class='ident'>itself</span>,
+
+    <span class='kw'>fn</span> <span class='ident'>greeting</span>() <span class='op'>-&gt;</span> <span class='ident'>RString</span> {
+        <span class='ident'>RString</span>::<span class='ident'>new</span>(<span class='string'>&quot;Greeting!&quot;</span>)
+    }
+);
+
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+    <span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>string</span> <span class='op'>=</span> <span class='ident'>RString</span>::<span class='ident'>new</span>(<span class='string'>&quot;Some string&quot;</span>);
+
+    <span class='comment'>// The same can be done by modifying `string.singleton_class()`</span>
+    <span class='comment'>// or using `string.define_singleton_method(&quot;greeting&quot;, greeting)`</span>
+    <span class='ident'>string</span>.<span class='ident'>define</span>(<span class='op'>|</span><span class='ident'>itself</span><span class='op'>|</span> {
+        <span class='ident'>itself</span>.<span class='ident'>define_singleton_method</span>(<span class='string'>&quot;greeting&quot;</span>, <span class='ident'>greeting</span>);
+    });
+
+    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>string</span>.<span class='ident'>respond_to</span>(<span class='string'>&quot;greeting&quot;</span>));
+}</pre>
+
+<p>Ruby:</p>
+
+<pre><code class="language-ruby">
+string = &quot;Some string&quot;
+
+class &lt;&lt; string
+  def greeting
+    &#39;Greeting!&#39;
+  end
+end
+
+string.respond_to?(&quot;greeting&quot;)
+</code></pre>
+</div><h3 id='method.def' class='method stab '><span id='def.v' class='invisible'><code>fn <a href='#method.def' class='fnname'>def</a>&lt;I:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>, O:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>&gt;(&amp;mut self, name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, callback: <a class='type' href='../ruru/types/type.Callback.html' title='ruru::types::Callback'>Callback</a>&lt;I, O&gt;)</code></span></h3><div class='docblock'><p>An alias for <code>define_method</code> (similar to Ruby syntax <code>def some_method</code>).</p>
+</div><h3 id='method.def_self' class='method stab '><span id='def_self.v' class='invisible'><code>fn <a href='#method.def_self' class='fnname'>def_self</a>&lt;I:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>, O:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>&gt;(&amp;mut self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; callback: <a class='type' href='../ruru/types/type.Callback.html' title='ruru::types::Callback'>Callback</a>&lt;I, O&gt;)</code></span></h3><div class='docblock'><p>An alias for <code>define_singleton_method</code> (similar to Ruby <code>def self.some_method</code>).</p>
+</div><h3 id='method.send' class='method stab '><span id='send.v' class='invisible'><code>fn <a href='#method.send' class='fnname'>send</a>(&amp;self, method: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, arguments: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a>&gt;) -&gt; <a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a></code></span></h3><div class='docblock'><p>Calls a given method on an object similarly to Ruby <code>Object#send</code> method</p>
+
+<h1 id='examples-7' class='section-header'><a href='#examples-7'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Array</span>, <span class='ident'>Fixnum</span>, <span class='ident'>Object</span>, <span class='ident'>RString</span>, <span class='ident'>VM</span>};
+
+<span class='kw'>let</span> <span class='ident'>array</span> <span class='op'>=</span> <span class='ident'>Array</span>::<span class='ident'>new</span>().<span class='ident'>push</span>(<span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='number'>1</span>));
+<span class='kw'>let</span> <span class='ident'>array_to_str</span> <span class='op'>=</span>
+    <span class='ident'>array</span>
+        .<span class='ident'>send</span>(<span class='string'>&quot;to_s&quot;</span>, <span class='macro'>vec</span><span class='macro'>!</span>[])
+        .<span class='ident'>try_convert_to</span>::<span class='op'>&lt;</span><span class='ident'>RString</span><span class='op'>&gt;</span>()
+        .<span class='ident'>unwrap</span>()
+        .<span class='ident'>to_string</span>();
+
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>array_to_str</span>, <span class='string'>&quot;[1]&quot;</span>.<span class='ident'>to_string</span>());</pre>
+</div><h3 id='method.respond_to' class='method stab '><span id='respond_to.v' class='invisible'><code>fn <a href='#method.respond_to' class='fnname'>respond_to</a>(&amp;self, method: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h3><div class='docblock'><p>Checks whether the object responds to given method</p>
+
+<h1 id='examples-8' class='section-header'><a href='#examples-8'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Array</span>, <span class='ident'>Object</span>, <span class='ident'>VM</span>};
+
+<span class='kw'>let</span> <span class='ident'>array</span> <span class='op'>=</span> <span class='ident'>Array</span>::<span class='ident'>new</span>();
+
+<span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>array</span>.<span class='ident'>respond_to</span>(<span class='string'>&quot;push&quot;</span>));
+<span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>array</span>.<span class='ident'>respond_to</span>(<span class='string'>&quot;something_else&quot;</span>));</pre>
+</div><h3 id='method.is_nil' class='method stab '><span id='is_nil.v' class='invisible'><code>fn <a href='#method.is_nil' class='fnname'>is_nil</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h3><div class='docblock'><p>Checks whether the object is <code>nil</code></p>
+
+<h1 id='examples-9' class='section-header'><a href='#examples-9'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Hash</span>, <span class='ident'>NilClass</span>, <span class='ident'>Object</span>, <span class='ident'>VM</span>};
+
+<span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>NilClass</span>::<span class='ident'>new</span>().<span class='ident'>is_nil</span>());
+<span class='macro'>assert</span><span class='macro'>!</span>(<span class='op'>!</span><span class='ident'>Hash</span>::<span class='ident'>new</span>().<span class='ident'>is_nil</span>());</pre>
+
+<p>Ruby:</p>
+
+<pre><code class="language-ruby">nil.nil? == true
+{}.nil? == false
+</code></pre>
+</div><h3 id='method.to_any_object' class='method stab '><span id='to_any_object.v' class='invisible'><code>fn <a href='#method.to_any_object' class='fnname'>to_any_object</a>(&amp;self) -&gt; <a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a></code></span></h3><div class='docblock'><p>Converts struct to <code>AnyObject</code></p>
+
+<p>See docs for <code>AnyObject</code> class for more details.</p>
+
+<h1 id='examples-10' class='section-header'><a href='#examples-10'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Array</span>, <span class='ident'>Fixnum</span>, <span class='ident'>Object</span>, <span class='ident'>VM</span>};
+
+<span class='kw'>let</span> <span class='ident'>array</span> <span class='op'>=</span> <span class='ident'>Array</span>::<span class='ident'>new</span>().<span class='ident'>push</span>(<span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='number'>1</span>));
+<span class='kw'>let</span> <span class='ident'>args</span> <span class='op'>=</span> <span class='macro'>vec</span><span class='macro'>!</span>[<span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='number'>1</span>).<span class='ident'>to_any_object</span>()];
+<span class='kw'>let</span> <span class='ident'>index</span> <span class='op'>=</span>
+    <span class='ident'>array</span>
+        .<span class='ident'>send</span>(<span class='string'>&quot;find_index&quot;</span>, <span class='ident'>args</span>)
+        .<span class='ident'>try_convert_to</span>::<span class='op'>&lt;</span><span class='ident'>Fixnum</span><span class='op'>&gt;</span>();
+
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>index</span>, <span class='prelude-val'>Ok</span>(<span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='number'>0</span>)));</pre>
+</div><h3 id='method.instance_variable_get' class='method stab '><span id='instance_variable_get.v' class='invisible'><code>fn <a href='#method.instance_variable_get' class='fnname'>instance_variable_get</a>(&amp;self, variable: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a></code></span></h3><div class='docblock'><p>Gets an instance variable of object</p>
+
+<h1 id='examples-11' class='section-header'><a href='#examples-11'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>ruru</span>;
+
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>AnyObject</span>, <span class='ident'>Class</span>, <span class='ident'>Fixnum</span>, <span class='ident'>Object</span>, <span class='ident'>VM</span>};
+
+<span class='macro'>class</span><span class='macro'>!</span>(<span class='ident'>Counter</span>);
+
+<span class='macro'>methods</span><span class='macro'>!</span>(
+    <span class='ident'>Counter</span>,
+    <span class='ident'>itself</span>,
+
+    <span class='kw'>fn</span> <span class='ident'>counter_initialize</span>() <span class='op'>-&gt;</span> <span class='ident'>AnyObject</span> {
+        <span class='ident'>itself</span>.<span class='ident'>instance_variable_set</span>(<span class='string'>&quot;@state&quot;</span>, <span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='number'>0</span>))
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>counter_increment</span>() <span class='op'>-&gt;</span> <span class='ident'>AnyObject</span> {
+        <span class='comment'>// Using unsafe conversion, because we are sure that `@state` is always a `Fixnum`</span>
+        <span class='comment'>// and we don&#39;t provide an interface to set the value externally</span>
+        <span class='kw'>let</span> <span class='ident'>state</span> <span class='op'>=</span> <span class='kw'>unsafe</span> {
+            <span class='ident'>itself</span>.<span class='ident'>instance_variable_get</span>(<span class='string'>&quot;@state&quot;</span>).<span class='ident'>to</span>::<span class='op'>&lt;</span><span class='ident'>Fixnum</span><span class='op'>&gt;</span>().<span class='ident'>to_i64</span>()
+        };
+
+        <span class='ident'>itself</span>.<span class='ident'>instance_variable_set</span>(<span class='string'>&quot;@state&quot;</span>, <span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='ident'>state</span> <span class='op'>+</span> <span class='number'>1</span>))
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>counter_state</span>() <span class='op'>-&gt;</span> <span class='ident'>Fixnum</span> {
+        <span class='kw'>unsafe</span> { <span class='ident'>itself</span>.<span class='ident'>instance_variable_get</span>(<span class='string'>&quot;@state&quot;</span>).<span class='ident'>to</span>::<span class='op'>&lt;</span><span class='ident'>Fixnum</span><span class='op'>&gt;</span>() }
+    }
+);
+
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+    <span class='kw'>let</span> <span class='ident'>counter</span> <span class='op'>=</span> <span class='ident'>Class</span>::<span class='ident'>new</span>(<span class='string'>&quot;Counter&quot;</span>, <span class='prelude-val'>None</span>).<span class='ident'>define</span>(<span class='op'>|</span><span class='ident'>itself</span><span class='op'>|</span> {
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;initialize&quot;</span>, <span class='ident'>counter_initialize</span>);
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;increment!&quot;</span>, <span class='ident'>counter_increment</span>);
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;state&quot;</span>, <span class='ident'>counter_state</span>);
+    }).<span class='ident'>new_instance</span>(<span class='macro'>vec</span><span class='macro'>!</span>[]);
+
+    <span class='ident'>counter</span>.<span class='ident'>send</span>(<span class='string'>&quot;increment!&quot;</span>, <span class='macro'>vec</span><span class='macro'>!</span>[]);
+
+    <span class='kw'>let</span> <span class='ident'>new_state</span> <span class='op'>=</span> <span class='ident'>counter</span>.<span class='ident'>send</span>(<span class='string'>&quot;state&quot;</span>, <span class='macro'>vec</span><span class='macro'>!</span>[]).<span class='ident'>try_convert_to</span>::<span class='op'>&lt;</span><span class='ident'>Fixnum</span><span class='op'>&gt;</span>();
+
+    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>new_state</span>, <span class='prelude-val'>Ok</span>(<span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='number'>1</span>)));
+}</pre>
+
+<p>Ruby:</p>
+
+<pre><code class="language-ruby">class Counter
+  def initialize
+    @state = 0
+  end
+
+  def increment!
+    @state += 1
+  end
+
+  def state
+    @state
+  end
+end
+
+counter = Counter.new
+counter.increment!
+
+new_state = counter.state
+
+new_state == 1
+</code></pre>
+</div><h3 id='method.instance_variable_set' class='method stab '><span id='instance_variable_set.v' class='invisible'><code>fn <a href='#method.instance_variable_set' class='fnname'>instance_variable_set</a>&lt;T:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>&gt;(&amp;mut self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; variable: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value: T)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a></code></span></h3><div class='docblock'><p>Sets an instance variable for object</p>
+
+<h1 id='examples-12' class='section-header'><a href='#examples-12'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>ruru</span>;
+
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>AnyObject</span>, <span class='ident'>Class</span>, <span class='ident'>Fixnum</span>, <span class='ident'>Object</span>, <span class='ident'>VM</span>};
+
+<span class='macro'>class</span><span class='macro'>!</span>(<span class='ident'>Counter</span>);
+
+<span class='macro'>methods</span><span class='macro'>!</span>(
+    <span class='ident'>Counter</span>,
+    <span class='ident'>itself</span>,
+
+    <span class='kw'>fn</span> <span class='ident'>counter_initialize</span>() <span class='op'>-&gt;</span> <span class='ident'>AnyObject</span> {
+        <span class='ident'>itself</span>.<span class='ident'>instance_variable_set</span>(<span class='string'>&quot;@state&quot;</span>, <span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='number'>0</span>))
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>counter_increment</span>() <span class='op'>-&gt;</span> <span class='ident'>AnyObject</span> {
+        <span class='comment'>// Using unsafe conversion, because we are sure that `@state` is always a `Fixnum`</span>
+        <span class='comment'>// and we don&#39;t provide an interface to set the value externally</span>
+        <span class='kw'>let</span> <span class='ident'>state</span> <span class='op'>=</span> <span class='kw'>unsafe</span> {
+            <span class='ident'>itself</span>.<span class='ident'>instance_variable_get</span>(<span class='string'>&quot;@state&quot;</span>).<span class='ident'>to</span>::<span class='op'>&lt;</span><span class='ident'>Fixnum</span><span class='op'>&gt;</span>().<span class='ident'>to_i64</span>()
+        };
+
+        <span class='ident'>itself</span>.<span class='ident'>instance_variable_set</span>(<span class='string'>&quot;@state&quot;</span>, <span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='ident'>state</span> <span class='op'>+</span> <span class='number'>1</span>))
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>counter_state</span>() <span class='op'>-&gt;</span> <span class='ident'>Fixnum</span> {
+        <span class='kw'>unsafe</span> { <span class='ident'>itself</span>.<span class='ident'>instance_variable_get</span>(<span class='string'>&quot;@state&quot;</span>).<span class='ident'>to</span>::<span class='op'>&lt;</span><span class='ident'>Fixnum</span><span class='op'>&gt;</span>() }
+    }
+);
+
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+    <span class='kw'>let</span> <span class='ident'>counter</span> <span class='op'>=</span> <span class='ident'>Class</span>::<span class='ident'>new</span>(<span class='string'>&quot;Counter&quot;</span>, <span class='prelude-val'>None</span>).<span class='ident'>define</span>(<span class='op'>|</span><span class='ident'>itself</span><span class='op'>|</span> {
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;initialize&quot;</span>, <span class='ident'>counter_initialize</span>);
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;increment!&quot;</span>, <span class='ident'>counter_increment</span>);
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;state&quot;</span>, <span class='ident'>counter_state</span>);
+    }).<span class='ident'>new_instance</span>(<span class='macro'>vec</span><span class='macro'>!</span>[]);
+
+    <span class='ident'>counter</span>.<span class='ident'>send</span>(<span class='string'>&quot;increment!&quot;</span>, <span class='macro'>vec</span><span class='macro'>!</span>[]);
+
+    <span class='kw'>let</span> <span class='ident'>new_state</span> <span class='op'>=</span> <span class='ident'>counter</span>.<span class='ident'>send</span>(<span class='string'>&quot;state&quot;</span>, <span class='macro'>vec</span><span class='macro'>!</span>[]).<span class='ident'>try_convert_to</span>::<span class='op'>&lt;</span><span class='ident'>Fixnum</span><span class='op'>&gt;</span>();
+
+    <span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>new_state</span>, <span class='prelude-val'>Ok</span>(<span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='number'>1</span>)));
+}</pre>
+
+<p>Ruby:</p>
+
+<pre><code class="language-ruby">class Counter
+  def initialize
+    @state = 0
+  end
+
+  def increment!
+    @state += 1
+  end
+
+  def state
+    @state
+  end
+end
+
+counter = Counter.new
+counter.increment!
+
+new_state = counter.state
+
+new_state == 1
+</code></pre>
+</div><h3 id='method.is_frozen' class='method stab '><span id='is_frozen.v' class='invisible'><code>fn <a href='#method.is_frozen' class='fnname'>is_frozen</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h3><div class='docblock'><p>Returns the freeze status of the object.</p>
+
+<h1 id='examples-13' class='section-header'><a href='#examples-13'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Object</span>, <span class='ident'>RString</span>, <span class='ident'>VM</span>};
+
+<span class='kw'>let</span> <span class='ident'>frozen_string</span> <span class='op'>=</span> <span class='ident'>RString</span>::<span class='ident'>new</span>(<span class='string'>&quot;String&quot;</span>).<span class='ident'>freeze</span>();
+
+<span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>frozen_string</span>.<span class='ident'>is_frozen</span>());</pre>
+
+<p>Ruby:</p>
+
+<pre><code class="language-ruby">frozen_string = &#39;String&#39;.freeze
+
+frozen_string.frozen? == true
+</code></pre>
+</div><h3 id='method.freeze' class='method stab '><span id='freeze.v' class='invisible'><code>fn <a href='#method.freeze' class='fnname'>freeze</a>(&amp;mut self) -&gt; Self</code></span></h3><div class='docblock'><p>Prevents further modifications to the object.</p>
+
+<h1 id='examples-14' class='section-header'><a href='#examples-14'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Object</span>, <span class='ident'>RString</span>, <span class='ident'>VM</span>};
+
+<span class='kw'>let</span> <span class='ident'>frozen_string</span> <span class='op'>=</span> <span class='ident'>RString</span>::<span class='ident'>new</span>(<span class='string'>&quot;String&quot;</span>).<span class='ident'>freeze</span>();
+
+<span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>frozen_string</span>.<span class='ident'>is_frozen</span>());</pre>
+
+<p>Ruby:</p>
+
+<pre><code class="language-ruby">frozen_string = &#39;String&#39;.freeze
+
+frozen_string.frozen? == true
+</code></pre>
+</div><h3 id='method.to' class='method stab '><span id='to.v' class='invisible'><code>unsafe fn <a href='#method.to' class='fnname'>to</a>&lt;T:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>&gt;(&amp;self) -&gt; T</code></span></h3><div class='docblock'><p>Unsafely casts current object to the specified Ruby type</p>
+
+<p>This operation in unsafe, because it does not perform any validations on the object, but
+it is faster than <code>try_convert_to()</code>.</p>
+
+<p>Use it when:</p>
+
+<ul>
+<li>you own the Ruby code which passes the object to Rust;</li>
+<li>you are sure that the object always has correct type;</li>
+<li>Ruby code has a good test coverage.</li>
+</ul>
+
+<p>This function is used by <code>unsafe_methods!</code> macro for argument casting.</p>
+
+<h1 id='examples-15' class='section-header'><a href='#examples-15'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>AnyObject</span>, <span class='ident'>Fixnum</span>, <span class='ident'>Object</span>, <span class='ident'>VM</span>};
+
+<span class='kw'>let</span> <span class='ident'>fixnum_as_any_object</span> <span class='op'>=</span> <span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='number'>1</span>).<span class='ident'>to_any_object</span>();
+
+<span class='kw'>let</span> <span class='ident'>fixnum</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>fixnum_as_any_object</span>.<span class='ident'>to</span>::<span class='op'>&lt;</span><span class='ident'>Fixnum</span><span class='op'>&gt;</span>() };
+
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>fixnum</span>.<span class='ident'>to_i64</span>(), <span class='number'>1</span>);</pre>
+</div><h3 id='method.try_convert_to' class='method stab '><span id='try_convert_to.v' class='invisible'><code>fn <a href='#method.try_convert_to' class='fnname'>try_convert_to</a>&lt;T:&nbsp;<a class='trait' href='../ruru/trait.VerifiedObject.html' title='ruru::VerifiedObject'>VerifiedObject</a>&gt;(&amp;self) -&gt; <a class='type' href='../ruru/result/type.Result.html' title='ruru::result::Result'>Result</a>&lt;T&gt;</code></span></h3><div class='docblock'><p>Safely casts current object to the specified Ruby type</p>
+
+<p>This function is used by <code>methods!</code> macro for argument casting.</p>
+
+<p>See documentation for <code>VerifiedObject</code> trait to enable safe conversions
+for custom classes.</p>
+
+<h1 id='examples-16' class='section-header'><a href='#examples-16'>Examples</a></h1>
+<h3 id='basic-conversions' class='section-header'><a href='#basic-conversions'>Basic conversions</a></h3>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>ruru</span>::<span class='ident'>result</span>::<span class='ident'>Error</span>;
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Fixnum</span>, <span class='ident'>Object</span>, <span class='ident'>RString</span>, <span class='ident'>VM</span>};
+
+<span class='kw'>let</span> <span class='ident'>fixnum_as_any_object</span> <span class='op'>=</span> <span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='number'>1</span>).<span class='ident'>to_any_object</span>();
+<span class='kw'>let</span> <span class='ident'>converted_fixnum</span> <span class='op'>=</span> <span class='ident'>fixnum_as_any_object</span>.<span class='ident'>try_convert_to</span>::<span class='op'>&lt;</span><span class='ident'>Fixnum</span><span class='op'>&gt;</span>();
+
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>converted_fixnum</span>, <span class='prelude-val'>Ok</span>(<span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='number'>1</span>)));
+
+<span class='kw'>let</span> <span class='ident'>string</span> <span class='op'>=</span> <span class='ident'>RString</span>::<span class='ident'>new</span>(<span class='string'>&quot;string&quot;</span>);
+<span class='kw'>let</span> <span class='ident'>string_as_fixnum</span> <span class='op'>=</span> <span class='ident'>string</span>.<span class='ident'>try_convert_to</span>::<span class='op'>&lt;</span><span class='ident'>Fixnum</span><span class='op'>&gt;</span>();
+<span class='kw'>let</span> <span class='ident'>expected_error</span> <span class='op'>=</span> <span class='ident'>Error</span>::<span class='ident'>TypeError</span>(<span class='string'>&quot;Error converting to Fixnum&quot;</span>.<span class='ident'>to_string</span>());
+
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>string_as_fixnum</span>, <span class='prelude-val'>Err</span>(<span class='ident'>expected_error</span>));</pre>
+
+<h3 id='method-arguments' class='section-header'><a href='#method-arguments'>Method arguments</a></h3>
+<p>To launch a server in Rust, you plan to write a simple <code>Server</code> class</p>
+
+<pre><code class="language-ruby">class Server
+  def start(address)
+    # ...
+  end
+end
+</code></pre>
+
+<p>The <code>address</code> must be <code>Hash</code> with the following structure:</p>
+
+<pre><code class="language-ruby">{
+  host: &#39;localhost&#39;,
+  port: 8080,
+}
+</code></pre>
+
+<p>You want to extract port from it. Default port is <code>8080</code> in case when:</p>
+
+<ul>
+<li><code>address</code> is not a <code>Hash</code></li>
+<li><code>address[:port]</code> is not present</li>
+<li><code>address[:port]</code> is not a <code>Fixnum</code></li>
+</ul>
+
+<pre class='rust rust-example-rendered'>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>ruru</span>;
+
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Class</span>, <span class='ident'>Fixnum</span>, <span class='ident'>Hash</span>, <span class='ident'>NilClass</span>, <span class='ident'>Object</span>, <span class='ident'>Symbol</span>, <span class='ident'>VM</span>};
+
+<span class='macro'>class</span><span class='macro'>!</span>(<span class='ident'>Server</span>);
+
+<span class='macro'>methods</span><span class='macro'>!</span>(
+    <span class='ident'>Server</span>,
+    <span class='ident'>itself</span>,
+
+    <span class='kw'>fn</span> <span class='ident'>start</span>(<span class='ident'>address</span>: <span class='ident'>Hash</span>) <span class='op'>-&gt;</span> <span class='ident'>NilClass</span> {
+        <span class='kw'>let</span> <span class='ident'>default_port</span> <span class='op'>=</span> <span class='number'>8080</span>;
+
+        <span class='kw'>let</span> <span class='ident'>port</span> <span class='op'>=</span> <span class='ident'>address</span>
+            .<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>hash</span><span class='op'>|</span> <span class='ident'>hash</span>.<span class='ident'>at</span>(<span class='ident'>Symbol</span>::<span class='ident'>new</span>(<span class='string'>&quot;port&quot;</span>)))
+            .<span class='ident'>and_then</span>(<span class='op'>|</span><span class='ident'>port</span><span class='op'>|</span> <span class='ident'>port</span>.<span class='ident'>try_convert_to</span>::<span class='op'>&lt;</span><span class='ident'>Fixnum</span><span class='op'>&gt;</span>())
+            .<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>port</span><span class='op'>|</span> <span class='ident'>port</span>.<span class='ident'>to_i64</span>())
+            .<span class='ident'>unwrap_or</span>(<span class='ident'>default_port</span>);
+
+        <span class='comment'>// Start server...</span>
+
+        <span class='ident'>NilClass</span>::<span class='ident'>new</span>()
+    }
+);
+
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+    <span class='ident'>Class</span>::<span class='ident'>new</span>(<span class='string'>&quot;Server&quot;</span>, <span class='prelude-val'>None</span>).<span class='ident'>define</span>(<span class='op'>|</span><span class='ident'>itself</span><span class='op'>|</span> {
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;start&quot;</span>, <span class='ident'>start</span>);
+    });
+}</pre>
+
+<p>Ruby:</p>
+
+<pre><code class="language-ruby">class Server
+  def start(address)
+    default_port = 8080
+
+    port =
+      if address.is_a?(Hash) &amp;&amp; address[:port].is_a?(Fixnum)
+        address[:port]
+      else
+        default_port
+      end
+
+    # Start server...
+  end
+end
+</code></pre>
+</div><h3 id='method.ty' class='method stab '><span id='ty.v' class='invisible'><code>fn <a href='#method.ty' class='fnname'>ty</a>(&amp;self) -&gt; <a class='enum' href='../ruru/types/enum.ValueType.html' title='ruru::types::ValueType'>ValueType</a></code></span></h3><div class='docblock'><p>Determines the value type of the object</p>
+
+<h1 id='example' class='section-header'><a href='#example'>Example</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>AnyObject</span>, <span class='ident'>Fixnum</span>, <span class='ident'>Object</span>, <span class='ident'>VM</span>};
+<span class='kw'>use</span> <span class='ident'>ruru</span>::<span class='ident'>types</span>::<span class='ident'>ValueType</span>;
+
+<span class='kw'>let</span> <span class='ident'>any_object</span> <span class='op'>=</span> <span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='number'>1</span>).<span class='ident'>to_any_object</span>();
+
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>any_object</span>.<span class='ident'>ty</span>(), <span class='ident'>ValueType</span>::<span class='ident'>Fixnum</span>);</pre>
+</div></div>
+        <h2 id='implementors'>Implementors</h2>
+        <ul class='item-list' id='implementors-list'>
+    <li><code>impl Object for <a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a></code></li>
+<li><code>impl Object for <a class='struct' href='../ruru/struct.Array.html' title='ruru::Array'>Array</a></code></li>
+<li><code>impl Object for <a class='struct' href='../ruru/struct.Boolean.html' title='ruru::Boolean'>Boolean</a></code></li>
+<li><code>impl Object for <a class='struct' href='../ruru/struct.Class.html' title='ruru::Class'>Class</a></code></li>
+<li><code>impl Object for <a class='struct' href='../ruru/struct.Fixnum.html' title='ruru::Fixnum'>Fixnum</a></code></li>
+<li><code>impl Object for <a class='struct' href='../ruru/struct.Float.html' title='ruru::Float'>Float</a></code></li>
+<li><code>impl Object for <a class='struct' href='../ruru/struct.Hash.html' title='ruru::Hash'>Hash</a></code></li>
+<li><code>impl Object for <a class='struct' href='../ruru/struct.NilClass.html' title='ruru::NilClass'>NilClass</a></code></li>
+<li><code>impl Object for <a class='struct' href='../ruru/struct.Proc.html' title='ruru::Proc'>Proc</a></code></li>
+<li><code>impl Object for <a class='struct' href='../ruru/struct.RString.html' title='ruru::RString'>RString</a></code></li>
+<li><code>impl Object for <a class='struct' href='../ruru/struct.Thread.html' title='ruru::Thread'>Thread</a></code></li>
+<li><code>impl Object for <a class='struct' href='../ruru/struct.Symbol.html' title='ruru::Symbol'>Symbol</a></code></li>
+</ul><script type="text/javascript" async
+                         src="../implementors/ruru/trait.Object.js">
+                 </script></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "ruru";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

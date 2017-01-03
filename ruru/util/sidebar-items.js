@@ -1,0 +1,1 @@
+initSidebarItems({"fn":[["bool_to_c_int",""],["bool_to_value",""],["c_int_to_bool",""],["closure_to_ptr",""],["create_arguments",""],["cstr_as_string",""],["ptr_to_data",""],["str_to_cstring",""]]});

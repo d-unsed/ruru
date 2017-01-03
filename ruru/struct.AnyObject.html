@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `AnyObject` struct in crate `ruru`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, AnyObject">
+
+    <title>ruru::AnyObject - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='index.html'>ruru</a></p><script>window.sidebarCurrent = {name: 'AnyObject', ty: 'struct', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content struct">
+<h1 class='fqn'><span class='in-band'>Struct <a href='index.html'>ruru</a>::<wbr><a class='struct' href=''>AnyObject</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-1005' class='srclink' href='../src/ruru/src/class/any_object.rs.html#52-54' title='goto source code'>[src]</a></span></h1>
+<pre class='rust struct'>pub struct AnyObject { /* fields omitted */ }</pre><div class='docblock'><p>Representation of any Ruby object while its type is unknown</p>
+
+<p>As Ruby is a dynamically typed language, at some points Ruru does not know the exact Ruby type
+of the object, for example:</p>
+
+<ul>
+<li><p>Retrieving an object from array;</p></li>
+<li><p>Retrieving an object from hash;</p></li>
+<li><p>Receiving arguments to a method;</p></li>
+<li><p>Initializing a new instance of a non-built-in class.</p></li>
+</ul>
+
+<p>In these cases you should cast <code>AnyObject</code> to the required type.</p>
+
+<h1 id='examples' class='section-header'><a href='#examples'>Examples</a></h1>
+<h3 id='retrieving-an-object-from-array' class='section-header'><a href='#retrieving-an-object-from-array'>Retrieving an object from <code>Array</code></a></h3>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Array</span>, <span class='ident'>Fixnum</span>, <span class='ident'>Object</span>, <span class='ident'>VM</span>};
+
+<span class='kw'>let</span> <span class='ident'>array</span> <span class='op'>=</span> <span class='ident'>Array</span>::<span class='ident'>new</span>().<span class='ident'>push</span>(<span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='number'>1</span>));
+<span class='kw'>let</span> <span class='ident'>value</span> <span class='op'>=</span> <span class='ident'>array</span>.<span class='ident'>at</span>(<span class='number'>0</span>).<span class='ident'>try_convert_to</span>::<span class='op'>&lt;</span><span class='ident'>Fixnum</span><span class='op'>&gt;</span>(); <span class='comment'>// `Array::at()` returns `AnyObject`</span>
+
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>value</span>, <span class='prelude-val'>Ok</span>(<span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='number'>1</span>)));</pre>
+
+<h3 id='retrieving-an-object-from-hash' class='section-header'><a href='#retrieving-an-object-from-hash'>Retrieving an object from <code>Hash</code></a></h3>
+<pre class='rust rust-example-rendered'>
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Fixnum</span>, <span class='ident'>Hash</span>, <span class='ident'>Object</span>, <span class='ident'>Symbol</span>, <span class='ident'>VM</span>};
+
+<span class='kw'>let</span> <span class='kw-2'>mut</span> <span class='ident'>hash</span> <span class='op'>=</span> <span class='ident'>Hash</span>::<span class='ident'>new</span>();
+
+<span class='ident'>hash</span>.<span class='ident'>store</span>(<span class='ident'>Symbol</span>::<span class='ident'>new</span>(<span class='string'>&quot;key&quot;</span>), <span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='number'>1</span>));
+
+<span class='comment'>// `Hash::at()` returns `AnyObject`</span>
+<span class='kw'>let</span> <span class='ident'>value</span> <span class='op'>=</span> <span class='ident'>hash</span>.<span class='ident'>at</span>(<span class='ident'>Symbol</span>::<span class='ident'>new</span>(<span class='string'>&quot;key&quot;</span>)).<span class='ident'>try_convert_to</span>::<span class='op'>&lt;</span><span class='ident'>Fixnum</span><span class='op'>&gt;</span>();
+
+<span class='macro'>assert_eq</span><span class='macro'>!</span>(<span class='ident'>value</span>, <span class='prelude-val'>Ok</span>(<span class='ident'>Fixnum</span>::<span class='ident'>new</span>(<span class='number'>1</span>)));</pre>
+
+<p>You can find more examples in <code>Class</code>, <code>Object</code> and <code>VerifiedObject</code> documentation.</p>
+</div><h2 id='implementations'>Trait Implementations</h2><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html' title='core::clone::Clone'>Clone</a> for <a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-1007' class='srclink' href='../src/ruru/src/class/any_object.rs.html#51' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.clone' class='method'><span id='clone.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone' class='fnname'>clone</a>(&amp;self) -&gt; <a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a></code></span></h4>
+<div class='docblock'><p>Returns a copy of the value. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#tymethod.clone">Read more</a></p>
+</div><h4 id='method.clone_from' class='method'><span id='clone_from.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from' class='fnname'>clone_from</a>(&amp;mut self, source: &amp;Self)</code><div class='since' title='Stable since Rust version 1.0.0'>1.0.0</div></span></h4>
+<div class='docblock'><p>Performs copy-assignment from <code>source</code>. <a href="https://doc.rust-lang.org/nightly/core/clone/trait.Clone.html#method.clone_from">Read more</a></p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html' title='core::fmt::Debug'>Debug</a> for <a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-1011' class='srclink' href='../src/ruru/src/class/any_object.rs.html#51' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.fmt' class='method'><span id='fmt.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/fmt/trait.Debug.html#tymethod.fmt' class='fnname'>fmt</a>(&amp;self, __arg_0: &amp;mut <a class='struct' href='https://doc.rust-lang.org/nightly/core/fmt/struct.Formatter.html' title='core::fmt::Formatter'>Formatter</a>) -&gt; <a class='type' href='https://doc.rust-lang.org/nightly/core/fmt/type.Result.html' title='core::fmt::Result'>Result</a></code></span></h4>
+<div class='docblock'><p>Formats the value using the given formatter.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html' title='core::cmp::PartialEq'>PartialEq</a> for <a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-1017' class='srclink' href='../src/ruru/src/class/any_object.rs.html#51' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.eq' class='method'><span id='eq.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq' class='fnname'>eq</a>(&amp;self, __arg_0: &amp;<a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
+<div class='docblock'><p>This method tests for <code>self</code> and <code>other</code> values to be equal, and is used by <code>==</code>. <a href="https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#tymethod.eq">Read more</a></p>
+</div><h4 id='method.ne' class='method'><span id='ne.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/cmp/trait.PartialEq.html#method.ne' class='fnname'>ne</a>(&amp;self, __arg_0: &amp;<a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
+<div class='docblock'><p>This method tests for <code>!=</code>.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html' title='core::convert::From'>From</a>&lt;<a class='struct' href='../ruru/types/struct.Value.html' title='ruru::types::Value'>Value</a>&gt; for <a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-335' class='srclink' href='../src/ruru/src/class/any_object.rs.html#56-60' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.from' class='method'><span id='from.v' class='invisible'><code>fn <a href='https://doc.rust-lang.org/nightly/core/convert/trait.From.html#tymethod.from' class='fnname'>from</a>(value: <a class='struct' href='../ruru/types/struct.Value.html' title='ruru::types::Value'>Value</a>) -&gt; Self</code></span></h4>
+<div class='docblock'><p>Performs the conversion.</p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a> for <a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-338' class='srclink' href='../src/ruru/src/class/any_object.rs.html#62-67' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.value' class='method'><span id='value.v' class='invisible'><code>fn <a href='../ruru/trait.Object.html#tymethod.value' class='fnname'>value</a>(&amp;self) -&gt; <a class='struct' href='../ruru/types/struct.Value.html' title='ruru::types::Value'>Value</a></code></span></h4>
+<div class='docblock'><p>Returns internal <code>value</code> of current object. <a href="../ruru/trait.Object.html#tymethod.value">Read more</a></p>
+</div><h4 id='method.class' class='method'><span id='class.v' class='invisible'><code>fn <a href='../ruru/trait.Object.html#method.class' class='fnname'>class</a>(&amp;self) -&gt; <a class='struct' href='../ruru/struct.Class.html' title='ruru::Class'>Class</a></code></span></h4>
+<div class='docblock'><p>Returns a class of current object. <a href="../ruru/trait.Object.html#method.class">Read more</a></p>
+</div><h4 id='method.singleton_class' class='method'><span id='singleton_class.v' class='invisible'><code>fn <a href='../ruru/trait.Object.html#method.singleton_class' class='fnname'>singleton_class</a>(&amp;self) -&gt; <a class='struct' href='../ruru/struct.Class.html' title='ruru::Class'>Class</a></code></span></h4>
+<div class='docblock'><p>Returns a singleton class of current object. <a href="../ruru/trait.Object.html#method.singleton_class">Read more</a></p>
+</div><h4 id='method.get_data' class='method'><span id='get_data.v' class='invisible'><code>fn <a href='../ruru/trait.Object.html#method.get_data' class='fnname'>get_data</a>&lt;'a, T&gt;(&amp;'a self, wrapper: &amp;'a <a class='trait' href='../ruru/typed_data/trait.DataTypeWrapper.html' title='ruru::typed_data::DataTypeWrapper'>DataTypeWrapper</a>&lt;T&gt;) -&gt; &amp;mut T</code></span></h4>
+<div class='docblock'><p>Gets a Rust structure that is wrapped into a Ruby object. <a href="../ruru/trait.Object.html#method.get_data">Read more</a></p>
+</div><h4 id='method.define' class='method'><span id='define.v' class='invisible'><code>fn <a href='../ruru/trait.Object.html#method.define' class='fnname'>define</a>&lt;F:&nbsp;<a class='trait' href='https://doc.rust-lang.org/nightly/core/ops/trait.Fn.html' title='core::ops::Fn'>Fn</a>(&amp;mut Self)&gt;(&amp;mut self, f: F) -&gt; &amp;Self</code></span></h4>
+<div class='docblock'><p>Wraps calls to the object. <a href="../ruru/trait.Object.html#method.define">Read more</a></p>
+</div><h4 id='method.define_method' class='method'><span id='define_method.v' class='invisible'><code>fn <a href='../ruru/trait.Object.html#method.define_method' class='fnname'>define_method</a>&lt;I:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>, O:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>&gt;(&amp;mut self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; callback: <a class='type' href='../ruru/types/type.Callback.html' title='ruru::types::Callback'>Callback</a>&lt;I, O&gt;)</code></span></h4>
+<div class='docblock'><p>Defines an instance method for the given class or object. <a href="../ruru/trait.Object.html#method.define_method">Read more</a></p>
+</div><h4 id='method.define_singleton_method' class='method'><span id='define_singleton_method.v' class='invisible'><code>fn <a href='../ruru/trait.Object.html#method.define_singleton_method' class='fnname'>define_singleton_method</a>&lt;I:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>, O:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>&gt;(&amp;mut self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; callback: <a class='type' href='../ruru/types/type.Callback.html' title='ruru::types::Callback'>Callback</a>&lt;I, O&gt;)</code></span></h4>
+<div class='docblock'><p>Defines a class method for given class or singleton method for object. <a href="../ruru/trait.Object.html#method.define_singleton_method">Read more</a></p>
+</div><h4 id='method.def' class='method'><span id='def.v' class='invisible'><code>fn <a href='../ruru/trait.Object.html#method.def' class='fnname'>def</a>&lt;I:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>, O:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>&gt;(&amp;mut self, name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, callback: <a class='type' href='../ruru/types/type.Callback.html' title='ruru::types::Callback'>Callback</a>&lt;I, O&gt;)</code></span></h4>
+<div class='docblock'><p>An alias for <code>define_method</code> (similar to Ruby syntax <code>def some_method</code>).</p>
+</div><h4 id='method.def_self' class='method'><span id='def_self.v' class='invisible'><code>fn <a href='../ruru/trait.Object.html#method.def_self' class='fnname'>def_self</a>&lt;I:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>, O:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>&gt;(&amp;mut self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; name: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; callback: <a class='type' href='../ruru/types/type.Callback.html' title='ruru::types::Callback'>Callback</a>&lt;I, O&gt;)</code></span></h4>
+<div class='docblock'><p>An alias for <code>define_singleton_method</code> (similar to Ruby <code>def self.some_method</code>).</p>
+</div><h4 id='method.send' class='method'><span id='send.v' class='invisible'><code>fn <a href='../ruru/trait.Object.html#method.send' class='fnname'>send</a>(&amp;self, method: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>, arguments: <a class='struct' href='https://doc.rust-lang.org/nightly/collections/vec/struct.Vec.html' title='collections::vec::Vec'>Vec</a>&lt;<a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a>&gt;) -&gt; <a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a></code></span></h4>
+<div class='docblock'><p>Calls a given method on an object similarly to Ruby <code>Object#send</code> method <a href="../ruru/trait.Object.html#method.send">Read more</a></p>
+</div><h4 id='method.respond_to' class='method'><span id='respond_to.v' class='invisible'><code>fn <a href='../ruru/trait.Object.html#method.respond_to' class='fnname'>respond_to</a>(&amp;self, method: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
+<div class='docblock'><p>Checks whether the object responds to given method <a href="../ruru/trait.Object.html#method.respond_to">Read more</a></p>
+</div><h4 id='method.is_nil' class='method'><span id='is_nil.v' class='invisible'><code>fn <a href='../ruru/trait.Object.html#method.is_nil' class='fnname'>is_nil</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
+<div class='docblock'><p>Checks whether the object is <code>nil</code> <a href="../ruru/trait.Object.html#method.is_nil">Read more</a></p>
+</div><h4 id='method.to_any_object' class='method'><span id='to_any_object.v' class='invisible'><code>fn <a href='../ruru/trait.Object.html#method.to_any_object' class='fnname'>to_any_object</a>(&amp;self) -&gt; <a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a></code></span></h4>
+<div class='docblock'><p>Converts struct to <code>AnyObject</code> <a href="../ruru/trait.Object.html#method.to_any_object">Read more</a></p>
+</div><h4 id='method.instance_variable_get' class='method'><span id='instance_variable_get.v' class='invisible'><code>fn <a href='../ruru/trait.Object.html#method.instance_variable_get' class='fnname'>instance_variable_get</a>(&amp;self, variable: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>) -&gt; <a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a></code></span></h4>
+<div class='docblock'><p>Gets an instance variable of object <a href="../ruru/trait.Object.html#method.instance_variable_get">Read more</a></p>
+</div><h4 id='method.instance_variable_set' class='method'><span id='instance_variable_set.v' class='invisible'><code>fn <a href='../ruru/trait.Object.html#method.instance_variable_set' class='fnname'>instance_variable_set</a>&lt;T:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>&gt;(&amp;mut self,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; variable: &amp;<a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; value: T)<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -&gt; <a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a></code></span></h4>
+<div class='docblock'><p>Sets an instance variable for object <a href="../ruru/trait.Object.html#method.instance_variable_set">Read more</a></p>
+</div><h4 id='method.is_frozen' class='method'><span id='is_frozen.v' class='invisible'><code>fn <a href='../ruru/trait.Object.html#method.is_frozen' class='fnname'>is_frozen</a>(&amp;self) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
+<div class='docblock'><p>Returns the freeze status of the object. <a href="../ruru/trait.Object.html#method.is_frozen">Read more</a></p>
+</div><h4 id='method.freeze' class='method'><span id='freeze.v' class='invisible'><code>fn <a href='../ruru/trait.Object.html#method.freeze' class='fnname'>freeze</a>(&amp;mut self) -&gt; Self</code></span></h4>
+<div class='docblock'><p>Prevents further modifications to the object. <a href="../ruru/trait.Object.html#method.freeze">Read more</a></p>
+</div><h4 id='method.to' class='method'><span id='to.v' class='invisible'><code>unsafe fn <a href='../ruru/trait.Object.html#method.to' class='fnname'>to</a>&lt;T:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>&gt;(&amp;self) -&gt; T</code></span></h4>
+<div class='docblock'><p>Unsafely casts current object to the specified Ruby type <a href="../ruru/trait.Object.html#method.to">Read more</a></p>
+</div><h4 id='method.try_convert_to' class='method'><span id='try_convert_to.v' class='invisible'><code>fn <a href='../ruru/trait.Object.html#method.try_convert_to' class='fnname'>try_convert_to</a>&lt;T:&nbsp;<a class='trait' href='../ruru/trait.VerifiedObject.html' title='ruru::VerifiedObject'>VerifiedObject</a>&gt;(&amp;self) -&gt; <a class='type' href='../ruru/result/type.Result.html' title='ruru::result::Result'>Result</a>&lt;T&gt;</code></span></h4>
+<div class='docblock'><p>Safely casts current object to the specified Ruby type <a href="../ruru/trait.Object.html#method.try_convert_to">Read more</a></p>
+</div><h4 id='method.ty' class='method'><span id='ty.v' class='invisible'><code>fn <a href='../ruru/trait.Object.html#method.ty' class='fnname'>ty</a>(&amp;self) -&gt; <a class='enum' href='../ruru/types/enum.ValueType.html' title='ruru::types::ValueType'>ValueType</a></code></span></h4>
+<div class='docblock'><p>Determines the value type of the object <a href="../ruru/trait.Object.html#method.ty">Read more</a></p>
+</div></div><h3 class='impl'><span class='in-band'><code>impl <a class='trait' href='../ruru/trait.VerifiedObject.html' title='ruru::VerifiedObject'>VerifiedObject</a> for <a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a></code></span><span class='out-of-band'><div class='ghost'></div><a id='src-341' class='srclink' href='../src/ruru/src/class/any_object.rs.html#70-78' title='goto source code'>[src]</a></span></h3>
+<div class='impl-items'><h4 id='method.is_correct_type' class='method'><span id='is_correct_type.v' class='invisible'><code>fn <a href='../ruru/trait.VerifiedObject.html#tymethod.is_correct_type' class='fnname'>is_correct_type</a>&lt;T:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>&gt;(_: &amp;T) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h4>
+<h4 id='method.error_message' class='method'><span id='error_message.v' class='invisible'><code>fn <a href='../ruru/trait.VerifiedObject.html#tymethod.error_message' class='fnname'>error_message</a>() -&gt; &amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></span></h4>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "ruru";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

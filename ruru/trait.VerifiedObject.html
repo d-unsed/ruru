@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `VerifiedObject` trait in crate `ruru`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, VerifiedObject">
+
+    <title>ruru::VerifiedObject - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='index.html'>ruru</a></p><script>window.sidebarCurrent = {name: 'VerifiedObject', ty: 'trait', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content trait">
+<h1 class='fqn'><span class='in-band'>Trait <a href='index.html'>ruru</a>::<wbr><a class='trait' href=''>VerifiedObject</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-806' class='srclink' href='../src/ruru/src/class/traits/verified_object.rs.html#124-127' title='goto source code'>[src]</a></span></h1>
+<pre class='rust trait'>pub trait VerifiedObject: <a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a> {
+    fn <a href='#tymethod.is_correct_type' class='fnname'>is_correct_type</a>&lt;T:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>&gt;(object: &amp;T) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a>;
+    fn <a href='#tymethod.error_message' class='fnname'>error_message</a>() -&gt; &amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a>;
+}</pre><div class='docblock'><p>Interface for safe conversions between types</p>
+
+<p>This trait is required by <code>Object::convert_to()</code> function.</p>
+
+<p>All built-in types like <code>Hash</code>, <code>RString</code> and others implement it.</p>
+
+<p><strong>You should implement this trait for custom classes which you receive from Ruby
+if at least one of the following statements is false</strong>:</p>
+
+<ul>
+<li>you own the Ruby code which passes the object to Rust;</li>
+<li>you are sure that the object always has correct type;</li>
+<li>your Ruby code has a good test coverage.</li>
+</ul>
+
+<p>Various techniques can be used to check if the object has correct type:</p>
+
+<ul>
+<li>check the class of the object;</li>
+<li>check ancestors of the object&#39;s class;</li>
+<li>check if object is one of built-in objects (when it is inherited from one of those);</li>
+<li>use duck typing to check if object responds to required methods;</li>
+<li>etc</li>
+</ul>
+
+<h1 id='examples' class='section-header'><a href='#examples'>Examples</a></h1>
+<pre class='rust rust-example-rendered'>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>ruru</span>;
+
+<span class='kw'>use</span> <span class='ident'>ruru</span>::<span class='ident'>types</span>::<span class='ident'>ValueType</span>;
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Class</span>, <span class='ident'>Object</span>, <span class='ident'>RString</span>, <span class='ident'>VerifiedObject</span>, <span class='ident'>VM</span>};
+
+<span class='comment'>// Check the class of the object</span>
+<span class='macro'>class</span><span class='macro'>!</span>(<span class='ident'>Server</span>);
+
+<span class='kw'>impl</span> <span class='ident'>VerifiedObject</span> <span class='kw'>for</span> <span class='ident'>Server</span> {
+    <span class='kw'>fn</span> <span class='ident'>is_correct_type</span><span class='op'>&lt;</span><span class='ident'>T</span>: <span class='ident'>Object</span><span class='op'>&gt;</span>(<span class='ident'>object</span>: <span class='kw-2'>&amp;</span><span class='ident'>T</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
+        <span class='ident'>object</span>.<span class='ident'>class</span>() <span class='op'>==</span> <span class='ident'>Class</span>::<span class='ident'>from_existing</span>(<span class='string'>&quot;Server&quot;</span>)
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>error_message</span>() <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;static</span> <span class='ident'>str</span> {
+        <span class='string'>&quot;Error converting to Server&quot;</span>
+    }
+}
+
+<span class='comment'>// Check presence of required methods (duck typing)</span>
+<span class='macro'>class</span><span class='macro'>!</span>(<span class='ident'>Request</span>);
+
+<span class='macro'>methods</span><span class='macro'>!</span>(
+    <span class='ident'>Request</span>,
+    <span class='ident'>itself</span>,
+
+    <span class='kw'>fn</span> <span class='ident'>protocol</span>() <span class='op'>-&gt;</span> <span class='ident'>RString</span> { <span class='ident'>RString</span>::<span class='ident'>new</span>(<span class='string'>&quot;HTTP&quot;</span>) }
+    <span class='kw'>fn</span> <span class='ident'>body</span>() <span class='op'>-&gt;</span> <span class='ident'>RString</span> { <span class='ident'>RString</span>::<span class='ident'>new</span>(<span class='string'>&quot;request body&quot;</span>) }
+);
+
+<span class='kw'>impl</span> <span class='ident'>VerifiedObject</span> <span class='kw'>for</span> <span class='ident'>Request</span> {
+    <span class='kw'>fn</span> <span class='ident'>is_correct_type</span><span class='op'>&lt;</span><span class='ident'>T</span>: <span class='ident'>Object</span><span class='op'>&gt;</span>(<span class='ident'>object</span>: <span class='kw-2'>&amp;</span><span class='ident'>T</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
+        <span class='ident'>object</span>.<span class='ident'>respond_to</span>(<span class='string'>&quot;protocol&quot;</span>) <span class='op'>&amp;&amp;</span> <span class='ident'>object</span>.<span class='ident'>respond_to</span>(<span class='string'>&quot;body&quot;</span>)
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>error_message</span>() <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;static</span> <span class='ident'>str</span> {
+        <span class='string'>&quot;Error converting to Request&quot;</span>
+    }
+}
+
+<span class='comment'>// Check if class inherits/includes some class or module</span>
+<span class='macro'>class</span><span class='macro'>!</span>(<span class='ident'>Response</span>);
+
+<span class='kw'>impl</span> <span class='ident'>VerifiedObject</span> <span class='kw'>for</span> <span class='ident'>Response</span> {
+    <span class='kw'>fn</span> <span class='ident'>is_correct_type</span><span class='op'>&lt;</span><span class='ident'>T</span>: <span class='ident'>Object</span><span class='op'>&gt;</span>(<span class='ident'>object</span>: <span class='kw-2'>&amp;</span><span class='ident'>T</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
+        <span class='ident'>object</span>.<span class='ident'>class</span>().<span class='ident'>ancestors</span>().<span class='ident'>iter</span>()
+            .<span class='ident'>any</span>(<span class='op'>|</span><span class='ident'>class</span><span class='op'>|</span> <span class='op'>*</span><span class='ident'>class</span> <span class='op'>==</span> <span class='ident'>Class</span>::<span class='ident'>from_existing</span>(<span class='string'>&quot;BasicResponse&quot;</span>))
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>error_message</span>() <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;static</span> <span class='ident'>str</span> {
+        <span class='string'>&quot;Error converting to Response&quot;</span>
+    }
+}
+
+<span class='comment'>// Check if class was inherited from built-in classes</span>
+<span class='macro'>class</span><span class='macro'>!</span>(<span class='ident'>Headers</span>);
+
+<span class='kw'>impl</span> <span class='ident'>VerifiedObject</span> <span class='kw'>for</span> <span class='ident'>Headers</span> {
+    <span class='kw'>fn</span> <span class='ident'>is_correct_type</span><span class='op'>&lt;</span><span class='ident'>T</span>: <span class='ident'>Object</span><span class='op'>&gt;</span>(<span class='ident'>object</span>: <span class='kw-2'>&amp;</span><span class='ident'>T</span>) <span class='op'>-&gt;</span> <span class='ident'>bool</span> {
+        <span class='ident'>object</span>.<span class='ident'>value</span>().<span class='ident'>ty</span>() <span class='op'>==</span> <span class='ident'>ValueType</span>::<span class='ident'>Hash</span>
+    }
+
+    <span class='kw'>fn</span> <span class='ident'>error_message</span>() <span class='op'>-&gt;</span> <span class='kw-2'>&amp;</span><span class='lifetime'>&#39;static</span> <span class='ident'>str</span> {
+        <span class='string'>&quot;Error converting to Headers&quot;</span>
+    }
+}
+
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+    <span class='ident'>Class</span>::<span class='ident'>new</span>(<span class='string'>&quot;Server&quot;</span>, <span class='prelude-val'>None</span>);
+    <span class='ident'>Class</span>::<span class='ident'>new</span>(<span class='string'>&quot;Response&quot;</span>, <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>Class</span>::<span class='ident'>new</span>(<span class='string'>&quot;BasicResponse&quot;</span>, <span class='prelude-val'>None</span>)));
+    <span class='ident'>Class</span>::<span class='ident'>new</span>(<span class='string'>&quot;Headers&quot;</span>, <span class='prelude-val'>Some</span>(<span class='kw-2'>&amp;</span><span class='ident'>Class</span>::<span class='ident'>from_existing</span>(<span class='string'>&quot;Hash&quot;</span>)));
+    <span class='ident'>Class</span>::<span class='ident'>new</span>(<span class='string'>&quot;Request&quot;</span>, <span class='prelude-val'>None</span>).<span class='ident'>define</span>(<span class='op'>|</span><span class='ident'>itself</span><span class='op'>|</span> {
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;protocol&quot;</span>, <span class='ident'>protocol</span>);
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;body&quot;</span>, <span class='ident'>body</span>);
+    });
+
+    <span class='comment'>// Create new instances of classes and convert them to `AnyObject`s</span>
+    <span class='comment'>// (make their type unknown)</span>
+    <span class='kw'>let</span> <span class='ident'>server</span> <span class='op'>=</span> <span class='ident'>Class</span>::<span class='ident'>from_existing</span>(<span class='string'>&quot;Server&quot;</span>).<span class='ident'>new_instance</span>(<span class='macro'>vec</span><span class='macro'>!</span>[]).<span class='ident'>to_any_object</span>();
+    <span class='kw'>let</span> <span class='ident'>request</span> <span class='op'>=</span> <span class='ident'>Class</span>::<span class='ident'>from_existing</span>(<span class='string'>&quot;Request&quot;</span>).<span class='ident'>new_instance</span>(<span class='macro'>vec</span><span class='macro'>!</span>[]).<span class='ident'>to_any_object</span>();
+    <span class='kw'>let</span> <span class='ident'>response</span> <span class='op'>=</span> <span class='ident'>Class</span>::<span class='ident'>from_existing</span>(<span class='string'>&quot;Response&quot;</span>).<span class='ident'>new_instance</span>(<span class='macro'>vec</span><span class='macro'>!</span>[]).<span class='ident'>to_any_object</span>();
+    <span class='kw'>let</span> <span class='ident'>headers</span> <span class='op'>=</span> <span class='ident'>Class</span>::<span class='ident'>from_existing</span>(<span class='string'>&quot;Headers&quot;</span>).<span class='ident'>new_instance</span>(<span class='macro'>vec</span><span class='macro'>!</span>[]).<span class='ident'>to_any_object</span>();
+
+    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>server</span>.<span class='ident'>try_convert_to</span>::<span class='op'>&lt;</span><span class='ident'>Server</span><span class='op'>&gt;</span>().<span class='ident'>is_ok</span>());
+    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>request</span>.<span class='ident'>try_convert_to</span>::<span class='op'>&lt;</span><span class='ident'>Request</span><span class='op'>&gt;</span>().<span class='ident'>is_ok</span>());
+    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>response</span>.<span class='ident'>try_convert_to</span>::<span class='op'>&lt;</span><span class='ident'>Response</span><span class='op'>&gt;</span>().<span class='ident'>is_ok</span>());
+    <span class='macro'>assert</span><span class='macro'>!</span>(<span class='ident'>headers</span>.<span class='ident'>try_convert_to</span>::<span class='op'>&lt;</span><span class='ident'>Headers</span><span class='op'>&gt;</span>().<span class='ident'>is_ok</span>());
+
+    <span class='comment'>// P.S.</span>
+    <span class='comment'>// The following is possible to compile, but the program will panic</span>
+    <span class='comment'>// if you perform any actions with these objects.</span>
+    <span class='comment'>// Try to avoid unsafe conversions.</span>
+    <span class='kw'>let</span> <span class='ident'>bad_request</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>server</span>.<span class='ident'>to</span>::<span class='op'>&lt;</span><span class='ident'>Request</span><span class='op'>&gt;</span>() };
+    <span class='kw'>let</span> <span class='ident'>bad_server</span> <span class='op'>=</span> <span class='kw'>unsafe</span> { <span class='ident'>headers</span>.<span class='ident'>to</span>::<span class='op'>&lt;</span><span class='ident'>Server</span><span class='op'>&gt;</span>() };
+}</pre>
+</div>
+            <h2 id='required-methods'>Required Methods</h2>
+            <div class='methods'>
+        <h3 id='tymethod.is_correct_type' class='method stab '><span id='is_correct_type.v' class='invisible'><code>fn <a href='#tymethod.is_correct_type' class='fnname'>is_correct_type</a>&lt;T:&nbsp;<a class='trait' href='../ruru/trait.Object.html' title='ruru::Object'>Object</a>&gt;(object: &amp;T) -&gt; <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.bool.html'>bool</a></code></span></h3><h3 id='tymethod.error_message' class='method stab '><span id='error_message.v' class='invisible'><code>fn <a href='#tymethod.error_message' class='fnname'>error_message</a>() -&gt; &amp;'static <a class='primitive' href='https://doc.rust-lang.org/nightly/std/primitive.str.html'>str</a></code></span></h3></div>
+        <h2 id='implementors'>Implementors</h2>
+        <ul class='item-list' id='implementors-list'>
+    <li><code>impl VerifiedObject for <a class='struct' href='../ruru/struct.AnyObject.html' title='ruru::AnyObject'>AnyObject</a></code></li>
+<li><code>impl VerifiedObject for <a class='struct' href='../ruru/struct.Array.html' title='ruru::Array'>Array</a></code></li>
+<li><code>impl VerifiedObject for <a class='struct' href='../ruru/struct.Boolean.html' title='ruru::Boolean'>Boolean</a></code></li>
+<li><code>impl VerifiedObject for <a class='struct' href='../ruru/struct.Class.html' title='ruru::Class'>Class</a></code></li>
+<li><code>impl VerifiedObject for <a class='struct' href='../ruru/struct.Fixnum.html' title='ruru::Fixnum'>Fixnum</a></code></li>
+<li><code>impl VerifiedObject for <a class='struct' href='../ruru/struct.Float.html' title='ruru::Float'>Float</a></code></li>
+<li><code>impl VerifiedObject for <a class='struct' href='../ruru/struct.Hash.html' title='ruru::Hash'>Hash</a></code></li>
+<li><code>impl VerifiedObject for <a class='struct' href='../ruru/struct.NilClass.html' title='ruru::NilClass'>NilClass</a></code></li>
+<li><code>impl VerifiedObject for <a class='struct' href='../ruru/struct.Proc.html' title='ruru::Proc'>Proc</a></code></li>
+<li><code>impl VerifiedObject for <a class='struct' href='../ruru/struct.RString.html' title='ruru::RString'>RString</a></code></li>
+<li><code>impl VerifiedObject for <a class='struct' href='../ruru/struct.Thread.html' title='ruru::Thread'>Thread</a></code></li>
+<li><code>impl VerifiedObject for <a class='struct' href='../ruru/struct.Symbol.html' title='ruru::Symbol'>Symbol</a></code></li>
+</ul><script type="text/javascript" async
+                         src="../implementors/ruru/trait.VerifiedObject.js">
+                 </script></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "ruru";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    <script defer src="../search-index.js"></script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="generator" content="rustdoc">
+    <meta name="description" content="API documentation for the Rust `methods` macro in crate `ruru`.">
+    <meta name="keywords" content="rust, rustlang, rust-lang, methods">
+
+    <title>ruru::methods - Rust</title>
+
+    <link rel="stylesheet" type="text/css" href="../rustdoc.css">
+    <link rel="stylesheet" type="text/css" href="../main.css">
+    
+
+    
+    
+</head>
+<body class="rustdoc">
+    <!--[if lte IE 8]>
+    <div class="warning">
+        This old browser is unsupported and will most likely display funky
+        things.
+    </div>
+    <![endif]-->
+
+    
+
+    <nav class="sidebar">
+        
+        <p class='location'><a href='index.html'>ruru</a></p><script>window.sidebarCurrent = {name: 'methods', ty: 'macro', relpath: ''};</script><script defer src="sidebar-items.js"></script>
+    </nav>
+
+    <nav class="sub">
+        <form class="search-form js-only">
+            <div class="search-container">
+                <input class="search-input" name="search"
+                       autocomplete="off"
+                       placeholder="Click or press ‘S’ to search, ‘?’ for more options…"
+                       type="search">
+            </div>
+        </form>
+    </nav>
+
+    <section id='main' class="content macro">
+<h1 class='fqn'><span class='in-band'>Macro <a href='index.html'>ruru</a>::<wbr><a class='macro' href=''>methods</a></span><span class='out-of-band'><span id='render-detail'>
+                   <a id="toggle-all-docs" href="javascript:void(0)" title="collapse all docs">
+                       [<span class='inner'>&#x2212;</span>]
+                   </a>
+               </span><a id='src-1274' class='srclink' href='../src/ruru/src/dsl.rs.html#274-317' title='goto source code'>[src]</a></span></h1>
+<pre class='rust macro'>
+<span class='macro'>macro_rules</span><span class='macro'>!</span> <span class='ident'>methods</span> {
+    (
+        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>itself_class</span>: <span class='ident'>ty</span>,
+        <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>itself_name</span>: <span class='ident'>ident</span>,
+        $(
+            <span class='kw'>fn</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>method_name</span>: <span class='ident'>ident</span>
+            ($(<span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>arg_name</span>: <span class='ident'>ident</span>: <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>arg_type</span>: <span class='ident'>ty</span>),<span class='op'>*</span>) <span class='op'>-&gt;</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>return_type</span>: <span class='ident'>ident</span> <span class='macro-nonterminal'>$</span><span class='macro-nonterminal'>body</span>: <span class='ident'>block</span>
+        )<span class='op'>*</span>
+    ) <span class='op'>=&gt;</span> { ... };
+}</pre>
+<div class='docblock'><p>Creates callbacks for Ruby methods</p>
+
+<p>Unlike <code>unsafe_methods!</code>, this macro is safe, because:</p>
+
+<ul>
+<li>it uses safe conversions of arguments (<code>Object::try_convert_to()</code>);</li>
+<li>it checks if arguments are present;</li>
+</ul>
+
+<p>Each argument will have type <code>Result&lt;Object, Error&gt;</code>.</p>
+
+<p>For example, if you declare <code>number: Fixnum</code> in the method definition, it will have actual
+type <code>number: Result&lt;Fixnum, Error&gt;</code>.</p>
+
+<p>See examples below and docs for <code>Object::try_convert_to()</code> for more information.</p>
+
+<h1 id='examples' class='section-header'><a href='#examples'>Examples</a></h1>
+<p>To launch a server in Rust, you plan to write a simple <code>Server</code> class</p>
+
+<pre><code class="language-ruby">class Server
+  def start(address)
+    # ...
+  end
+end
+</code></pre>
+
+<p>The <code>address</code> must be <code>Hash</code> with the following structure:</p>
+
+<pre><code class="language-ruby">{
+  host: &#39;localhost&#39;,
+  port: 8080,
+}
+</code></pre>
+
+<p>You want to extract port from it. Default port is <code>8080</code> in case when:</p>
+
+<ul>
+<li><code>address</code> is not a <code>Hash</code></li>
+<li><code>address[:port]</code> is not present</li>
+<li><code>address[:port]</code> is not a <code>Fixnum</code></li>
+</ul>
+
+<pre class='rust rust-example-rendered'>
+<span class='attribute'>#[<span class='ident'>macro_use</span>]</span>
+<span class='kw'>extern</span> <span class='kw'>crate</span> <span class='ident'>ruru</span>;
+
+<span class='kw'>use</span> <span class='ident'>ruru</span>::{<span class='ident'>Class</span>, <span class='ident'>Fixnum</span>, <span class='ident'>Hash</span>, <span class='ident'>NilClass</span>, <span class='ident'>Object</span>, <span class='ident'>Symbol</span>, <span class='ident'>VM</span>};
+
+<span class='macro'>class</span><span class='macro'>!</span>(<span class='ident'>Server</span>);
+
+<span class='macro'>methods</span><span class='macro'>!</span>(
+    <span class='ident'>Server</span>,
+    <span class='ident'>itself</span>,
+
+    <span class='kw'>fn</span> <span class='ident'>start</span>(<span class='ident'>address</span>: <span class='ident'>Hash</span>) <span class='op'>-&gt;</span> <span class='ident'>NilClass</span> {
+        <span class='kw'>let</span> <span class='ident'>default_port</span> <span class='op'>=</span> <span class='number'>8080</span>;
+
+        <span class='kw'>let</span> <span class='ident'>port</span> <span class='op'>=</span> <span class='ident'>address</span>
+            .<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>hash</span><span class='op'>|</span> <span class='ident'>hash</span>.<span class='ident'>at</span>(<span class='ident'>Symbol</span>::<span class='ident'>new</span>(<span class='string'>&quot;port&quot;</span>)))
+            .<span class='ident'>and_then</span>(<span class='op'>|</span><span class='ident'>port</span><span class='op'>|</span> <span class='ident'>port</span>.<span class='ident'>try_convert_to</span>::<span class='op'>&lt;</span><span class='ident'>Fixnum</span><span class='op'>&gt;</span>())
+            .<span class='ident'>map</span>(<span class='op'>|</span><span class='ident'>port</span><span class='op'>|</span> <span class='ident'>port</span>.<span class='ident'>to_i64</span>())
+            .<span class='ident'>unwrap_or</span>(<span class='ident'>default_port</span>);
+
+        <span class='comment'>// Start server...</span>
+
+        <span class='ident'>NilClass</span>::<span class='ident'>new</span>()
+    }
+);
+
+<span class='kw'>fn</span> <span class='ident'>main</span>() {
+    <span class='ident'>Class</span>::<span class='ident'>new</span>(<span class='string'>&quot;Server&quot;</span>, <span class='prelude-val'>None</span>).<span class='ident'>define</span>(<span class='op'>|</span><span class='ident'>itself</span><span class='op'>|</span> {
+        <span class='ident'>itself</span>.<span class='ident'>def</span>(<span class='string'>&quot;start&quot;</span>, <span class='ident'>start</span>);
+    });
+}</pre>
+
+<p>Ruby:</p>
+
+<pre><code class="language-ruby">class Server
+  def start(address)
+    default_port = 8080
+
+    port =
+      if address.is_a?(Hash) &amp;&amp; address[:port].is_a?(Fixnum)
+        address[:port]
+      else
+        default_port
+      end
+
+    # Start server...
+  end
+end
+</code></pre>
+</div></section>
+    <section id='search' class="content hidden"></section>
+
+    <section class="footer"></section>
+
+    <aside id="help" class="hidden">
+        <div>
+            <h1 class="hidden">Help</h1>
+
+            <div class="shortcuts">
+                <h2>Keyboard Shortcuts</h2>
+
+                <dl>
+                    <dt>?</dt>
+                    <dd>Show this help dialog</dd>
+                    <dt>S</dt>
+                    <dd>Focus the search field</dd>
+                    <dt>&larrb;</dt>
+                    <dd>Move up in search results</dd>
+                    <dt>&rarrb;</dt>
+                    <dd>Move down in search results</dd>
+                    <dt>&#9166;</dt>
+                    <dd>Go to active search result</dd>
+                    <dt>+</dt>
+                    <dd>Collapse/expand all sections</dd>
+                </dl>
+            </div>
+
+            <div class="infos">
+                <h2>Search Tricks</h2>
+
+                <p>
+                    Prefix searches with a type followed by a colon (e.g.
+                    <code>fn:</code>) to restrict the search to a given type.
+                </p>
+
+                <p>
+                    Accepted types are: <code>fn</code>, <code>mod</code>,
+                    <code>struct</code>, <code>enum</code>,
+                    <code>trait</code>, <code>type</code>, <code>macro</code>,
+                    and <code>const</code>.
+                </p>
+
+                <p>
+                    Search functions by type signature (e.g.
+                    <code>vec -> usize</code> or <code>* -> vec</code>)
+                </p>
+            </div>
+        </div>
+    </aside>
+
+    
+
+    <script>
+        window.rootPath = "../";
+        window.currentCrate = "ruru";
+    </script>
+    <script src="../jquery.js"></script>
+    <script src="../main.js"></script>
+    <script defer src="../search-index.js"></script>
+</body>
+</html>
