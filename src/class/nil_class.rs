@@ -1,4 +1,5 @@
 use std::convert::From;
+use std::default::Default;
 
 use binding::global::RubySpecialConsts;
 use types::{InternalValue, Value, ValueType};
@@ -30,6 +31,12 @@ impl NilClass {
     /// ```
     pub fn new() -> Self {
         Self::from(Value::from(RubySpecialConsts::Nil as InternalValue))
+    }
+}
+
+impl Default for NilClass {
+    fn default() -> Self {
+        NilClass::new()
     }
 }
 
