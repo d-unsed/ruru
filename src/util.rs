@@ -9,7 +9,7 @@ pub fn cstr_to_string(str: *const c_char) -> String {
     unsafe { CStr::from_ptr(str).to_string_lossy().into_owned() }
 }
 
-pub fn cstr_as_str<'a>(str: *const c_char) -> &'a str {
+pub fn cstr_to_str<'a>(str: *const c_char) -> &'a str {
     unsafe { CStr::from_ptr(str).to_str().unwrap() }
 }
 
