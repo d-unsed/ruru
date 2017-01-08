@@ -36,3 +36,4 @@ env:
   matrix:
     - BUILD_RUBY_VERSION: 2.3.0
     - BUILD_RUBY_VERSION: 2.3.1
+    - BUILD_RUBY_VERSION: 2.4.0
