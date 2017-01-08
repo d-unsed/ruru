@@ -3,6 +3,7 @@
 ## Native Ruby extensions in Rust
 
 [![](http://meritbadge.herokuapp.com/ruru)](https://crates.io/crates/ruru)
+[![Documentation](https://docs.rs/ruru/badge.svg)](https://docs.rs/ruru)
 [![Build Status](https://travis-ci.org/d-unseductable/ruru.svg?branch=master)](https://travis-ci.org/d-unseductable/ruru)
 [![Build status](https://ci.appveyor.com/api/projects/status/2epyqhooimdu6u5l?svg=true)](https://ci.appveyor.com/project/d-unseductable/ruru)
 [![Gitter](https://badges.gitter.im/rust-ruru/general.svg)](https://gitter.im/rust-ruru/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
@@ -10,7 +11,7 @@
 <p align="center">
   <img src="http://this-week-in-ruru.org/assets/images/logo.png" width="350" height="350">
   <br>
-  <b><a href="http://d-unseductable.github.io/ruru/ruru/index.html">Documentation</a></b>
+  <b><a href="https://docs.rs/ruru">Documentation</a></b>
   <br>
   <b><a href="http://this-week-in-ruru.org">Website</a></b>
   <br>
@@ -413,7 +414,7 @@ fn main() {
 }
 ```
 
-**Check out [Documentation](http://d-unseductable.github.io/ruru/ruru/index.html) for many more
+**Check out [Documentation](https://docs.rs/ruru) for many more
 examples!**
 
 ## ... and why is **FFI** not enough?
