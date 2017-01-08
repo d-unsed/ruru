@@ -1,4 +1,5 @@
 use std::convert::From;
+use std::default::Default;
 use std::iter::{FromIterator, IntoIterator, Iterator};
 
 use binding::array;
@@ -503,6 +504,12 @@ impl Array {
     pub fn sort_bang(&mut self) -> Array {
         let result = array::sort_bang(self.value());
         Array::from(result)
+    }
+}
+
+impl Default for Array {
+    fn default() -> Self {
+        Array::new()
     }
 }
 
