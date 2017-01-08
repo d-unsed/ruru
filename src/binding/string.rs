@@ -30,9 +30,11 @@ pub fn value_to_string_unchecked(value: Value) -> String {
 }
 
 pub fn value_to_str<'a>(value: Value) -> &'a str {
-    let str = unsafe { string::rb_string_value_cstr(&value) };
+    unsafe {
+        let str = string::rb_string_value_cstr(&value);
 
-    util::cstr_to_str(str)
+        util::cstr_to_str(str)
+    }
 }
 
 pub fn value_to_str_unchecked<'a>(value: Value) -> &'a str {
