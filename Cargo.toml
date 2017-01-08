@@ -5,7 +5,7 @@ authors = ["Dmitry Gritsay <unseductable@gmail.com>"]
 
 description = "Native Ruby extensions in Rust"
 documentation = "https://docs.rs/ruru"
-homepage = "https://github.com/d-unseductable/ruru"
+homepage = "http://this-week-in-ruru.org/"
 repository = "https://github.com/d-unseductable/ruru"
 readme = "README.md"
 keywords = ["cruby", "mri", "ruby", "ruru"]
