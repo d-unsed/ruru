@@ -293,7 +293,7 @@ macro_rules! methods {
                     let $arg_name =
                         _arguments
                             .get(_i)
-                            .ok_or({
+                            .ok_or_else(|| {
                                 $crate::result::Error::ArgumentError(
                                     format!(
                                         "Argument '{}: {}' not found for method '{}'",
