@@ -18,9 +18,10 @@ pub fn str_to_cstring(str: &str) -> CString {
 }
 
 pub fn bool_to_value(state: bool) -> Value {
-    let internal_value = match state {
-        false => RubySpecialConsts::False,
-        true => RubySpecialConsts::True,
+    let internal_value = if state {
+        RubySpecialConsts::True
+    } else {
+        RubySpecialConsts::False
     };
 
     Value::from(internal_value as InternalValue)

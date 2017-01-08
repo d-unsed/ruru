@@ -192,9 +192,10 @@ impl Class {
     pub fn superclass(&self) -> Option<Class> {
         let superclass_value = class::superclass(self.value());
 
-        match superclass_value.is_nil() {
-            true => None,
-            false => Some(Self::from(superclass_value)),
+        if superclass_value.is_nil() {
+            None
+        } else {
+            Some(Self::from(superclass_value))
         }
     }
 
