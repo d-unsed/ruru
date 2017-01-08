@@ -1,4 +1,5 @@
 use std::convert::From;
+use std::default::Default;
 
 use binding::hash;
 use types::{Value, ValueType};
@@ -253,6 +254,12 @@ impl Hash {
 impl Clone for Hash {
     fn clone(&self) -> Hash {
         Hash { value: hash::dup(self.value()) }
+    }
+}
+
+impl Default for Hash {
+    fn default() -> Self {
+        Hash::new()
     }
 }
 
