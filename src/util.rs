@@ -5,7 +5,7 @@ use types::{c_char, c_int, c_void, InternalValue, Value};
 
 use {AnyObject, Object};
 
-pub fn cstr_as_string(str: *const c_char) -> String {
+pub fn cstr_to_string(str: *const c_char) -> String {
     unsafe { CStr::from_ptr(str).to_string_lossy().into_owned() }
 }
 
