@@ -8,9 +8,11 @@ pub fn id_to_sym(id: Id) -> Value {
 }
 
 pub fn id_to_name(id: Id) -> String {
-    let str = unsafe { symbol::rb_id2name(id) };
+    unsafe {
+        let str = symbol::rb_id2name(id);
 
-    util::cstr_to_string(str)
+        util::cstr_to_string(str)
+    }
 }
 
 pub fn sym_to_id(sym: Value) -> Id {

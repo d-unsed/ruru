@@ -11,9 +11,11 @@ pub fn new(string: &str) -> Value {
 }
 
 pub fn value_to_string(value: Value) -> String {
-    let str = unsafe { string::rb_string_value_cstr(&value) };
+    unsafe {
+        let str = string::rb_string_value_cstr(&value);
 
-    util::cstr_to_string(str)
+        util::cstr_to_string(str)
+    }
 }
 
 pub fn value_to_string_unchecked(value: Value) -> String {

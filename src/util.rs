@@ -5,8 +5,8 @@ use types::{c_char, c_int, c_void, InternalValue, Value};
 
 use {AnyObject, Object};
 
-pub fn cstr_to_string(str: *const c_char) -> String {
-    unsafe { CStr::from_ptr(str).to_string_lossy().into_owned() }
+pub unsafe fn cstr_to_string(str: *const c_char) -> String {
+    CStr::from_ptr(str).to_string_lossy().into_owned()
 }
 
 pub fn cstr_to_str<'a>(str: *const c_char) -> &'a str {
