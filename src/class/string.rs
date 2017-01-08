@@ -88,6 +88,62 @@ impl RString {
         string::from_value_unchecked(self.value())
     }
 
+    /// Retrieves underlying `&str` from Ruby `String` object.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{RString, VM};
+    /// # VM::init();
+    ///
+    /// let string = RString::new("Hello, World!");
+    ///
+    /// assert_eq!(string.to_str(), "Hello, World!");
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// str = 'Hello, World!'
+    ///
+    /// str == 'Hello, World!'
+    /// ```
+    pub fn to_str(&self) -> &str {
+        let value = self.value();
+
+        string::value_to_str(value)
+    }
+
+    /// Retrieves underlying `&str` from Ruby `String` object.
+    ///
+    /// Unlike `to_str()` it does not perform any checks for internal null-bytes.
+    ///
+    /// This function may be used to safely get binary data from Ruby.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use ruru::{RString, VM};
+    /// # VM::init();
+    ///
+    /// let string = RString::new("Hello,\0World!");
+    ///
+    /// assert_eq!(string.to_str_unchecked(), "Hello,\0World!");
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// str = 'Hello,\0World!'
+    ///
+    /// str == 'Hello,\0World!'
+    /// ```
+    pub fn to_str_unchecked(&self) -> &str {
+        let value = self.value();
+
+        string::value_to_str_unchecked(value)
+    }
+
     /// Returns the length of the string in bytes
     ///
     /// # Examples

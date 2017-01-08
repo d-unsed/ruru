@@ -9,6 +9,10 @@ pub fn cstr_as_string(str: *const c_char) -> String {
     unsafe { CStr::from_ptr(str).to_string_lossy().into_owned() }
 }
 
+pub fn cstr_as_str<'a>(str: *const c_char) -> &'a str {
+    unsafe { CStr::from_ptr(str).to_str().unwrap() }
+}
+
 pub fn str_to_cstring(str: &str) -> CString {
     CString::new(str).unwrap()
 }
