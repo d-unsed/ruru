@@ -57,7 +57,7 @@ impl RString {
     /// str == 'Hello, World!'
     /// ```
     pub fn to_string(&self) -> String {
-        string::from_value(self.value())
+        string::value_to_string(self.value())
     }
 
     /// Retrieves underlying Rust `String` from Ruby `String` object.

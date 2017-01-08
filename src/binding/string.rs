@@ -10,7 +10,7 @@ pub fn new(string: &str) -> Value {
     unsafe { string::rb_str_new(str, len) }
 }
 
-pub fn from_value(value: Value) -> String {
+pub fn value_to_string(value: Value) -> String {
     let str = unsafe { string::rb_string_value_cstr(&value) };
 
     util::cstr_as_string(str)
