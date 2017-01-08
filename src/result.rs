@@ -47,8 +47,7 @@ impl Display for Error {
 impl error::Error for Error {
     fn description(&self) -> &str {
         match *self {
-            Error::ArgumentError(ref message) => message,
-            Error::TypeError(ref message) => message,
+            Error::ArgumentError(ref message) | Error::TypeError(ref message) => message,
         }
     }
 }
