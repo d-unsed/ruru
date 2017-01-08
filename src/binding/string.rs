@@ -16,7 +16,7 @@ pub fn value_to_string(value: Value) -> String {
     util::cstr_as_string(str)
 }
 
-pub fn from_value_unchecked(value: Value) -> String {
+pub fn value_to_string_unchecked(value: Value) -> String {
     unsafe {
         let str = string::rb_string_value_ptr(&value) as *const u8;
         let len = string::rb_str_len(value) as usize;

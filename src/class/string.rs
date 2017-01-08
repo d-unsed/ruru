@@ -85,7 +85,7 @@ impl RString {
     /// str == 'Hello,\0World!'
     /// ```
     pub fn to_string_unchecked(&self) -> String {
-        string::from_value_unchecked(self.value())
+        string::value_to_string_unchecked(self.value())
     }
 
     /// Retrieves underlying `&str` from Ruby `String` object.
