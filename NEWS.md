@@ -2,6 +2,19 @@
 
 ## Unreleased
 
+## [0.9.3] - 2016-12-10
+
+### Added
+
+* `Hash::clear()` (#47)
+* `Hash::delete()` (#47)
+* `Clone` for `Hash` (#47)
+* `Default` for `Array`
+* `Default` for `NilClass`
+* `Default` for `Hash`
+* `RString::to_str()`
+* `RString::to_str_unchecked()`
+
 ## [0.9.2] - 2016-12-10
 
 ### Added
@@ -197,6 +210,7 @@ See [wiki page for upgrading from 0.7.x to 0.8.0](https://github.com/d-unseducta
 
 For versions prior to 0.7.0, please see `git log`.
 
+[0.9.3]: https://github.com/d-unseductable/ruru/compare/v0.9.2...v0.9.3
 [0.9.2]: https://github.com/d-unseductable/ruru/compare/v0.9.1...v0.9.2
 [0.9.1]: https://github.com/d-unseductable/ruru/compare/v0.9.0...v0.9.1
 [0.9.0]: https://github.com/d-unseductable/ruru/compare/v0.8.1...v0.9.0
