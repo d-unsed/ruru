@@ -160,8 +160,8 @@ impl Hash {
         hash::clear(self.value())
     }
 
-    /// Deletes the key-value pair and returns the value from hsh whose key is equal to key. If the
-    /// key is not found, it returns nil.
+    /// Deletes the key-value pair and returns the value from hash whose key is equal to key. If
+    /// the key is not found, it returns nil.
     ///
     /// `key` must be a type which implements the `Object` trait.
     ///
@@ -196,7 +196,7 @@ impl Hash {
     /// hash.length == 1
     /// deleted == 2
     /// ```
-    pub fn delete<K: Object>(&self, key: K) -> AnyObject {
+    pub fn delete<K: Object>(&mut self, key: K) -> AnyObject {
         let result = hash::delete(self.value(), key.value());
 
         AnyObject::from(result)
