@@ -10,6 +10,13 @@ pub fn new(string: &str) -> Value {
     unsafe { string::rb_str_new(str, len) }
 }
 
+pub fn new_utf8(string: &str) -> Value {
+    let str = string.as_ptr() as *const c_char;
+    let len = string.len() as c_long;
+
+    unsafe { string::rb_utf8_str_new(str, len) }
+}
+
 pub fn value_to_string(value: Value) -> String {
     unsafe {
         let str = string::rb_string_value_cstr(&value);
