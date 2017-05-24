@@ -179,6 +179,12 @@ impl From<Value> for RString {
     }
 }
 
+impl From<String> for RString {
+    fn from(string: String) -> Self {
+        Self::new(string.as_str())
+    }
+}
+
 impl Object for RString {
     #[inline]
     fn value(&self) -> Value {
