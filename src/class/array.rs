@@ -532,7 +532,7 @@ impl VerifiedObject for Array {
     }
 
     fn error_message() -> &'static str {
-        "Error converting to Boolean"
+        "Error converting to Array"
     }
 }
 
