@@ -37,14 +37,14 @@ pub fn bool_to_c_int(state: bool) -> c_int {
     state as c_int
 }
 
-pub fn create_arguments(arguments: Vec<AnyObject>) -> (c_int, Vec<Value>) {
+pub fn create_arguments(arguments: &[AnyObject]) -> (c_int, Vec<Value>) {
     (arguments.len() as c_int, arguments_to_values(arguments))
 }
 
-fn arguments_to_values(arguments: Vec<AnyObject>) -> Vec<Value> {
+fn arguments_to_values(arguments: &[AnyObject]) -> Vec<Value> {
     arguments.iter()
         .map(|object| object.value())
-        .collect::<Vec<Value>>()
+        .collect()
 }
 
 pub fn closure_to_ptr<F, R>(func: F) -> *const c_void

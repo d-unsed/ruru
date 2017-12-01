@@ -168,7 +168,7 @@ impl Class {
     /// Worker.new(1, 2)
     /// ```
     pub fn new_instance(&self, arguments: Vec<AnyObject>) -> AnyObject {
-        let (argc, argv) = util::create_arguments(arguments);
+        let (argc, argv) = util::create_arguments(&arguments);
         let instance = class::new_instance(self.value(), argc, argv.as_ptr());
 
         AnyObject::from(instance)

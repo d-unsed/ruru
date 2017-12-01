@@ -58,7 +58,7 @@ impl Proc {
     /// Greeter.greet_rust_with(greeting_template) # => "Hello, Rust!"
     /// ```
     pub fn call(&self, arguments: Vec<AnyObject>) -> AnyObject {
-        let (argc, argv) = util::create_arguments(arguments);
+        let (argc, argv) = util::create_arguments(&arguments);
         let result = rproc::call(self.value(), argc, argv.as_ptr());
 
         AnyObject::from(result)
