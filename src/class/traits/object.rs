@@ -694,7 +694,7 @@ pub trait Object: From<Value> {
     ///         itself.def("initialize", counter_initialize);
     ///         itself.def("increment!", counter_increment);
     ///         itself.def("state", counter_state);
-    ///     }).new_instance(vec![]);
+    ///     }).new_instance(&[]);
     ///
     ///     counter.send("increment!", &[]);
     ///
@@ -775,7 +775,7 @@ pub trait Object: From<Value> {
     ///         itself.def("initialize", counter_initialize);
     ///         itself.def("increment!", counter_increment);
     ///         itself.def("state", counter_state);
-    ///     }).new_instance(vec![]);
+    ///     }).new_instance(&[]);
     ///
     ///     counter.send("increment!", &[]);
     ///
