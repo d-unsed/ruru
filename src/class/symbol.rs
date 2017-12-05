@@ -39,6 +39,30 @@ impl Symbol {
         Self::from(symbol::id_to_sym(id))
     }
 
+    /// Retrieves the Rust `&str` corresponding to `Symbol` object (Ruby `Symbol#to_s`).
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Symbol, VM};
+    /// # VM::init();
+    ///
+    /// let symbol = Symbol::new("hello");
+    ///
+    /// assert_eq!(symbol.to_str(), "hello");
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// sym = :hello
+    ///
+    /// sym.to_s == 'hello'
+    /// ```
+    pub fn to_str(&self) -> &str {
+        symbol::value_to_str(self.value())
+    }
+
     /// Retrieves the Rust `String` corresponding to `Symbol` object (Ruby `Symbol#to_s`).
     ///
     /// # Examples
@@ -60,9 +84,7 @@ impl Symbol {
     /// sym.to_s == 'hello'
     /// ```
     pub fn to_string(&self) -> String {
-        let id = symbol::sym_to_id(self.value());
-
-        symbol::id_to_name(id)
+        symbol::value_to_string(self.value())
     }
 }
 
