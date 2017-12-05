@@ -45,7 +45,7 @@ impl Hash {
     ///
     /// hash.store(Symbol::new("key"), Fixnum::new(1));
     ///
-    /// assert_eq!(hash.at(Symbol::new("key")).try_convert_to::<Fixnum>(), Ok(Fixnum::new(1)));
+    /// assert_eq!(hash.at(&Symbol::new("key")).try_convert_to::<Fixnum>(), Ok(Fixnum::new(1)));
     /// ```
     ///
     /// Ruby:
@@ -56,7 +56,7 @@ impl Hash {
     ///
     /// hash[:key] == 1
     /// ```
-    pub fn at<T: Object>(&self, key: T) -> AnyObject {
+    pub fn at<T: Object>(&self, key: &T) -> AnyObject {
         let result = hash::aref(self.value(), key.value());
 
         AnyObject::from(result)
@@ -76,7 +76,7 @@ impl Hash {
     ///
     /// hash.store(Symbol::new("key"), Fixnum::new(1));
     ///
-    /// assert_eq!(hash.at(Symbol::new("key")).try_convert_to::<Fixnum>(), Ok(Fixnum::new(1)));
+    /// assert_eq!(hash.at(&Symbol::new("key")).try_convert_to::<Fixnum>(), Ok(Fixnum::new(1)));
     /// ```
     ///
     /// Ruby:

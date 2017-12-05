@@ -233,7 +233,7 @@ macro_rules! unsafe_methods {
 ///         let default_port = 8080;
 ///
 ///         let port = address
-///             .map(|hash| hash.at(Symbol::new("port")))
+///             .map(|hash| hash.at(&Symbol::new("port")))
 ///             .and_then(|port| port.try_convert_to::<Fixnum>())
 ///             .map(|port| port.to_i64())
 ///             .unwrap_or(default_port);

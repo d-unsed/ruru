@@ -42,7 +42,7 @@ use {Object, VerifiedObject};
 /// hash.store(Symbol::new("key"), Fixnum::new(1));
 ///
 /// // `Hash::at()` returns `AnyObject`
-/// let value = hash.at(Symbol::new("key")).try_convert_to::<Fixnum>();
+/// let value = hash.at(&Symbol::new("key")).try_convert_to::<Fixnum>();
 ///
 /// assert_eq!(value, Ok(Fixnum::new(1)));
 /// ```
