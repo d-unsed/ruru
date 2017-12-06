@@ -31,7 +31,7 @@ impl Proc {
     ///
     ///     fn greet_rust_with(greeting_template: Proc) -> RString {
     ///         let name = RString::new("Rust").to_any_object();
-    ///         let rendered_template = greeting_template.unwrap().call(&[name]);
+    ///         let rendered_template = greeting_template.unwrap().call(Some(&[name]));
     ///
     ///         rendered_template.try_convert_to::<RString>().unwrap()
     ///     }
@@ -57,9 +57,9 @@ impl Proc {
     ///
     /// Greeter.greet_rust_with(greeting_template) # => "Hello, Rust!"
     /// ```
-    pub fn call(&self, arguments: &[AnyObject]) -> AnyObject {
-        let (argc, argv) = util::create_arguments(arguments);
-        let result = rproc::call(self.value(), argc, argv.as_ptr());
+    pub fn call(&self, arguments: Option<&[AnyObject]>) -> AnyObject {
+        let arguments = util::arguments_to_values(arguments);
+        let result = rproc::call(self.value(), arguments);
 
         AnyObject::from(result)
     }

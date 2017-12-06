@@ -584,7 +584,7 @@ pub trait Object: From<Value> {
     /// assert_eq!(array_to_str, "[1]".to_string());
     /// ```
     fn send(&self, method: &str, arguments: Option<&[AnyObject]>) -> AnyObject {
-        let arguments = util::arguments_to_values_opt(arguments);
+        let arguments = util::arguments_to_values(arguments);
         let result = binding_util::call_method(self.value(), method, arguments);
 
         AnyObject::from(result)

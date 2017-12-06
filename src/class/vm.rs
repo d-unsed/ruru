@@ -124,7 +124,7 @@ impl VM {
     ///         let greeting_template = VM::block_proc();
     ///         let name = RString::new("Rust").to_any_object();
     ///
-    ///         greeting_template.call(&[name]).try_convert_to::<RString>().unwrap()
+    ///         greeting_template.call(Some(&[name])).try_convert_to::<RString>().unwrap()
     ///     }
     /// );
     ///
@@ -173,7 +173,8 @@ impl VM {
     ///         let b = b.unwrap();
     ///
     ///         if VM::is_block_given() {
-    ///             let result = VM::block_proc().call(&[a.to_any_object(), b.to_any_object()]);
+    ///             let arguments = [a.to_any_object(), b.to_any_object()];
+    ///             let result = VM::block_proc().call(Some(&arguments));
     ///
     ///             result.try_convert_to::<Fixnum>().unwrap()
     ///         } else {

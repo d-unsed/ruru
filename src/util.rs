@@ -38,25 +38,19 @@ pub fn bool_to_c_int(state: bool) -> c_int {
     state as c_int
 }
 
+pub fn arguments_to_values(arguments: Option<&[AnyObject]>) -> Option<Vec<Value>> {
+    arguments.map(|arguments| {
+        arguments.iter()
+            .map(Object::value)
+            .collect()
+    })
+}
+
 pub fn process_arguments(arguments: &Option<Vec<Value>>) -> (Argc, *const Value) {
     match arguments {
         &Some(ref arguments) => (arguments.len() as Argc, arguments.as_ptr()),
         &None => (0, ptr::null()),
     }
-}
-
-pub fn create_arguments(arguments: &[AnyObject]) -> (c_int, Vec<Value>) {
-    (arguments.len() as c_int, arguments_to_values(arguments))
-}
-
-pub fn arguments_to_values_opt(arguments: Option<&[AnyObject]>) -> Option<Vec<Value>> {
-    arguments.map(arguments_to_values)
-}
-
-fn arguments_to_values(arguments: &[AnyObject]) -> Vec<Value> {
-    arguments.iter()
-        .map(|object| object.value())
-        .collect()
 }
 
 pub fn closure_to_ptr<F, R>(func: F) -> *const c_void

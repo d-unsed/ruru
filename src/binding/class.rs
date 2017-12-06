@@ -2,7 +2,7 @@ use ruby_sys::{class, typed_data};
 
 use binding::util as binding_util;
 use typed_data::DataTypeWrapper;
-use types::{Argc, c_void, Callback, CallbackPtr, Value};
+use types::{c_void, Callback, CallbackPtr, Value};
 use util;
 
 use Object;
