@@ -331,10 +331,10 @@ impl Class {
     ///
     /// let greeting = Class::from_existing("Greeter")
     ///     .const_get("GREETING")
-    ///     .try_convert_to::<RString>().unwrap()
-    ///     .to_string();
+    ///     .try_convert_to::<RString>()
+    ///     .unwrap();
     ///
-    /// assert_eq!(greeting, "Hello, World!");
+    /// assert_eq!(greeting.to_str(), "Hello, World!");
     /// ```
     ///
     /// Ruby:
@@ -377,10 +377,10 @@ impl Class {
     ///
     /// let greeting = Class::from_existing("Greeter")
     ///     .const_get("GREETING")
-    ///     .try_convert_to::<RString>().unwrap()
-    ///     .to_string();
+    ///     .try_convert_to::<RString>()
+    ///     .unwrap();
     ///
-    /// assert_eq!(greeting, "Hello, World!");
+    /// assert_eq!(greeting.to_str(), "Hello, World!");
     /// ```
     ///
     /// Ruby:

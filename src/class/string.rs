@@ -22,7 +22,7 @@ impl RString {
     ///
     /// let string = RString::new("Hello, World!");
     ///
-    /// assert_eq!(string.to_string(), "Hello, World!".to_string());
+    /// assert_eq!(string.to_str(), "Hello, World!");
     /// ```
     ///
     /// Ruby:

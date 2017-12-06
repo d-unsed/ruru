@@ -115,7 +115,7 @@ macro_rules! class {
 ///     itself, // name of `self` object which will be used in methods
 ///
 ///     fn string_length_equals(expected_length: Fixnum) -> Boolean {
-///         let real_length = itself.to_string().len() as i64;
+///         let real_length = itself.to_str().len() as i64;
 ///
 ///         Boolean::new(expected_length.to_i64() == real_length)
 ///     }

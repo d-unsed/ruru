@@ -129,9 +129,9 @@ impl Array {
     ///     .push(RString::new("Hello"))
     ///     .push(RString::new("World!"));
     ///
-    /// let joined_string = array.join(RString::new(", ")).to_string();
+    /// let joined_string = array.join(RString::new(", "));
     ///
-    /// assert_eq!(joined_string, "Hello, World!".to_string());
+    /// assert_eq!(joined_string.to_str(), "Hello, World!");
     /// ```
     ///
     /// Ruby:
@@ -332,7 +332,7 @@ impl Array {
     ///
     /// let array = Array::new().push(Fixnum::new(1)).push(Fixnum::new(2));
     ///
-    /// assert_eq!(array.to_s().to_string(), "[1, 2]".to_string());
+    /// assert_eq!(array.to_s().to_str(), "[1, 2]");
     /// ```
     ///
     /// Ruby:

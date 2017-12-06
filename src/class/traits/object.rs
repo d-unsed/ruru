@@ -361,7 +361,7 @@ pub trait Object: From<Value> {
     ///    itself,
     ///
     ///    fn is_blank() -> Boolean {
-    ///        Boolean::new(itself.to_string().chars().all(|c| c.is_whitespace()))
+    ///        Boolean::new(itself.to_str().chars().all(|c| c.is_whitespace()))
     ///    }
     /// );
     ///
@@ -574,14 +574,13 @@ pub trait Object: From<Value> {
     /// # VM::init();
     ///
     /// let array = Array::new().push(Fixnum::new(1));
-    /// let array_to_str =
+    /// let array_string =
     ///     array
     ///         .send("to_s", None)
     ///         .try_convert_to::<RString>()
-    ///         .unwrap()
-    ///         .to_string();
+    ///         .unwrap();
     ///
-    /// assert_eq!(array_to_str, "[1]".to_string());
+    /// assert_eq!(array_string.to_str(), "[1]");
     /// ```
     fn send(&self, method: &str, arguments: Option<&[AnyObject]>) -> AnyObject {
         let arguments = util::arguments_to_values(arguments);

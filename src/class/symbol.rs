@@ -23,7 +23,7 @@ impl Symbol {
     ///
     /// let symbol = Symbol::new("hello");
     ///
-    /// assert_eq!(symbol.to_string(), "hello");
+    /// assert_eq!(symbol.to_str(), "hello");
     /// ```
     ///
     /// Ruby:

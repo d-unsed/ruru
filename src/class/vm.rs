@@ -227,7 +227,7 @@ impl VM {
     ///     let argv = VM::parse_arguments(argc, argv);
     ///     let other_string = argv[0].try_convert_to::<RString>().unwrap();
     ///
-    ///     Boolean::new(itself.to_string() == other_string.to_string())
+    ///     Boolean::new(itself.to_str() == other_string.to_str())
     /// }
     ///
     /// fn main() {
