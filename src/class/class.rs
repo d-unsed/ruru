@@ -149,7 +149,7 @@ impl Class {
     /// use ruru::{Class, Fixnum, Object};
     ///
     /// // Without arguments
-    /// Class::from_existing("Hello").new_instance(&[]);
+    /// Class::from_existing("Hello").new_instance(None);
     ///
     /// // With arguments passing arguments to constructor
     /// let arguments = [
@@ -157,7 +157,7 @@ impl Class {
     ///     Fixnum::new(2).to_any_object()
     /// ];
     ///
-    /// Class::from_existing("Worker").new_instance(&arguments);
+    /// Class::from_existing("Worker").new_instance(Some(&arguments));
     /// ```
     ///
     /// Ruby:
@@ -167,9 +167,9 @@ impl Class {
     ///
     /// Worker.new(1, 2)
     /// ```
-    pub fn new_instance(&self, arguments: &[AnyObject]) -> AnyObject {
-        let (argc, argv) = util::create_arguments(arguments);
-        let instance = class::new_instance(self.value(), argc, argv.as_ptr());
+    pub fn new_instance(&self, arguments: Option<&[AnyObject]>) -> AnyObject {
+        let arguments = util::arguments_to_values_opt(arguments);
+        let instance = class::new_instance(self.value(), arguments);
 
         AnyObject::from(instance)
     }
