@@ -153,7 +153,6 @@ macro_rules! unsafe_methods {
         )*
     ) => {
         $(
-            #[no_mangle]
             #[allow(unused_mut)]
             pub extern fn $method_name(argc: $crate::types::Argc,
                                        argv: *const $crate::AnyObject,
@@ -281,7 +280,6 @@ macro_rules! methods {
         )*
     ) => {
         $(
-            #[no_mangle]
             #[allow(unused_mut)]
             pub extern fn $method_name(argc: $crate::types::Argc,
                                        argv: *const $crate::AnyObject,
@@ -599,7 +597,6 @@ macro_rules! wrappable_struct {
     };
     (@mark_function_definition $struct_name: ty) => {};
     (@mark_function_definition $struct_name: ty, mark($object: ident) $body: expr) => {
-        #[no_mangle]
         pub extern "C" fn mark(data: *mut $crate::types::c_void) {
             let mut data = unsafe { (data as *mut $struct_name).as_mut() };
 
