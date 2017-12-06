@@ -576,17 +576,16 @@ pub trait Object: From<Value> {
     /// let array = Array::new().push(Fixnum::new(1));
     /// let array_to_str =
     ///     array
-    ///         .send("to_s", &[])
+    ///         .send("to_s", None)
     ///         .try_convert_to::<RString>()
     ///         .unwrap()
     ///         .to_string();
     ///
     /// assert_eq!(array_to_str, "[1]".to_string());
     /// ```
-    fn send(&self, method: &str, arguments: &[AnyObject]) -> AnyObject {
-        let (argc, argv) = util::create_arguments(arguments);
-
-        let result = binding_util::call_method(self.value(), method, argc, argv.as_ptr());
+    fn send(&self, method: &str, arguments: Option<&[AnyObject]>) -> AnyObject {
+        let arguments = util::arguments_to_values_opt(arguments);
+        let result = binding_util::call_method(self.value(), method, arguments);
 
         AnyObject::from(result)
     }
@@ -644,7 +643,7 @@ pub trait Object: From<Value> {
     /// let args = [Fixnum::new(1).to_any_object()];
     /// let index =
     ///     array
-    ///         .send("find_index", &args)
+    ///         .send("find_index", Some(&args))
     ///         .try_convert_to::<Fixnum>();
     ///
     /// assert_eq!(index, Ok(Fixnum::new(0)));
@@ -696,9 +695,9 @@ pub trait Object: From<Value> {
     ///         itself.def("state", counter_state);
     ///     }).new_instance(&[]);
     ///
-    ///     counter.send("increment!", &[]);
+    ///     counter.send("increment!", None);
     ///
-    ///     let new_state = counter.send("state", &[]).try_convert_to::<Fixnum>();
+    ///     let new_state = counter.send("state", None).try_convert_to::<Fixnum>();
     ///
     ///     assert_eq!(new_state, Ok(Fixnum::new(1)));
     /// }
@@ -777,9 +776,9 @@ pub trait Object: From<Value> {
     ///         itself.def("state", counter_state);
     ///     }).new_instance(&[]);
     ///
-    ///     counter.send("increment!", &[]);
+    ///     counter.send("increment!", None);
     ///
-    ///     let new_state = counter.send("state", &[]).try_convert_to::<Fixnum>();
+    ///     let new_state = counter.send("state", None).try_convert_to::<Fixnum>();
     ///
     ///     assert_eq!(new_state, Ok(Fixnum::new(1)));
     /// }
