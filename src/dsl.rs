@@ -347,8 +347,8 @@ macro_rules! methods {
 ///     This variable has to be passed to `wrap_data()` and `get_data()` functions (see examples).
 ///
 ///     Also, these variables describe the structure in general, but not some specific object.
-///     So you should pass the same wrapper static variable when wrapping/getting data of the same
-///     kind for different ruby objects.
+///     So you should pass the same static variable when wrapping/getting data of the same
+///     type for different ruby objects.
 ///
 ///     For example,
 ///
@@ -548,7 +548,7 @@ macro_rules! methods {
 ///     }
 ///
 ///     fn push(object: AnyObject) -> NilClass {
-///         itself.get_data(&*VECTOR_OF_OBJECTS_WRAPPER).push(object.unwrap());
+///         itself.get_data_mut(&*VECTOR_OF_OBJECTS_WRAPPER).push(object.unwrap());
 ///
 ///         NilClass::new()
 ///     }
