@@ -40,7 +40,7 @@ impl Error {
 
 impl Display for Error {
     fn fmt(&self, f: &mut Formatter) -> fmt::Result {
-        write!(f, "{}", <Error as error::Error>::description(&self))
+        write!(f, "{}", <Error as error::Error>::description(self))
     }
 }
 
