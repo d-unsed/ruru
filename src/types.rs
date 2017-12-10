@@ -1,9 +1,8 @@
 use AnyObject;
 
-pub use ruby_sys::types::{Argc, c_char, c_int, c_long, CallbackPtr, CallbackMutPtr, c_void, Id,
-                          InternalValue, RbDataType as DataType,
-                          RbDataTypeFunction as DataTypeFunction, SignedValue, size_t, Value,
-                          ValueType};
+pub use ruby_sys::types::{c_char, c_int, c_long, c_void, size_t, Argc, CallbackMutPtr,
+                          CallbackPtr, Id, InternalValue, RbDataType as DataType,
+                          RbDataTypeFunction as DataTypeFunction, SignedValue, Value, ValueType};
 
 #[cfg(unix)]
 pub use ruby_sys::types::RawFd;

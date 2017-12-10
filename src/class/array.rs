@@ -5,7 +5,7 @@ use std::iter::{FromIterator, IntoIterator, Iterator};
 use binding::array;
 use types::{Value, ValueType};
 
-use {AnyObject, RString, Object, VerifiedObject};
+use {AnyObject, Object, RString, VerifiedObject};
 
 /// `Array`
 #[derive(Debug, PartialEq)]

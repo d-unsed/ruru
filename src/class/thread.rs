@@ -42,8 +42,9 @@ impl Thread {
     /// end
     /// ```
     pub fn new<F, R>(func: F) -> Self
-        where F: 'static + FnOnce() -> R,
-              R: Object
+    where
+        F: 'static + FnOnce() -> R,
+        R: Object,
     {
         Self::from(thread::create(func))
     }
@@ -115,21 +116,24 @@ impl Thread {
     /// }
     /// ```
     pub fn call_without_gvl<F, R, G>(func: F, unblock_func: Option<G>) -> R
-        where F: 'static + FnOnce() -> R,
-              G: 'static + FnOnce()
+    where
+        F: 'static + FnOnce() -> R,
+        G: 'static + FnOnce(),
     {
         thread::call_without_gvl(func, unblock_func)
     }
 
     pub fn call_without_gvl2<F, R, G>(func: F, unblock_func: Option<G>) -> R
-        where F: 'static + FnOnce() -> R,
-              G: 'static + FnOnce()
+    where
+        F: 'static + FnOnce() -> R,
+        G: 'static + FnOnce(),
     {
         thread::call_without_gvl2(func, unblock_func)
     }
 
     pub fn call_with_gvl<F, R>(func: F) -> R
-        where F: 'static + FnOnce() -> R
+    where
+        F: 'static + FnOnce() -> R,
     {
         thread::call_with_gvl(func)
     }

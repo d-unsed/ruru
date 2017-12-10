@@ -283,34 +283,35 @@ impl VM {
     ///     });
     /// }
     /// ```
-    #[deprecated(since="0.9.2",
-        note="Use `Thread::call_without_gvl()` instead")]
+    #[deprecated(since = "0.9.2", note = "Use `Thread::call_without_gvl()` instead")]
     pub fn thread_call_without_gvl<F, R, G>(func: F, unblock_func: Option<G>) -> R
-        where F: FnOnce() -> R,
-              G: FnOnce()
+    where
+        F: FnOnce() -> R,
+        G: FnOnce(),
     {
         vm::thread_call_without_gvl(func, unblock_func)
     }
 
-    #[deprecated(since="0.9.2",
-        note="Use `Thread::call_without_gvl2()` instead")]
+    #[deprecated(since = "0.9.2", note = "Use `Thread::call_without_gvl2()` instead")]
     pub fn thread_call_without_gvl2<F, R, G>(func: F, unblock_func: Option<G>) -> R
-        where F: FnOnce() -> R,
-              G: FnOnce()
+    where
+        F: FnOnce() -> R,
+        G: FnOnce(),
     {
         vm::thread_call_without_gvl2(func, unblock_func)
     }
 
-    #[deprecated(since="0.9.2",
-        note="Use `Thread::call_with_gvl()` instead")]
+    #[deprecated(since = "0.9.2", note = "Use `Thread::call_with_gvl()` instead")]
     pub fn thread_call_with_gvl<F, R>(func: F) -> R
-        where F: FnOnce() -> R
+    where
+        F: FnOnce() -> R,
     {
         vm::thread_call_with_gvl(func)
     }
 
     pub fn protect<F>(func: F) -> Result<Value, i32>
-        where F: FnOnce()
+    where
+        F: FnOnce(),
     {
         vm::protect(func)
     }

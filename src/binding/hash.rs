@@ -1,7 +1,7 @@
 use ruby_sys::hash;
 
 use binding::fixnum;
-use types::{CallbackPtr, CallbackMutPtr, Value};
+use types::{CallbackMutPtr, CallbackPtr, Value};
 use AnyObject;
 
 pub fn new() -> Value {
@@ -37,7 +37,8 @@ pub fn length(hash: Value) -> i64 {
 }
 
 pub fn each<F>(hash: Value, closure_callback: F)
-    where F: FnMut(AnyObject, AnyObject)
+where
+    F: FnMut(AnyObject, AnyObject),
 {
     let closure_ptr = &closure_callback as *const _ as CallbackMutPtr;
 
@@ -47,7 +48,8 @@ pub fn each<F>(hash: Value, closure_callback: F)
 }
 
 extern "C" fn each_callback<F>(key: AnyObject, value: AnyObject, closure: CallbackMutPtr)
-    where F: FnMut(AnyObject, AnyObject)
+where
+    F: FnMut(AnyObject, AnyObject),
 {
     let closure = closure as *mut F;
 

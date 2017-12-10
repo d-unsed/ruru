@@ -39,11 +39,7 @@ pub fn bool_to_c_int(state: bool) -> c_int {
 }
 
 pub fn arguments_to_values(arguments: Option<&[AnyObject]>) -> Option<Vec<Value>> {
-    arguments.map(|arguments| {
-        arguments.iter()
-            .map(Object::value)
-            .collect()
-    })
+    arguments.map(|arguments| arguments.iter().map(Object::value).collect())
 }
 
 pub fn process_arguments(arguments: &Option<Vec<Value>>) -> (Argc, *const Value) {
@@ -54,7 +50,8 @@ pub fn process_arguments(arguments: &Option<Vec<Value>>) -> (Argc, *const Value)
 }
 
 pub fn closure_to_ptr<F, R>(func: F) -> *const c_void
-    where F: FnOnce() -> R
+where
+    F: FnOnce() -> R,
 {
     let wrap_return = || {
         let r = func();

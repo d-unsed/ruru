@@ -238,7 +238,8 @@ impl Class {
     pub fn ancestors(&self) -> Vec<Class> {
         let ancestors = Array::from(class::ancestors(self.value()));
 
-        ancestors.into_iter()
+        ancestors
+            .into_iter()
             .map(|class| unsafe { class.to::<Self>() })
             .collect()
     }

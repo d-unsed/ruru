@@ -245,7 +245,8 @@ impl Hash {
     /// doubled_values == [2, 4]
     /// ```
     pub fn each<F>(&self, closure: F)
-        where F: FnMut(AnyObject, AnyObject)
+    where
+        F: FnMut(AnyObject, AnyObject),
     {
         hash::each(self.value(), closure);
     }
@@ -253,7 +254,9 @@ impl Hash {
 
 impl Clone for Hash {
     fn clone(&self) -> Hash {
-        Hash { value: hash::dup(self.value()) }
+        Hash {
+            value: hash::dup(self.value()),
+        }
     }
 }
 

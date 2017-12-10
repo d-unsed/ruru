@@ -2,7 +2,7 @@ use std::ptr;
 
 use ruby_sys::{thread, vm};
 
-use types::{CallbackPtr, c_int, c_void, Value};
+use types::{c_int, c_void, CallbackPtr, Value};
 use util;
 
 pub fn block_proc() -> Value {
@@ -38,20 +38,25 @@ pub fn raise(exception: Value, message: &str) {
 }
 
 pub fn thread_call_without_gvl<F, R, G>(func: F, unblock_func: Option<G>) -> R
-    where F: FnOnce() -> R,
-          G: FnOnce()
+where
+    F: FnOnce() -> R,
+    G: FnOnce(),
 {
     unsafe {
         let ptr = if let Some(ubf) = unblock_func {
-            thread::rb_thread_call_without_gvl(callbox as CallbackPtr,
-                                               util::closure_to_ptr(func),
-                                               callbox as CallbackPtr,
-                                               util::closure_to_ptr(ubf))
+            thread::rb_thread_call_without_gvl(
+                callbox as CallbackPtr,
+                util::closure_to_ptr(func),
+                callbox as CallbackPtr,
+                util::closure_to_ptr(ubf),
+            )
         } else {
-            thread::rb_thread_call_without_gvl(callbox as CallbackPtr,
-                                               util::closure_to_ptr(func),
-                                               ptr::null() as CallbackPtr,
-                                               ptr::null() as *const c_void)
+            thread::rb_thread_call_without_gvl(
+                callbox as CallbackPtr,
+                util::closure_to_ptr(func),
+                ptr::null() as CallbackPtr,
+                ptr::null() as *const c_void,
+            )
         };
 
         util::ptr_to_data(ptr)
@@ -59,20 +64,25 @@ pub fn thread_call_without_gvl<F, R, G>(func: F, unblock_func: Option<G>) -> R
 }
 
 pub fn thread_call_without_gvl2<F, R, G>(func: F, unblock_func: Option<G>) -> R
-    where F: FnOnce() -> R,
-          G: FnOnce()
+where
+    F: FnOnce() -> R,
+    G: FnOnce(),
 {
     unsafe {
         let ptr = if let Some(ubf) = unblock_func {
-            thread::rb_thread_call_without_gvl2(callbox as CallbackPtr,
-                                                util::closure_to_ptr(func),
-                                                callbox as CallbackPtr,
-                                                util::closure_to_ptr(ubf))
+            thread::rb_thread_call_without_gvl2(
+                callbox as CallbackPtr,
+                util::closure_to_ptr(func),
+                callbox as CallbackPtr,
+                util::closure_to_ptr(ubf),
+            )
         } else {
-            thread::rb_thread_call_without_gvl2(callbox as CallbackPtr,
-                                                util::closure_to_ptr(func),
-                                                ptr::null() as CallbackPtr,
-                                                ptr::null() as *const c_void)
+            thread::rb_thread_call_without_gvl2(
+                callbox as CallbackPtr,
+                util::closure_to_ptr(func),
+                ptr::null() as CallbackPtr,
+                ptr::null() as *const c_void,
+            )
         };
 
         util::ptr_to_data(ptr)
@@ -80,15 +90,15 @@ pub fn thread_call_without_gvl2<F, R, G>(func: F, unblock_func: Option<G>) -> R
 }
 
 pub fn thread_call_with_gvl<F, R>(func: F) -> R
-    where F: FnOnce() -> R
+where
+    F: FnOnce() -> R,
 {
     unsafe {
-        let ptr = thread::rb_thread_call_with_gvl(callbox as CallbackPtr,
-                                                  util::closure_to_ptr(func));
+        let ptr =
+            thread::rb_thread_call_with_gvl(callbox as CallbackPtr, util::closure_to_ptr(func));
 
         util::ptr_to_data(ptr)
     }
-
 }
 
 extern "C" fn callbox(boxptr: *mut c_void) -> *const c_void {
@@ -99,13 +109,20 @@ extern "C" fn callbox(boxptr: *mut c_void) -> *const c_void {
 }
 
 pub fn protect<F>(func: F) -> Result<Value, c_int>
-    where F: FnOnce()
+where
+    F: FnOnce(),
 {
     let mut state = 0;
     let value = unsafe {
-        vm::rb_protect(callbox as CallbackPtr,
-                       util::closure_to_ptr(func),
-                       &mut state as *mut c_int)
+        vm::rb_protect(
+            callbox as CallbackPtr,
+            util::closure_to_ptr(func),
+            &mut state as *mut c_int,
+        )
     };
-    if state == 0 { Ok(value) } else { Err(state) }
+    if state == 0 {
+        Ok(value)
+    } else {
+        Err(state)
+    }
 }
