@@ -36,6 +36,31 @@ impl RString {
         Self::from(string::new(string))
     }
 
+    /// Creates a new instance of Ruby `String`, with UTF8 encoding, containing
+    /// given `string`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{RString, VM};
+    /// # VM::init();
+    ///
+    /// let string = RString::new_utf8("Hello, World!");
+    ///
+    /// assert_eq!(string.to_string(), "Hello, World!".to_string());
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// str = 'Hello, World!'
+    ///
+    /// str == 'Hello, World!'
+    /// ```
+    pub fn new_utf8(string: &str) -> Self {
+        Self::from(string::new_utf8(string))
+    }
+
     /// Retrieves underlying Rust `String` from Ruby `String` object.
     ///
     /// # Examples
