@@ -6,6 +6,7 @@ pub mod fixnum;
 pub mod float;
 pub mod gc;
 pub mod hash;
+pub mod integer;
 pub mod nil_class;
 pub mod rproc;
 pub mod string;
