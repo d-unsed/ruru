@@ -23,6 +23,7 @@ pub use class::fixnum::Fixnum;
 pub use class::float::Float;
 pub use class::gc::GC;
 pub use class::hash::Hash;
+pub use class::integer::Integer;
 pub use class::nil_class::NilClass;
 pub use class::rproc::Proc;
 pub use class::string::RString;
