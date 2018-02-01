@@ -29,6 +29,31 @@ pub fn require(name: &str) {
     }
 }
 
+// "evaluation can raise an exception."
+pub fn eval_string(string: &str) -> Value {
+    let s = util::str_to_cstring(string);
+
+    unsafe {
+        vm::rb_eval_string(s.as_ptr())
+    }
+}
+
+pub fn eval_string_protect(string: &str) -> Result<Value, c_int> {
+    let s = util::str_to_cstring(string);
+    let mut state = 0;
+    let value = unsafe {
+        vm::rb_eval_string_protect(
+            s.as_ptr(),
+            &mut state as *mut c_int
+        )
+    };
+    if state == 0 {
+      Ok(value)
+    } else {
+      Err(state)
+    }
+}
+
 pub fn raise(exception: Value, message: &str) {
     let message = util::str_to_cstring(message);
 
