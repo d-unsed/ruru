@@ -1,0 +1,581 @@
+use std::convert::From;
+
+use binding::{module, class};
+use binding::global::rb_cObject;
+use binding::util as binding_util;
+use typed_data::DataTypeWrapper;
+use types::{Value, ValueType};
+use util;
+
+use {AnyObject, Array, Object, Class, VerifiedObject};
+
+/// `Module`
+///
+/// Also see `def`, `def_self`, `define` and some more functions from `Object` trait.
+///
+/// ```rust
+/// #[macro_use] extern crate ruru;
+///
+/// use std::error::Error;
+///
+/// use ruru::{Module, Fixnum, Object, VM};
+/// 
+/// module!(Example);
+///
+/// methods!(
+///    Example,
+///    itself,
+///
+///     fn square(exp: Fixnum) -> Fixnum {
+///         // `exp` is not a valid `Fixnum`, raise an exception
+///         if let Err(ref error) = exp {
+///             VM::raise(error.to_exception(), error.description());
+///         }
+///
+///         // We can safely unwrap here, because an exception was raised if `exp` is `Err`
+///         let exp = exp.unwrap().to_i64();
+///
+///         Fixnum::new(exp * exp)
+///     }
+/// );
+///
+/// fn main() {
+///     # VM::init();
+///     Module::new("Example").define(|itself| {
+///         itself.def("square", square);
+///     });
+/// }
+/// ```
+///
+/// Ruby:
+///
+/// ```ruby
+/// module Example
+///   def square(exp)
+///     raise TypeError unless exp.is_a?(Fixnum)
+///
+///     exp * exp
+///   end
+/// end
+/// ```
+#[derive(Debug, PartialEq)]
+pub struct Module {
+    value: Value,
+}
+
+impl Module {
+    /// Creates a new `Module`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Module, VM};
+    /// # VM::init();
+    ///
+    /// let basic_record_module = Module::new("BasicRecord");
+    ///
+    /// assert_eq!(basic_record_module, Module::from_existing("BasicRecord"));
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// module BasicRecord
+    /// end
+    /// ```
+    pub fn new(name: &str) -> Self {
+        Self::from(module::define_module(name))
+    }
+
+    /// Retrieves an existing `Module` object.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Module, VM};
+    /// # VM::init();
+    ///
+    /// let class = Module::new("Record");
+    ///
+    /// assert_eq!(class, Module::from_existing("Record"));
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// module Record
+    /// end
+    ///
+    /// # get module
+    ///
+    /// Record
+    ///
+    /// # or
+    ///
+    /// Object.const_get('Record')
+    /// ```
+    pub fn from_existing(name: &str) -> Self {
+        let object_class = unsafe { rb_cObject };
+
+        Self::from(binding_util::get_constant(name, object_class))
+    }
+
+    /// Returns a Vector of ancestors of current class
+    ///
+    /// # Examples
+    ///
+    /// ### Getting all the ancestors
+    ///
+    /// ```
+    /// use ruru::{Module, VM};
+    /// # VM::init();
+    ///
+    /// let process_module_ancestors = Module::from_existing("Process").ancestors();
+    ///
+    /// let expected_ancestors = vec![
+    ///     Module::from_existing("Process")
+    /// ];
+    ///
+    /// assert_eq!(process_module_ancestors, expected_ancestors);
+    /// ```
+    ///
+    /// ### Searching for an ancestor
+    ///
+    /// ```
+    /// use ruru::{Module, VM};
+    /// # VM::init();
+    ///
+    /// let record_class = Module::new("Record");
+    ///
+    /// let ancestors = record_class.ancestors();
+    ///
+    /// assert!(ancestors.iter().any(|class| *class == record_class));
+    /// ```
+    // Using unsafe conversions is ok, because MRI guarantees to return an `Array` of `Module`es
+    pub fn ancestors(&self) -> Vec<Module> {
+        let ancestors = Array::from(module::ancestors(self.value()));
+
+        ancestors
+            .into_iter()
+            .map(|class| unsafe { class.to::<Self>() })
+            .collect()
+    }
+
+    /// Retrieves a `Module` nested to current `Module`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Module, Object, VM};
+    /// # VM::init();
+    ///
+    /// Module::new("Outer").define(|itself| {
+    ///     itself.define_nested_module("Inner");
+    /// });
+    ///
+    /// Module::from_existing("Outer").get_nested_module("Inner");
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// module Outer
+    ///   module Inner
+    ///   end
+    /// end
+    ///
+    /// Outer::Inner
+    ///
+    /// # or
+    ///
+    /// Outer.const_get('Inner')
+    /// ```
+    pub fn get_nested_module(&self, name: &str) -> Self {
+        Self::from(binding_util::get_constant(name, self.value()))
+    }
+
+    /// Retrieves a `Class` nested to current `Module`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Class, Module, Object, VM};
+    /// # VM::init();
+    ///
+    /// Module::new("Outer").define(|itself| {
+    ///     itself.define_nested_class("Inner", None);
+    /// });
+    ///
+    /// Module::from_existing("Outer").get_nested_class("Inner");
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// module Outer
+    ///   class Inner
+    ///   end
+    /// end
+    ///
+    /// Outer::Inner
+    ///
+    /// # or
+    ///
+    /// Outer.const_get('Inner')
+    /// ```
+    pub fn get_nested_class(&self, name: &str) -> Class {
+        Class::from(binding_util::get_constant(name, self.value()))
+    }
+
+    /// Creates a new `Module` nested into current `Module`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Module, Object, VM};
+    /// # VM::init();
+    ///
+    /// Module::new("Outer").define(|itself| {
+    ///     itself.define_nested_module("Inner");
+    /// });
+    ///
+    /// Module::from_existing("Outer").get_nested_module("Inner");
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// module Outer
+    ///   module Inner
+    ///   end
+    /// end
+    ///
+    /// Outer::Inner
+    ///
+    /// # or
+    ///
+    /// Outer.const_get('Inner')
+    /// ```
+    pub fn define_nested_module(&mut self, name: &str) -> Self {
+        Self::from(module::define_nested_module(self.value(), name))
+    }
+
+    /// Creates a new `Class` nested into current module.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Class, Module, Object, VM};
+    /// # VM::init();
+    ///
+    /// Module::new("Outer").define(|itself| {
+    ///     itself.define_nested_class("Inner", None);
+    /// });
+    ///
+    /// Module::from_existing("Outer").get_nested_class("Inner");
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// Module Outer
+    ///   class Inner
+    ///   end
+    /// end
+    ///
+    /// Outer::Inner
+    ///
+    /// # or
+    ///
+    /// Outer.const_get('Inner')
+    /// ```
+    pub fn define_nested_class(&mut self, name: &str, superclass: Option<&Class>) -> Class {
+        let superclass = Self::superclass_to_value(superclass);
+
+        Class::from(class::define_nested_class(self.value(), name, superclass))
+    }
+
+    /// Retrieves a constant from module.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Module, Object, RString, VM};
+    /// # VM::init();
+    ///
+    /// Module::new("Greeter").define(|itself| {
+    ///     itself.const_set("GREETING", &RString::new("Hello, World!"));
+    /// });
+    ///
+    /// let greeting = Module::from_existing("Greeter")
+    ///     .const_get("GREETING")
+    ///     .try_convert_to::<RString>()
+    ///     .unwrap();
+    ///
+    /// assert_eq!(greeting.to_str(), "Hello, World!");
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// module Greeter
+    ///   GREETING = 'Hello, World!'
+    /// end
+    ///
+    /// # or
+    ///
+    /// Greeter = Module.new
+    /// Greeter.const_set('GREETING', 'Hello, World!')
+    ///
+    /// # ...
+    ///
+    /// Greeter::GREETING == 'Hello, World!'
+    ///
+    /// # or
+    ///
+    /// Greeter.const_get('GREETING') == 'Hello, World'
+    /// ```
+    pub fn const_get(&self, name: &str) -> AnyObject {
+        let value = module::const_get(self.value(), name);
+
+        AnyObject::from(value)
+    }
+
+    /// Defines a constant for module.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Module, Object, RString, VM};
+    /// # VM::init();
+    ///
+    /// Module::new("Greeter").define(|itself| {
+    ///     itself.const_set("GREETING", &RString::new("Hello, World!"));
+    /// });
+    ///
+    /// let greeting = Module::from_existing("Greeter")
+    ///     .const_get("GREETING")
+    ///     .try_convert_to::<RString>()
+    ///     .unwrap();
+    ///
+    /// assert_eq!(greeting.to_str(), "Hello, World!");
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// module Greeter
+    ///   GREETING = 'Hello, World!'
+    /// end
+    ///
+    /// # or
+    ///
+    /// Greeter = Module.new
+    /// Greeter.const_set('GREETING', 'Hello, World!')
+    ///
+    /// # ...
+    ///
+    /// Greeter::GREETING == 'Hello, World!'
+    ///
+    /// # or
+    ///
+    /// Greeter.const_get('GREETING') == 'Hello, World'
+    /// ```
+    pub fn const_set<T: Object>(&mut self, name: &str, value: &T) {
+        module::const_set(self.value(), name, value.value());
+    }
+
+    /// Defines an `attr_reader` for module
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Module, Object, VM};
+    /// # VM::init();
+    ///
+    /// Module::new("Test").define(|itself| {
+    ///     itself.attr_reader("reader");
+    /// });
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// module Test
+    ///   attr_reader :reader
+    /// end
+    /// ```
+    pub fn attr_reader(&mut self, name: &str) {
+        module::define_attribute(self.value(), name, true, false);
+    }
+
+    /// Defines an `attr_writer` for module
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Module, Object, VM};
+    /// # VM::init();
+    ///
+    /// Module::new("Test").define(|itself| {
+    ///     itself.attr_writer("writer");
+    /// });
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// module Test
+    ///   attr_writer :writer
+    /// end
+    /// ```
+    pub fn attr_writer(&mut self, name: &str) {
+        module::define_attribute(self.value(), name, false, true);
+    }
+
+    /// Defines an `attr_accessor` for module
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Module, Object, VM};
+    /// # VM::init();
+    ///
+    /// Module::new("Test").define(|itself| {
+    ///     itself.attr_accessor("accessor");
+    /// });
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// module Test
+    ///   attr_accessor :accessor
+    /// end
+    /// ```
+    pub fn attr_accessor(&mut self, name: &str) {
+        module::define_attribute(self.value(), name, true, true);
+    }
+
+    /// Wraps Rust structure into a new Ruby object of the current module.
+    ///
+    /// See the documentation for `wrappable_struct!` macro for more information.
+    ///
+    /// # Examples
+    ///
+    /// Wrap `Server` structs to `RubyServer` objects
+    ///
+    /// ```
+    /// #[macro_use] extern crate ruru;
+    /// #[macro_use] extern crate lazy_static;
+    ///
+    /// use ruru::{AnyObject, Module, Fixnum, Object, RString, VM};
+    ///
+    /// // The structure which we want to wrap
+    /// pub struct Server {
+    ///     host: String,
+    ///     port: u16,
+    /// }
+    ///
+    /// impl Server {
+    ///     fn new(host: String, port: u16) -> Self {
+    ///         Server {
+    ///             host: host,
+    ///             port: port,
+    ///         }
+    ///     }
+    ///
+    ///     fn host(&self) -> &str {
+    ///         &self.host
+    ///     }
+    ///
+    ///     fn port(&self) -> u16 {
+    ///         self.port
+    ///     }
+    /// }
+    ///
+    /// wrappable_struct!(Server, ServerWrapper, SERVER_WRAPPER);
+    ///
+    /// module!(RubyServer);
+    ///
+    /// methods!(
+    ///     RubyServer,
+    ///     itself,
+    ///
+    ///     fn ruby_server_new(host: RString, port: Fixnum) -> AnyObject {
+    ///         let server = Server::new(host.unwrap().to_string(),
+    ///                                  port.unwrap().to_i64() as u16);
+    ///
+    ///         Module::from_existing("RubyServer").wrap_data(server, &*SERVER_WRAPPER)
+    ///     }
+    ///
+    ///     fn ruby_server_host() -> RString {
+    ///         let host = itself.get_data(&*SERVER_WRAPPER).host();
+    ///
+    ///         RString::new(host)
+    ///     }
+    ///
+    ///     fn ruby_server_port() -> Fixnum {
+    ///         let port = itself.get_data(&*SERVER_WRAPPER).port();
+    ///
+    ///         Fixnum::new(port as i64)
+    ///     }
+    /// );
+    ///
+    /// fn main() {
+    ///     # VM::init();
+    ///     let data_class = Module::from_existing("Data");
+    ///
+    ///     Module::new("RubyServer").define(|itself| {
+    ///         itself.def_self("new", ruby_server_new);
+    ///
+    ///         itself.def("host", ruby_server_host);
+    ///         itself.def("port", ruby_server_port);
+    ///     });
+    /// }
+    /// ```
+    ///
+    /// To use the `RubyServer` class in Ruby:
+    ///
+    /// ```ruby
+    /// server = RubyServer.new("127.0.0.1", 3000)
+    ///
+    /// server.host == "127.0.0.1"
+    /// server.port == 3000
+    /// ```
+    pub fn wrap_data<T, O: Object>(&self, data: T, wrapper: &DataTypeWrapper<T>) -> O {
+        let value = module::wrap_data(self.value(), data, wrapper);
+
+        O::from(value)
+    }
+
+    fn superclass_to_value(superclass: Option<&Class>) -> Value {
+        match superclass {
+            Some(class) => class.value(),
+            None => unsafe { rb_cObject },
+        }
+    }
+}
+
+impl From<Value> for Module {
+    fn from(value: Value) -> Self {
+        Module { value: value }
+    }
+}
+
+impl Object for Module {
+    #[inline]
+    fn value(&self) -> Value {
+        self.value
+    }
+}
+
+impl VerifiedObject for Module {
+    fn is_correct_type<T: Object>(object: &T) -> bool {
+        object.value().ty() == ValueType::Module
+    }
+
+    fn error_message() -> &'static str {
+        "Error converting to Module"
+    }
+}
