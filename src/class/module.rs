@@ -5,7 +5,6 @@ use binding::global::rb_cObject;
 use binding::util as binding_util;
 use typed_data::DataTypeWrapper;
 use types::{Value, ValueType};
-use util;
 
 use {AnyObject, Array, Object, Class, VerifiedObject};
 
@@ -95,9 +94,9 @@ impl Module {
     /// use ruru::{Module, VM};
     /// # VM::init();
     ///
-    /// let class = Module::new("Record");
+    /// let module = Module::new("Record");
     ///
-    /// assert_eq!(class, Module::from_existing("Record"));
+    /// assert_eq!(module, Module::from_existing("Record"));
     /// ```
     ///
     /// Ruby:
@@ -115,12 +114,12 @@ impl Module {
     /// Object.const_get('Record')
     /// ```
     pub fn from_existing(name: &str) -> Self {
-        let object_class = unsafe { rb_cObject };
+        let object_module = unsafe { rb_cObject };
 
-        Self::from(binding_util::get_constant(name, object_class))
+        Self::from(binding_util::get_constant(name, object_module))
     }
 
-    /// Returns a Vector of ancestors of current class
+    /// Returns a Vector of ancestors of current module
     ///
     /// # Examples
     ///
@@ -145,11 +144,11 @@ impl Module {
     /// use ruru::{Module, VM};
     /// # VM::init();
     ///
-    /// let record_class = Module::new("Record");
+    /// let record_module = Module::new("Record");
     ///
-    /// let ancestors = record_class.ancestors();
+    /// let ancestors = record_module.ancestors();
     ///
-    /// assert!(ancestors.iter().any(|class| *class == record_class));
+    /// assert!(ancestors.iter().any(|module| *module == record_module));
     /// ```
     // Using unsafe conversions is ok, because MRI guarantees to return an `Array` of `Module`es
     pub fn ancestors(&self) -> Vec<Module> {
@@ -157,7 +156,7 @@ impl Module {
 
         ancestors
             .into_iter()
-            .map(|class| unsafe { class.to::<Self>() })
+            .map(|module| unsafe { module.to::<Self>() })
             .collect()
     }
 
@@ -278,7 +277,7 @@ impl Module {
     /// Ruby:
     ///
     /// ```ruby
-    /// Module Outer
+    /// module Outer
     ///   class Inner
     ///   end
     /// end

@@ -1,13 +1,13 @@
 use std::convert::From;
 
-use binding::class;
+use binding::{class, module};
 use binding::global::rb_cObject;
 use binding::util as binding_util;
 use typed_data::DataTypeWrapper;
 use types::{Value, ValueType};
 use util;
 
-use {AnyObject, Array, Object, VerifiedObject};
+use {AnyObject, Array, Object, Module, VerifiedObject};
 
 /// `Class`
 ///
@@ -277,6 +277,39 @@ impl Class {
         Self::from(binding_util::get_constant(name, self.value()))
     }
 
+    /// Retrieves a `Module` nested to current `Class`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Class, Module, Object, VM};
+    /// # VM::init();
+    ///
+    /// Class::new("Outer", None).define(|itself| {
+    ///     itself.define_nested_module("Inner");
+    /// });
+    ///
+    /// Class::from_existing("Outer").get_nested_module("Inner");
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class Outer
+    ///   module Inner
+    ///   end
+    /// end
+    ///
+    /// Outer::Inner
+    ///
+    /// # or
+    ///
+    /// Outer.const_get('Inner')
+    /// ```
+    pub fn get_nested_module(&self, name: &str) -> Module {
+        Module::from(binding_util::get_constant(name, self.value()))
+    }
+
     /// Creates a new `Class` nested into current class.
     ///
     /// `superclass` can receive the following values:
@@ -316,6 +349,39 @@ impl Class {
         let superclass = Self::superclass_to_value(superclass);
 
         Self::from(class::define_nested_class(self.value(), name, superclass))
+    }
+
+    /// Creates a new `Module` nested into current `Class`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Class, Module, Object, VM};
+    /// # VM::init();
+    ///
+    /// Class::new("Outer", None).define(|itself| {
+    ///     itself.define_nested_module("Inner");
+    /// });
+    ///
+    /// Module::from_existing("Outer").get_nested_module("Inner");
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class Outer
+    ///   module Inner
+    ///   end
+    /// end
+    ///
+    /// Outer::Inner
+    ///
+    /// # or
+    ///
+    /// Outer.const_get('Inner')
+    /// ```
+    pub fn define_nested_module(&mut self, name: &str) -> Module {
+        Module::from(module::define_nested_module(self.value(), name))
     }
 
     /// Retrieves a constant from class.
