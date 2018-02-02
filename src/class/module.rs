@@ -462,13 +462,14 @@ impl Module {
     ///
     /// # Examples
     ///
-    /// Wrap `Server` structs to `RubyServer` objects
+    /// Wrap `Server` structs to `RubyServer` objects.  Note: Example shows use
+    /// with class but the method still applies to module.
     ///
     /// ```
     /// #[macro_use] extern crate ruru;
     /// #[macro_use] extern crate lazy_static;
     ///
-    /// use ruru::{AnyObject, Module, Fixnum, Object, RString, VM};
+    /// use ruru::{AnyObject, Class, Fixnum, Object, RString, VM};
     ///
     /// // The structure which we want to wrap
     /// pub struct Server {
@@ -495,7 +496,7 @@ impl Module {
     ///
     /// wrappable_struct!(Server, ServerWrapper, SERVER_WRAPPER);
     ///
-    /// module!(RubyServer);
+    /// class!(RubyServer);
     ///
     /// methods!(
     ///     RubyServer,
@@ -505,7 +506,7 @@ impl Module {
     ///         let server = Server::new(host.unwrap().to_string(),
     ///                                  port.unwrap().to_i64() as u16);
     ///
-    ///         Module::from_existing("RubyServer").wrap_data(server, &*SERVER_WRAPPER)
+    ///         Class::from_existing("RubyServer").wrap_data(server, &*SERVER_WRAPPER)
     ///     }
     ///
     ///     fn ruby_server_host() -> RString {
@@ -523,9 +524,9 @@ impl Module {
     ///
     /// fn main() {
     ///     # VM::init();
-    ///     let data_class = Module::from_existing("Data");
+    ///     let data_class = Class::from_existing("Data");
     ///
-    ///     Module::new("RubyServer").define(|itself| {
+    ///     Class::new("RubyServer", None).define(|itself| {
     ///         itself.def_self("new", ruby_server_new);
     ///
     ///         itself.def("host", ruby_server_host);
