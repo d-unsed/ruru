@@ -1,15 +1,14 @@
 use std::convert::From;
 
-use binding::{class, module};
+use binding::{module, class};
 use binding::global::rb_cObject;
 use binding::util as binding_util;
 use typed_data::DataTypeWrapper;
 use types::{Value, ValueType};
-use util;
 
-use {AnyObject, Array, Object, Module, VerifiedObject};
+use {AnyObject, Array, Object, Class, VerifiedObject};
 
-/// `Class`
+/// `Module`
 ///
 /// Also see `def`, `def_self`, `define` and some more functions from `Object` trait.
 ///
@@ -18,29 +17,31 @@ use {AnyObject, Array, Object, Module, VerifiedObject};
 ///
 /// use std::error::Error;
 ///
-/// use ruru::{Class, Fixnum, Object, VM};
+/// use ruru::{Module, Fixnum, Object, VM};
+/// 
+/// module!(Example);
 ///
 /// methods!(
-///    Fixnum,
+///    Example,
 ///    itself,
 ///
-///     fn pow(exp: Fixnum) -> Fixnum {
+///     fn square(exp: Fixnum) -> Fixnum {
 ///         // `exp` is not a valid `Fixnum`, raise an exception
 ///         if let Err(ref error) = exp {
 ///             VM::raise(error.to_exception(), error.description());
 ///         }
 ///
 ///         // We can safely unwrap here, because an exception was raised if `exp` is `Err`
-///         let exp = exp.unwrap().to_i64() as u32;
+///         let exp = exp.unwrap().to_i64();
 ///
-///         Fixnum::new(itself.to_i64().pow(exp))
+///         Fixnum::new(exp * exp)
 ///     }
 /// );
 ///
 /// fn main() {
 ///     # VM::init();
-///     Class::from_existing("Fixnum").define(|itself| {
-///         itself.def("pow", pow);
+///     Module::new("Example").define(|itself| {
+///         itself.def("square", square);
 ///     });
 /// }
 /// ```
@@ -48,84 +49,63 @@ use {AnyObject, Array, Object, Module, VerifiedObject};
 /// Ruby:
 ///
 /// ```ruby
-/// class Fixnum
-///   def pow(exp)
+/// module Example
+///   def square(exp)
 ///     raise TypeError unless exp.is_a?(Fixnum)
 ///
-///     self ** exp
+///     exp * exp
 ///   end
 /// end
 /// ```
 #[derive(Debug, PartialEq)]
-pub struct Class {
+pub struct Module {
     value: Value,
 }
 
-impl Class {
-    /// Creates a new `Class`.
-    ///
-    /// `superclass` can receive the following values:
-    ///
-    ///  - `None` to inherit from `Object` class
-    ///     (standard Ruby behavior when superclass is not given explicitly);
-    ///  - `Some(&Class)` to inherit from the given class
+impl Module {
+    /// Creates a new `Module`.
     ///
     /// # Examples
     ///
     /// ```
-    /// use ruru::{Class, VM};
+    /// use ruru::{Module, VM};
     /// # VM::init();
     ///
-    /// let basic_record_class = Class::new("BasicRecord", None);
+    /// let basic_record_module = Module::new("BasicRecord");
     ///
-    /// assert_eq!(basic_record_class, Class::from_existing("BasicRecord"));
-    /// assert_eq!(basic_record_class.superclass(), Some(Class::from_existing("Object")));
-    ///
-    /// let record_class = Class::new("Record", Some(&basic_record_class));
-    ///
-    /// assert_eq!(record_class, Class::from_existing("Record"));
-    /// assert_eq!(record_class.superclass(), Some(Class::from_existing("BasicRecord")));
+    /// assert_eq!(basic_record_module, Module::from_existing("BasicRecord"));
     /// ```
     ///
     /// Ruby:
     ///
     /// ```ruby
-    /// class BasicRecord
+    /// module BasicRecord
     /// end
-    ///
-    /// class Record < BasicRecord
-    /// end
-    ///
-    /// BasicRecord.superclass == Object
-    ///
-    /// Record.superclass == BasicRecord
     /// ```
-    pub fn new(name: &str, superclass: Option<&Self>) -> Self {
-        let superclass = Self::superclass_to_value(superclass);
-
-        Self::from(class::define_class(name, superclass))
+    pub fn new(name: &str) -> Self {
+        Self::from(module::define_module(name))
     }
 
-    /// Retrieves an existing `Class` object.
+    /// Retrieves an existing `Module` object.
     ///
     /// # Examples
     ///
     /// ```
-    /// use ruru::{Class, VM};
+    /// use ruru::{Module, VM};
     /// # VM::init();
     ///
-    /// let class = Class::new("Record", None);
+    /// let module = Module::new("Record");
     ///
-    /// assert_eq!(class, Class::from_existing("Record"));
+    /// assert_eq!(module, Module::from_existing("Record"));
     /// ```
     ///
     /// Ruby:
     ///
     /// ```ruby
-    /// class Record
+    /// module Record
     /// end
     ///
-    /// # get class
+    /// # get module
     ///
     /// Record
     ///
@@ -134,232 +114,61 @@ impl Class {
     /// Object.const_get('Record')
     /// ```
     pub fn from_existing(name: &str) -> Self {
-        let object_class = unsafe { rb_cObject };
+        let object_module = unsafe { rb_cObject };
 
-        Self::from(binding_util::get_constant(name, object_class))
+        Self::from(binding_util::get_constant(name, object_module))
     }
 
-    /// Creates a new instance of `Class`
-    ///
-    /// Arguments must be passed as a vector of `AnyObject` (see example).
-    ///
-    /// # Examples
-    ///
-    /// ```no_run
-    /// use ruru::{Class, Fixnum, Object};
-    ///
-    /// // Without arguments
-    /// Class::from_existing("Hello").new_instance(None);
-    ///
-    /// // With arguments passing arguments to constructor
-    /// let arguments = [
-    ///     Fixnum::new(1).to_any_object(),
-    ///     Fixnum::new(2).to_any_object()
-    /// ];
-    ///
-    /// Class::from_existing("Worker").new_instance(Some(&arguments));
-    /// ```
-    ///
-    /// Ruby:
-    ///
-    /// ```ruby
-    /// Hello.new
-    ///
-    /// Worker.new(1, 2)
-    /// ```
-    pub fn new_instance(&self, arguments: Option<&[AnyObject]>) -> AnyObject {
-        let arguments = util::arguments_to_values(arguments);
-        let instance = class::new_instance(self.value(), arguments);
-
-        AnyObject::from(instance)
-    }
-
-    /// Returns a superclass of the current class
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use ruru::{Class, Object, VM};
-    /// # VM::init();
-    ///
-    /// assert_eq!(
-    ///     Class::from_existing("Array").superclass(),
-    ///     Some(Class::from_existing("Object"))
-    /// );
-    ///
-    /// assert_eq!(Class::from_existing("BasicObject").superclass(), None);
-    /// ```
-    pub fn superclass(&self) -> Option<Class> {
-        let superclass_value = class::superclass(self.value());
-
-        if superclass_value.is_nil() {
-            None
-        } else {
-            Some(Self::from(superclass_value))
-        }
-    }
-
-    /// Returns a Vector of ancestors of current class
+    /// Returns a Vector of ancestors of current module
     ///
     /// # Examples
     ///
     /// ### Getting all the ancestors
     ///
     /// ```
-    /// use ruru::{Class, VM};
+    /// use ruru::{Module, VM};
     /// # VM::init();
     ///
-    /// let true_class_ancestors = Class::from_existing("TrueClass").ancestors();
+    /// let process_module_ancestors = Module::from_existing("Process").ancestors();
     ///
     /// let expected_ancestors = vec![
-    ///     Class::from_existing("TrueClass"),
-    ///     Class::from_existing("Object"),
-    ///     Class::from_existing("Kernel"),
-    ///     Class::from_existing("BasicObject")
+    ///     Module::from_existing("Process")
     /// ];
     ///
-    /// assert_eq!(true_class_ancestors, expected_ancestors);
+    /// assert_eq!(process_module_ancestors, expected_ancestors);
     /// ```
     ///
     /// ### Searching for an ancestor
     ///
     /// ```
-    /// use ruru::{Class, VM};
+    /// use ruru::{Module, VM};
     /// # VM::init();
     ///
-    /// let basic_record_class = Class::new("BasicRecord", None);
-    /// let record_class = Class::new("Record", Some(&basic_record_class));
+    /// let record_module = Module::new("Record");
     ///
-    /// let ancestors = record_class.ancestors();
+    /// let ancestors = record_module.ancestors();
     ///
-    /// assert!(ancestors.iter().any(|class| *class == basic_record_class));
+    /// assert!(ancestors.iter().any(|module| *module == record_module));
     /// ```
-    // Using unsafe conversions is ok, because MRI guarantees to return an `Array` of `Class`es
-    pub fn ancestors(&self) -> Vec<Class> {
+    // Using unsafe conversions is ok, because MRI guarantees to return an `Array` of `Module`es
+    pub fn ancestors(&self) -> Vec<Module> {
         let ancestors = Array::from(class::ancestors(self.value()));
 
         ancestors
             .into_iter()
-            .map(|class| unsafe { class.to::<Self>() })
+            .map(|module| unsafe { module.to::<Self>() })
             .collect()
     }
 
-    /// Retrieves a `Class` nested to current `Class`.
+    /// Retrieves a `Module` nested to current `Module`.
     ///
     /// # Examples
     ///
     /// ```
-    /// use ruru::{Class, Object, VM};
+    /// use ruru::{Module, Object, VM};
     /// # VM::init();
     ///
-    /// Class::new("Outer", None).define(|itself| {
-    ///     itself.define_nested_class("Inner", None);
-    /// });
-    ///
-    /// Class::from_existing("Outer").get_nested_class("Inner");
-    /// ```
-    ///
-    /// Ruby:
-    ///
-    /// ```ruby
-    /// class Outer
-    ///   class Inner
-    ///   end
-    /// end
-    ///
-    /// Outer::Inner
-    ///
-    /// # or
-    ///
-    /// Outer.const_get('Inner')
-    /// ```
-    pub fn get_nested_class(&self, name: &str) -> Self {
-        Self::from(binding_util::get_constant(name, self.value()))
-    }
-
-    /// Retrieves a `Module` nested to current `Class`.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use ruru::{Class, Module, Object, VM};
-    /// # VM::init();
-    ///
-    /// Class::new("Outer", None).define(|itself| {
-    ///     itself.define_nested_module("Inner");
-    /// });
-    ///
-    /// Class::from_existing("Outer").get_nested_module("Inner");
-    /// ```
-    ///
-    /// Ruby:
-    ///
-    /// ```ruby
-    /// class Outer
-    ///   module Inner
-    ///   end
-    /// end
-    ///
-    /// Outer::Inner
-    ///
-    /// # or
-    ///
-    /// Outer.const_get('Inner')
-    /// ```
-    pub fn get_nested_module(&self, name: &str) -> Module {
-        Module::from(binding_util::get_constant(name, self.value()))
-    }
-
-    /// Creates a new `Class` nested into current class.
-    ///
-    /// `superclass` can receive the following values:
-    ///
-    ///  - `None` to inherit from `Object` class
-    ///     (standard Ruby behavior when superclass is not given explicitly);
-    ///  - `Some(&class)` to inherit from the given class
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use ruru::{Class, Object, VM};
-    /// # VM::init();
-    ///
-    /// Class::new("Outer", None).define(|itself| {
-    ///     itself.define_nested_class("Inner", None);
-    /// });
-    ///
-    /// Class::from_existing("Outer").get_nested_class("Inner");
-    /// ```
-    ///
-    /// Ruby:
-    ///
-    /// ```ruby
-    /// class Outer
-    ///   class Inner
-    ///   end
-    /// end
-    ///
-    /// Outer::Inner
-    ///
-    /// # or
-    ///
-    /// Outer.const_get('Inner')
-    /// ```
-    pub fn define_nested_class(&mut self, name: &str, superclass: Option<&Class>) -> Self {
-        let superclass = Self::superclass_to_value(superclass);
-
-        Self::from(class::define_nested_class(self.value(), name, superclass))
-    }
-
-    /// Creates a new `Module` nested into current `Class`.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use ruru::{Class, Module, Object, VM};
-    /// # VM::init();
-    ///
-    /// Class::new("Outer", None).define(|itself| {
+    /// Module::new("Outer").define(|itself| {
     ///     itself.define_nested_module("Inner");
     /// });
     ///
@@ -369,7 +178,7 @@ impl Class {
     /// Ruby:
     ///
     /// ```ruby
-    /// class Outer
+    /// module Outer
     ///   module Inner
     ///   end
     /// end
@@ -380,23 +189,124 @@ impl Class {
     ///
     /// Outer.const_get('Inner')
     /// ```
-    pub fn define_nested_module(&mut self, name: &str) -> Module {
-        Module::from(module::define_nested_module(self.value(), name))
+    pub fn get_nested_module(&self, name: &str) -> Self {
+        Self::from(binding_util::get_constant(name, self.value()))
     }
 
-    /// Retrieves a constant from class.
+    /// Retrieves a `Class` nested to current `Module`.
     ///
     /// # Examples
     ///
     /// ```
-    /// use ruru::{Class, Object, RString, VM};
+    /// use ruru::{Class, Module, Object, VM};
     /// # VM::init();
     ///
-    /// Class::new("Greeter", None).define(|itself| {
+    /// Module::new("Outer").define(|itself| {
+    ///     itself.define_nested_class("Inner", None);
+    /// });
+    ///
+    /// Module::from_existing("Outer").get_nested_class("Inner");
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// module Outer
+    ///   class Inner
+    ///   end
+    /// end
+    ///
+    /// Outer::Inner
+    ///
+    /// # or
+    ///
+    /// Outer.const_get('Inner')
+    /// ```
+    pub fn get_nested_class(&self, name: &str) -> Class {
+        Class::from(binding_util::get_constant(name, self.value()))
+    }
+
+    /// Creates a new `Module` nested into current `Module`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Module, Object, VM};
+    /// # VM::init();
+    ///
+    /// Module::new("Outer").define(|itself| {
+    ///     itself.define_nested_module("Inner");
+    /// });
+    ///
+    /// Module::from_existing("Outer").get_nested_module("Inner");
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// module Outer
+    ///   module Inner
+    ///   end
+    /// end
+    ///
+    /// Outer::Inner
+    ///
+    /// # or
+    ///
+    /// Outer.const_get('Inner')
+    /// ```
+    pub fn define_nested_module(&mut self, name: &str) -> Self {
+        Self::from(module::define_nested_module(self.value(), name))
+    }
+
+    /// Creates a new `Class` nested into current module.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Class, Module, Object, VM};
+    /// # VM::init();
+    ///
+    /// Module::new("Outer").define(|itself| {
+    ///     itself.define_nested_class("Inner", None);
+    /// });
+    ///
+    /// Module::from_existing("Outer").get_nested_class("Inner");
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// module Outer
+    ///   class Inner
+    ///   end
+    /// end
+    ///
+    /// Outer::Inner
+    ///
+    /// # or
+    ///
+    /// Outer.const_get('Inner')
+    /// ```
+    pub fn define_nested_class(&mut self, name: &str, superclass: Option<&Class>) -> Class {
+        let superclass = Self::superclass_to_value(superclass);
+
+        Class::from(class::define_nested_class(self.value(), name, superclass))
+    }
+
+    /// Retrieves a constant from module.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Module, Object, RString, VM};
+    /// # VM::init();
+    ///
+    /// Module::new("Greeter").define(|itself| {
     ///     itself.const_set("GREETING", &RString::new("Hello, World!"));
     /// });
     ///
-    /// let greeting = Class::from_existing("Greeter")
+    /// let greeting = Module::from_existing("Greeter")
     ///     .const_get("GREETING")
     ///     .try_convert_to::<RString>()
     ///     .unwrap();
@@ -407,13 +317,13 @@ impl Class {
     /// Ruby:
     ///
     /// ```ruby
-    /// class Greeter
+    /// module Greeter
     ///   GREETING = 'Hello, World!'
     /// end
     ///
     /// # or
     ///
-    /// Greeter = Class.new
+    /// Greeter = Module.new
     /// Greeter.const_set('GREETING', 'Hello, World!')
     ///
     /// # ...
@@ -430,19 +340,19 @@ impl Class {
         AnyObject::from(value)
     }
 
-    /// Defines a constant for class.
+    /// Defines a constant for module.
     ///
     /// # Examples
     ///
     /// ```
-    /// use ruru::{Class, Object, RString, VM};
+    /// use ruru::{Module, Object, RString, VM};
     /// # VM::init();
     ///
-    /// Class::new("Greeter", None).define(|itself| {
+    /// Module::new("Greeter").define(|itself| {
     ///     itself.const_set("GREETING", &RString::new("Hello, World!"));
     /// });
     ///
-    /// let greeting = Class::from_existing("Greeter")
+    /// let greeting = Module::from_existing("Greeter")
     ///     .const_get("GREETING")
     ///     .try_convert_to::<RString>()
     ///     .unwrap();
@@ -453,13 +363,13 @@ impl Class {
     /// Ruby:
     ///
     /// ```ruby
-    /// class Greeter
+    /// module Greeter
     ///   GREETING = 'Hello, World!'
     /// end
     ///
     /// # or
     ///
-    /// Greeter = Class.new
+    /// Greeter = Module.new
     /// Greeter.const_set('GREETING', 'Hello, World!')
     ///
     /// # ...
@@ -474,55 +384,63 @@ impl Class {
         class::const_set(self.value(), name, value.value());
     }
 
-    /// Includes module into current class
+    /// Includes module into current module
     /// 
     /// # Examples
     /// 
     /// ```
-    /// use ruru::{Class, Module, VM};
+    /// use ruru::{Module, VM};
     /// # VM::init();
     /// 
-    /// let a_module = Module::new("A");
-    /// Class::new("B", None).include("A");
+    /// Module::new("A");
+    /// Module::new("B").include("A");
     ///
-    /// let b_class_ancestors = Class::from_existing("B").ancestors();
-    /// let expected_ancestors = vec![Module::from_existing("A")];
+    /// let b_module_ancestors = Module::from_existing("B").ancestors();
     ///
-    /// assert!(expected_ancestors.iter().any(|anc| *anc == a_module));
+    /// let expected_ancestors = vec![
+    ///     Module::from_existing("B"),
+    ///     Module::from_existing("A")
+    /// ];
+    ///
+    /// assert_eq!(b_module_ancestors, expected_ancestors);
     /// ```
     pub fn include(&self, md: &str) {
         module::include_module(self.value(), md);
     }
 
-    /// Prepends module into current class
+    /// Prepends module into current module
     /// 
     /// # Examples
     /// 
     /// ```
-    /// use ruru::{Class, Module, VM};
+    /// use ruru::{Module, VM};
     /// # VM::init();
     /// 
-    /// let a_module = Module::new("A");
-    /// Class::new("B", None).prepend("A");
+    /// Module::new("A");
+    /// Module::new("B").prepend("A");
     ///
-    /// let b_class_ancestors = Class::from_existing("B").ancestors();
-    /// let expected_ancestors = vec![Module::from_existing("A")];
+    /// let b_module_ancestors = Module::from_existing("B").ancestors();
     ///
-    /// assert!(expected_ancestors.iter().any(|anc| *anc == a_module));
+    /// let expected_ancestors = vec![
+    ///     Module::from_existing("A"),
+    ///     Module::from_existing("B")
+    /// ];
+    ///
+    /// assert_eq!(b_module_ancestors, expected_ancestors);
     /// ```
     pub fn prepend(&self, md: &str) {
         module::prepend_module(self.value(), md);
     }
 
-    /// Defines an `attr_reader` for class
+    /// Defines an `attr_reader` for module
     ///
     /// # Examples
     ///
     /// ```
-    /// use ruru::{Class, Object, VM};
+    /// use ruru::{Module, Object, VM};
     /// # VM::init();
     ///
-    /// Class::new("Test", None).define(|itself| {
+    /// Module::new("Test").define(|itself| {
     ///     itself.attr_reader("reader");
     /// });
     /// ```
@@ -530,7 +448,7 @@ impl Class {
     /// Ruby:
     ///
     /// ```ruby
-    /// class Test
+    /// module Test
     ///   attr_reader :reader
     /// end
     /// ```
@@ -538,15 +456,15 @@ impl Class {
         class::define_attribute(self.value(), name, true, false);
     }
 
-    /// Defines an `attr_writer` for class
+    /// Defines an `attr_writer` for module
     ///
     /// # Examples
     ///
     /// ```
-    /// use ruru::{Class, Object, VM};
+    /// use ruru::{Module, Object, VM};
     /// # VM::init();
     ///
-    /// Class::new("Test", None).define(|itself| {
+    /// Module::new("Test").define(|itself| {
     ///     itself.attr_writer("writer");
     /// });
     /// ```
@@ -554,7 +472,7 @@ impl Class {
     /// Ruby:
     ///
     /// ```ruby
-    /// class Test
+    /// module Test
     ///   attr_writer :writer
     /// end
     /// ```
@@ -562,15 +480,15 @@ impl Class {
         class::define_attribute(self.value(), name, false, true);
     }
 
-    /// Defines an `attr_accessor` for class
+    /// Defines an `attr_accessor` for module
     ///
     /// # Examples
     ///
     /// ```
-    /// use ruru::{Class, Object, VM};
+    /// use ruru::{Module, Object, VM};
     /// # VM::init();
     ///
-    /// Class::new("Test", None).define(|itself| {
+    /// Module::new("Test").define(|itself| {
     ///     itself.attr_accessor("accessor");
     /// });
     /// ```
@@ -578,7 +496,7 @@ impl Class {
     /// Ruby:
     ///
     /// ```ruby
-    /// class Test
+    /// module Test
     ///   attr_accessor :accessor
     /// end
     /// ```
@@ -586,13 +504,14 @@ impl Class {
         class::define_attribute(self.value(), name, true, true);
     }
 
-    /// Wraps Rust structure into a new Ruby object of the current class.
+    /// Wraps Rust structure into a new Ruby object of the current module.
     ///
     /// See the documentation for `wrappable_struct!` macro for more information.
     ///
     /// # Examples
     ///
-    /// Wrap `Server` structs to `RubyServer` objects
+    /// Wrap `Server` structs to `RubyServer` objects.  Note: Example shows use
+    /// with class but the method still applies to module.
     ///
     /// ```
     /// #[macro_use] extern crate ruru;
@@ -655,7 +574,7 @@ impl Class {
     ///     # VM::init();
     ///     let data_class = Class::from_existing("Data");
     ///
-    ///     Class::new("RubyServer", Some(&data_class)).define(|itself| {
+    ///     Class::new("RubyServer", None).define(|itself| {
     ///         itself.def_self("new", ruby_server_new);
     ///
     ///         itself.def("host", ruby_server_host);
@@ -686,25 +605,25 @@ impl Class {
     }
 }
 
-impl From<Value> for Class {
+impl From<Value> for Module {
     fn from(value: Value) -> Self {
-        Class { value: value }
+        Module { value: value }
     }
 }
 
-impl Object for Class {
+impl Object for Module {
     #[inline]
     fn value(&self) -> Value {
         self.value
     }
 }
 
-impl VerifiedObject for Class {
+impl VerifiedObject for Module {
     fn is_correct_type<T: Object>(object: &T) -> bool {
-        object.value().ty() == ValueType::Class
+        object.value().ty() == ValueType::Module
     }
 
     fn error_message() -> &'static str {
-        "Error converting to Class"
+        "Error converting to Module"
     }
 }

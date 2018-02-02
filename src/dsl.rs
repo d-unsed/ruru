@@ -81,6 +81,89 @@ macro_rules! class {
     }
 }
 
+/// Creates Rust structure for new Ruby module
+///
+/// This macro does not define an actual Ruby module. It only creates structs for using
+/// the module in Rust. To define the module in Ruby, use `Module` structure.
+///
+/// # Examples
+///
+/// ```
+/// #[macro_use]
+/// extern crate ruru;
+///
+/// use ruru::{Module, RString, Object, VM};
+///
+/// module!(Greeter);
+///
+/// methods!(
+///     Greeter,
+///     itself,
+///
+///     fn anonymous_greeting() -> RString {
+///         RString::new("Hello stranger!")
+///     }
+///
+///     fn friendly_greeting(name: RString) -> RString {
+///         let name = name
+///             .map(|name| name.to_string())
+///             .unwrap_or("Anonymous".to_string());
+///
+///         let greeting = format!("Hello dear {}!", name);
+///
+///         RString::new(&greeting)
+///     }
+/// );
+///
+/// fn main() {
+///     # VM::init();
+///     Module::new("Greeter").define(|itself| {
+///         itself.def("anonymous_greeting", anonymous_greeting);
+///         itself.def("friendly_greeting", friendly_greeting);
+///     });
+/// }
+/// ```
+///
+/// Ruby:
+///
+/// ```ruby
+/// module Greeter
+///   def anonymous_greeting
+///     'Hello stranger!'
+///   end
+///
+///   def friendly_greeting(name)
+///     default_name = 'Anonymous'
+///
+///     name = defaut_name unless name.is_a?(String)
+///
+///     "Hello dear #{name}"
+///   end
+/// end
+/// ```
+#[macro_export]
+macro_rules! module {
+    ($module: ident) => {
+        #[derive(Debug, PartialEq)]
+        pub struct $module {
+            value: $crate::types::Value,
+        }
+
+        impl From<$crate::types::Value> for $module {
+            fn from(value: $crate::types::Value) -> Self {
+                $module { value: value }
+            }
+        }
+
+        impl $crate::Object for $module {
+            #[inline]
+            fn value(&self) -> $crate::types::Value {
+                self.value
+            }
+        }
+    }
+}
+
 /// Creates unsafe callbacks for Ruby methods
 ///
 /// This macro is unsafe, because:
