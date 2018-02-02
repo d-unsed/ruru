@@ -152,7 +152,7 @@ impl Module {
     /// ```
     // Using unsafe conversions is ok, because MRI guarantees to return an `Array` of `Module`es
     pub fn ancestors(&self) -> Vec<Module> {
-        let ancestors = Array::from(module::ancestors(self.value()));
+        let ancestors = Array::from(class::ancestors(self.value()));
 
         ancestors
             .into_iter()
@@ -335,7 +335,7 @@ impl Module {
     /// Greeter.const_get('GREETING') == 'Hello, World'
     /// ```
     pub fn const_get(&self, name: &str) -> AnyObject {
-        let value = module::const_get(self.value(), name);
+        let value = class::const_get(self.value(), name);
 
         AnyObject::from(value)
     }
@@ -381,7 +381,7 @@ impl Module {
     /// Greeter.const_get('GREETING') == 'Hello, World'
     /// ```
     pub fn const_set<T: Object>(&mut self, name: &str, value: &T) {
-        module::const_set(self.value(), name, value.value());
+        class::const_set(self.value(), name, value.value());
     }
 
     /// Defines an `attr_reader` for module
@@ -405,7 +405,7 @@ impl Module {
     /// end
     /// ```
     pub fn attr_reader(&mut self, name: &str) {
-        module::define_attribute(self.value(), name, true, false);
+        class::define_attribute(self.value(), name, true, false);
     }
 
     /// Defines an `attr_writer` for module
@@ -429,7 +429,7 @@ impl Module {
     /// end
     /// ```
     pub fn attr_writer(&mut self, name: &str) {
-        module::define_attribute(self.value(), name, false, true);
+        class::define_attribute(self.value(), name, false, true);
     }
 
     /// Defines an `attr_accessor` for module
@@ -453,7 +453,7 @@ impl Module {
     /// end
     /// ```
     pub fn attr_accessor(&mut self, name: &str) {
-        module::define_attribute(self.value(), name, true, true);
+        class::define_attribute(self.value(), name, true, true);
     }
 
     /// Wraps Rust structure into a new Ruby object of the current module.
@@ -544,7 +544,7 @@ impl Module {
     /// server.port == 3000
     /// ```
     pub fn wrap_data<T, O: Object>(&self, data: T, wrapper: &DataTypeWrapper<T>) -> O {
-        let value = module::wrap_data(self.value(), data, wrapper);
+        let value = class::wrap_data(self.value(), data, wrapper);
 
         O::from(value)
     }
