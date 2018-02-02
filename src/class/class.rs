@@ -474,6 +474,46 @@ impl Class {
         class::const_set(self.value(), name, value.value());
     }
 
+    /// Includes module into current class
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// use ruru::{Class, Module, VM};
+    /// # VM::init();
+    /// 
+    /// let a_module = Module::new("A");
+    /// Class::new("B", None).include("A");
+    ///
+    /// let b_class_ancestors = Class::from_existing("B").ancestors();
+    /// let expected_ancestors = vec![Module::from_existing("A")];
+    ///
+    /// assert!(expected_ancestors.iter().any(|anc| *anc == a_module));
+    /// ```
+    pub fn include(&self, md: &str) {
+        module::include_module(self.value(), md);
+    }
+
+    /// Prepends module into current class
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// use ruru::{Class, Module, VM};
+    /// # VM::init();
+    /// 
+    /// let a_module = Module::new("A");
+    /// Class::new("B", None).prepend("A");
+    ///
+    /// let b_class_ancestors = Class::from_existing("B").ancestors();
+    /// let expected_ancestors = vec![Module::from_existing("A")];
+    ///
+    /// assert!(expected_ancestors.iter().any(|anc| *anc == a_module));
+    /// ```
+    pub fn prepend(&self, md: &str) {
+        module::prepend_module(self.value(), md);
+    }
+
     /// Defines an `attr_reader` for class
     ///
     /// # Examples

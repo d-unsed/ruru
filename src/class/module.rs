@@ -384,6 +384,54 @@ impl Module {
         class::const_set(self.value(), name, value.value());
     }
 
+    /// Includes module into current module
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// use ruru::{Module, VM};
+    /// # VM::init();
+    /// 
+    /// Module::new("A");
+    /// Module::new("B").include("A");
+    ///
+    /// let b_module_ancestors = Module::from_existing("B").ancestors();
+    ///
+    /// let expected_ancestors = vec![
+    ///     Module::from_existing("B"),
+    ///     Module::from_existing("A")
+    /// ];
+    ///
+    /// assert_eq!(b_module_ancestors, expected_ancestors);
+    /// ```
+    pub fn include(&self, md: &str) {
+        module::include_module(self.value(), md);
+    }
+
+    /// Prepends module into current module
+    /// 
+    /// # Examples
+    /// 
+    /// ```
+    /// use ruru::{Module, VM};
+    /// # VM::init();
+    /// 
+    /// Module::new("A");
+    /// Module::new("B").prepend("A");
+    ///
+    /// let b_module_ancestors = Module::from_existing("B").ancestors();
+    ///
+    /// let expected_ancestors = vec![
+    ///     Module::from_existing("A"),
+    ///     Module::from_existing("B")
+    /// ];
+    ///
+    /// assert_eq!(b_module_ancestors, expected_ancestors);
+    /// ```
+    pub fn prepend(&self, md: &str) {
+        module::prepend_module(self.value(), md);
+    }
+
     /// Defines an `attr_reader` for module
     ///
     /// # Examples
