@@ -342,7 +342,7 @@ pub trait Object: From<Value> {
     ///
     /// Use `methods!` macro to define a `callback`.
     ///
-    /// You can also use `def()` alias for this function combined with `Class::define()` a for
+    /// You can also use `def()` alias for this function combined with `Class::define()` for a
     /// nicer DSL.
     ///
     /// # Panics
