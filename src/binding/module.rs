@@ -2,8 +2,10 @@ use ruby_sys::class;
 
 use binding::global::rb_cObject;
 use binding::util as binding_util;
-use types::Value;
+use types::{Value, Callback, CallbackPtr};
 use util;
+
+use Object;
 
 pub fn define_module(name: &str) -> Value {
     let name = util::str_to_cstring(name);
@@ -15,6 +17,14 @@ pub fn define_nested_module(outer: Value, name: &str) -> Value {
     let name = util::str_to_cstring(name);
 
     unsafe { class::rb_define_module_under(outer, name.as_ptr()) }
+}
+
+pub fn define_module_function<I: Object, O: Object>(klass: Value, name: &str, callback: Callback<I, O>) {
+    let name = util::str_to_cstring(name);
+
+    unsafe {
+        class::rb_define_module_function(klass, name.as_ptr(), callback as CallbackPtr, -1);
+    }
 }
 
 pub fn include_module(klass: Value, module: &str) {

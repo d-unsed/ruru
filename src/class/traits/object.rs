@@ -1,6 +1,6 @@
 use std::convert::From;
 
-use binding::class;
+use binding::{module, class};
 use binding::global::ValueType;
 use binding::util as binding_util;
 use result::{Error, Result};
@@ -457,6 +457,126 @@ pub trait Object: From<Value> {
         class::define_method(self.value(), name, callback);
     }
 
+    /// Defines a private instance method for the given class or object.
+    ///
+    /// Use `methods!` macro to define a `callback`.
+    ///
+    /// You can also use `def_private()` alias for this function combined with `Class::define()` for a
+    /// nicer DSL.
+    ///
+    /// # Panics
+    ///
+    /// Ruby can raise an exception if you try to define instance method directly on an instance
+    /// of some class (like `Fixnum`, `String`, `Array` etc).
+    ///
+    /// Use this method only on classes (or singleton classes of objects).
+    ///
+    /// # Examples
+    ///
+    /// ### The famous String#blank? method
+    ///
+    /// ```rust
+    /// #[macro_use] extern crate ruru;
+    ///
+    /// use ruru::{Boolean, Class, Object, RString, VM};
+    ///
+    /// methods!(
+    ///    RString,
+    ///    itself,
+    ///
+    ///    fn is_blank() -> Boolean {
+    ///        Boolean::new(itself.to_str().chars().all(|c| c.is_whitespace()))
+    ///    }
+    /// );
+    ///
+    /// fn main() {
+    ///     # VM::init();
+    ///     Class::from_existing("String").define(|itself| {
+    ///         itself.def_private("blank?", is_blank);
+    ///     });
+    /// }
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class String
+    ///   private def blank?
+    ///     # simplified
+    ///     self.chars.all? { |c| c == ' ' }
+    ///   end
+    /// end
+    /// ```
+    ///
+    /// ### Receiving arguments
+    ///
+    /// Raise `Fixnum` to the power of `exp`.
+    ///
+    /// ```rust
+    /// #[macro_use] extern crate ruru;
+    ///
+    /// use std::error::Error;
+    ///
+    /// use ruru::{Class, Fixnum, Object, VM};
+    ///
+    /// methods!(
+    ///     Fixnum,
+    ///     itself,
+    ///
+    ///     fn pow(exp: Fixnum) -> Fixnum {
+    ///         // `exp` is not a valid `Fixnum`, raise an exception
+    ///         if let Err(ref error) = exp {
+    ///             VM::raise(error.to_exception(), error.description());
+    ///         }
+    ///
+    ///         // We can safely unwrap here, because an exception was raised if `exp` is `Err`
+    ///         let exp = exp.unwrap().to_i64() as u32;
+    ///
+    ///         Fixnum::new(itself.to_i64().pow(exp))
+    ///     }
+    ///
+    ///     fn pow_with_default_argument(exp: Fixnum) -> Fixnum {
+    ///         let default_exp = 0;
+    ///         let exp = exp.map(|exp| exp.to_i64()).unwrap_or(default_exp);
+    ///
+    ///         let result = itself.to_i64().pow(exp as u32);
+    ///
+    ///         Fixnum::new(result)
+    ///     }
+    /// );
+    ///
+    /// fn main() {
+    ///     # VM::init();
+    ///     Class::from_existing("Fixnum").define(|itself| {
+    ///         itself.def_private("pow", pow);
+    ///         itself.def_private("pow_with_default_argument", pow_with_default_argument);
+    ///     });
+    /// }
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class Fixnum
+    ///   private
+    ///   def pow(exp)
+    ///     raise ArgumentError unless exp.is_a?(Fixnum)
+    ///
+    ///     self ** exp
+    ///   end
+    ///
+    ///   def pow_with_default_argument(exp)
+    ///     default_exp = 0
+    ///     exp = default_exp unless exp.is_a?(Fixnum)
+    ///
+    ///     self ** exp
+    ///   end
+    /// end
+    /// ```
+    fn define_private_method<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
+        class::define_private_method(self.value(), name, callback);
+    }
+
     /// Defines a class method for given class or singleton method for object.
     ///
     /// Use `methods!` macro to define a `callback`.
@@ -562,9 +682,141 @@ pub trait Object: From<Value> {
         class::define_singleton_method(self.value(), name, callback);
     }
 
-    /// An alias for `define_method` (similar to Ruby syntax `def some_method`).
+    /// Defines an instance method for the given module.
+    ///
+    /// Use `methods!` macro to define a `callback`.
+    ///
+    /// You can also use `def()` alias for this function combined with `Module::define()` for a
+    /// nicer DSL.
+    ///
+    /// # Panics
+    ///
+    /// Ruby can raise an exception if you try to define instance method directly on an instance
+    /// of some class (like `Fixnum`, `String`, `Array` etc).
+    ///
+    /// Use this method only on classes (or singleton classes of objects).
+    ///
+    /// # Examples
+    ///
+    /// ### The famous String#blank? method
+    ///
+    /// ```rust
+    /// #[macro_use] extern crate ruru;
+    ///
+    /// use ruru::{Boolean, Module, Class, Object, RString, VM};
+    ///
+    /// methods!(
+    ///    RString,
+    ///    itself,
+    ///
+    ///    fn is_blank() -> Boolean {
+    ///        Boolean::new(itself.to_str().chars().all(|c| c.is_whitespace()))
+    ///    }
+    /// );
+    ///
+    /// fn main() {
+    ///     # VM::init();
+    ///     Module::new("Blank").define(|itself| {
+    ///         itself.def("blank?", is_blank);
+    ///     });
+    ///
+    ///     Class::from_existing("String").include("Blank");
+    /// }
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// module Blank
+    ///   def blank?
+    ///     # simplified
+    ///     self.chars.all? { |c| c == ' ' }
+    ///   end
+    /// end
+    ///
+    /// String.include Blank
+    /// ```
+    ///
+    /// ### Receiving arguments
+    ///
+    /// Raise `Fixnum` to the power of `exp`.
+    ///
+    /// ```rust
+    /// #[macro_use] extern crate ruru;
+    ///
+    /// use std::error::Error;
+    ///
+    /// use ruru::{Module, Fixnum, Object, VM};
+    ///
+    /// methods!(
+    ///     Fixnum,
+    ///     itself,
+    ///
+    ///     fn pow(exp: Fixnum) -> Fixnum {
+    ///         // `exp` is not a valid `Fixnum`, raise an exception
+    ///         if let Err(ref error) = exp {
+    ///             VM::raise(error.to_exception(), error.description());
+    ///         }
+    ///
+    ///         // We can safely unwrap here, because an exception was raised if `exp` is `Err`
+    ///         let exp = exp.unwrap().to_i64() as u32;
+    ///
+    ///         Fixnum::new(itself.to_i64().pow(exp))
+    ///     }
+    ///
+    ///     fn pow_with_default_argument(exp: Fixnum) -> Fixnum {
+    ///         let default_exp = 0;
+    ///         let exp = exp.map(|exp| exp.to_i64()).unwrap_or(default_exp);
+    ///
+    ///         let result = itself.to_i64().pow(exp as u32);
+    ///
+    ///         Fixnum::new(result)
+    ///     }
+    /// );
+    ///
+    /// fn main() {
+    ///     # VM::init();
+    ///     Module::from_existing("Fixnum").define(|itself| {
+    ///         itself.def("pow", pow);
+    ///         itself.def("pow_with_default_argument", pow_with_default_argument);
+    ///     });
+    /// }
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// module Fixnum
+    ///   def pow(exp)
+    ///     raise ArgumentError unless exp.is_a?(Fixnum)
+    ///
+    ///     self ** exp
+    ///   end
+    ///
+    ///   def pow_with_default_argument(exp)
+    ///     default_exp = 0
+    ///     exp = default_exp unless exp.is_a?(Fixnum)
+    ///
+    ///     self ** exp
+    ///   end
+    /// end
+    /// ```
+    fn define_module_function<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
+        module::define_module_function(self.value(), name, callback);
+    }
+
+    /// An alias for `define_method`, or `define_module_function`.
+    /// Similar to the Ruby syntax of `def some_method`.
     fn def<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
-        self.define_method(name, callback);
+        match self.value().ty() {
+            ValueType::Module => { self.define_module_function(name, callback); },
+            _ => { self.define_method(name, callback); },
+        }
+    }
+
+    /// An alias for `define_private_method` (similar to Ruby syntax `private def some_method`).
+    fn def_private<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
+        self.define_private_method(name, callback);
     }
 
     /// An alias for `define_singleton_method` (similar to Ruby `def self.some_method`).
