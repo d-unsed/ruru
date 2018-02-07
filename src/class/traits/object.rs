@@ -717,7 +717,7 @@ pub trait Object: From<Value> {
     /// fn main() {
     ///     # VM::init();
     ///     Module::new("Blank").define(|itself| {
-    ///         itself.def("blank?", is_blank);
+    ///         itself.mod_func("blank?", is_blank);
     ///     });
     ///
     ///     Class::from_existing("String").include("Blank");
@@ -732,6 +732,7 @@ pub trait Object: From<Value> {
     ///     # simplified
     ///     self.chars.all? { |c| c == ' ' }
     ///   end
+    ///   module_function :blank?
     /// end
     ///
     /// String.include Blank
@@ -777,8 +778,8 @@ pub trait Object: From<Value> {
     /// fn main() {
     ///     # VM::init();
     ///     Module::from_existing("Fixnum").define(|itself| {
-    ///         itself.def("pow", pow);
-    ///         itself.def("pow_with_default_argument", pow_with_default_argument);
+    ///         itself.mod_func("pow", pow);
+    ///         itself.mod_func("pow_with_default_argument", pow_with_default_argument);
     ///     });
     /// }
     /// ```
@@ -792,6 +793,7 @@ pub trait Object: From<Value> {
     ///
     ///     self ** exp
     ///   end
+    ///   module_function :pow
     ///
     ///   def pow_with_default_argument(exp)
     ///     default_exp = 0
@@ -799,19 +801,16 @@ pub trait Object: From<Value> {
     ///
     ///     self ** exp
     ///   end
+    ///   module_function :pow_with_default_argument
     /// end
     /// ```
     fn define_module_function<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
         module::define_module_function(self.value(), name, callback);
     }
 
-    /// An alias for `define_method`, or `define_module_function`.
-    /// Similar to the Ruby syntax of `def some_method`.
+    /// An alias for `define_method` (similar to Ruby syntax `def some_method`).
     fn def<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
-        match self.value().ty() {
-            ValueType::Module => { self.define_module_function(name, callback); },
-            _ => { self.define_method(name, callback); },
-        }
+        self.define_method(name, callback);
     }
 
     /// An alias for `define_private_method` (similar to Ruby syntax `private def some_method`).
@@ -822,6 +821,11 @@ pub trait Object: From<Value> {
     /// An alias for `define_singleton_method` (similar to Ruby `def self.some_method`).
     fn def_self<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
         self.define_singleton_method(name, callback);
+    }
+
+    /// An alias for `define_module_function` (similar to Ruby `module_function :some_method`).
+    fn mod_func<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
+        self.define_module_function(name, callback);
     }
 
     /// Calls a given method on an object similarly to Ruby `Object#send` method
