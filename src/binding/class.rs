@@ -81,6 +81,14 @@ pub fn define_method<I: Object, O: Object>(klass: Value, name: &str, callback: C
     }
 }
 
+pub fn define_private_method<I: Object, O: Object>(klass: Value, name: &str, callback: Callback<I, O>) {
+    let name = util::str_to_cstring(name);
+
+    unsafe {
+        class::rb_define_private_method(klass, name.as_ptr(), callback as CallbackPtr, -1);
+    }
+}
+
 pub fn define_singleton_method<I: Object, O: Object>(
     klass: Value,
     name: &str,
