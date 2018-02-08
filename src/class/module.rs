@@ -4,7 +4,7 @@ use binding::{module, class};
 use binding::global::rb_cObject;
 use binding::util as binding_util;
 use typed_data::DataTypeWrapper;
-use types::{Value, ValueType};
+use types::{Value, ValueType, Callback};
 
 use {AnyObject, Array, Object, Class, VerifiedObject};
 
@@ -292,6 +292,137 @@ impl Module {
         let superclass = Self::superclass_to_value(superclass);
 
         Class::from(class::define_nested_class(self.value(), name, superclass))
+    }
+
+    /// Defines an instance method for the given module.
+    ///
+    /// Use `methods!` macro to define a `callback`.
+    ///
+    /// You can also use `def()` alias for this function combined with `Module::define()` for a
+    /// nicer DSL.
+    ///
+    /// # Panics
+    ///
+    /// Ruby can raise an exception if you try to define instance method directly on an instance
+    /// of some class (like `Fixnum`, `String`, `Array` etc).
+    ///
+    /// Use this method only on classes (or singleton classes of objects).
+    ///
+    /// # Examples
+    ///
+    /// ### The famous String#blank? method
+    ///
+    /// ```rust
+    /// #[macro_use] extern crate ruru;
+    ///
+    /// use ruru::{Boolean, Module, Class, Object, RString, VM};
+    ///
+    /// methods!(
+    ///    RString,
+    ///    itself,
+    ///
+    ///    fn is_blank() -> Boolean {
+    ///        Boolean::new(itself.to_str().chars().all(|c| c.is_whitespace()))
+    ///    }
+    /// );
+    ///
+    /// fn main() {
+    ///     # VM::init();
+    ///     Module::new("Blank").define(|itself| {
+    ///         itself.mod_func("blank?", is_blank);
+    ///     });
+    ///
+    ///     Class::from_existing("String").include("Blank");
+    /// }
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// module Blank
+    ///   def blank?
+    ///     # simplified
+    ///     self.chars.all? { |c| c == ' ' }
+    ///   end
+    ///   module_function :blank?
+    /// end
+    ///
+    /// String.include Blank
+    /// ```
+    ///
+    /// ### Receiving arguments
+    ///
+    /// Raise `Fixnum` to the power of `exp`.
+    ///
+    /// ```rust
+    /// #[macro_use] extern crate ruru;
+    ///
+    /// use std::error::Error;
+    ///
+    /// use ruru::{Module, Fixnum, Object, VM};
+    ///
+    /// methods!(
+    ///     Fixnum,
+    ///     itself,
+    ///
+    ///     fn pow(exp: Fixnum) -> Fixnum {
+    ///         // `exp` is not a valid `Fixnum`, raise an exception
+    ///         if let Err(ref error) = exp {
+    ///             VM::raise(error.to_exception(), error.description());
+    ///         }
+    ///
+    ///         // We can safely unwrap here, because an exception was raised if `exp` is `Err`
+    ///         let exp = exp.unwrap().to_i64() as u32;
+    ///
+    ///         Fixnum::new(itself.to_i64().pow(exp))
+    ///     }
+    ///
+    ///     fn pow_with_default_argument(exp: Fixnum) -> Fixnum {
+    ///         let default_exp = 0;
+    ///         let exp = exp.map(|exp| exp.to_i64()).unwrap_or(default_exp);
+    ///
+    ///         let result = itself.to_i64().pow(exp as u32);
+    ///
+    ///         Fixnum::new(result)
+    ///     }
+    /// );
+    ///
+    /// fn main() {
+    ///     # VM::init();
+    ///     Module::from_existing("Fixnum").define(|itself| {
+    ///         itself.mod_func("pow", pow);
+    ///         itself.mod_func("pow_with_default_argument", pow_with_default_argument);
+    ///     });
+    /// }
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// module Fixnum
+    ///   def pow(exp)
+    ///     raise ArgumentError unless exp.is_a?(Fixnum)
+    ///
+    ///     self ** exp
+    ///   end
+    ///   module_function :pow
+    ///
+    ///   def pow_with_default_argument(exp)
+    ///     default_exp = 0
+    ///     exp = default_exp unless exp.is_a?(Fixnum)
+    ///
+    ///     self ** exp
+    ///   end
+    ///   module_function :pow_with_default_argument
+    /// end
+    /// ```
+    pub fn define_module_function<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
+        module::define_module_function(self.value(), name, callback);
+    }
+
+    /// An alias for `define_module_function` (similar to Ruby `module_function :some_method`).
+    pub fn mod_func<I: Object, O: Object>(&mut self, name: &str, callback: Callback<I, O>) {
+        self.define_module_function(name, callback);
     }
 
     /// Retrieves a constant from module.
