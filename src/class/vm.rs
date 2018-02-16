@@ -130,8 +130,8 @@ impl VM {
     /// ```
     ///
     /// `Err` will return an `AnyObject` of the exception class raised.
-    /// 
-    /// 
+    ///
+    ///
     /// ```
     /// #[macro_use]
     /// extern crate ruru;
@@ -142,7 +142,7 @@ impl VM {
     ///     # VM::init();
     ///
     ///     let result = VM::eval("raise IndexError, 'flowers'");
-    ///     
+    ///
     ///     match result {
     ///       Err(ao) => {
     ///         let err = Class::from(ao.value());
