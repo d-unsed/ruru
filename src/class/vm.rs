@@ -1,7 +1,7 @@
 use std::slice;
 
 use binding::vm;
-use types::{Argc, Value, c_int};
+use types::{Argc, Value};
 
 use {AnyObject, Class, Object, Proc};
 
@@ -132,9 +132,11 @@ impl VM {
     /// Be aware when checking for equality amongst types like strings, that even
     /// with the same content in Ruby, they will evaluate to different values in
     /// C/Rust.
-    pub fn eval(string: &str) -> Result<AnyObject, c_int> {
+    pub fn eval(string: &str) -> Result<AnyObject, AnyObject> {
         vm::eval_string_protect(string).map(|v|
             AnyObject::from(v)
+        ).map_err(|_|
+            AnyObject::from(vm::errinfo())
         )
     }
 

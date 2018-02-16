@@ -48,9 +48,9 @@ pub fn eval_string_protect(string: &str) -> Result<Value, c_int> {
         )
     };
     if state == 0 {
-      Ok(value)
+        Ok(value)
     } else {
-      Err(state)
+        Err(state)
     }
 }
 
@@ -60,6 +60,16 @@ pub fn raise(exception: Value, message: &str) {
     unsafe {
         vm::rb_raise(exception, message.as_ptr());
     }
+}
+
+pub fn errinfo() -> Value {
+    unsafe { vm::rb_errinfo() }
+}
+
+// TODO: Implement passing raised exception into Ruby
+#[allow(dead_code)]
+pub fn set_errinfo(err: Value) {
+    unsafe { vm::rb_set_errinfo(err) }
 }
 
 pub fn thread_call_without_gvl<F, R, G>(func: F, unblock_func: Option<G>) -> R
