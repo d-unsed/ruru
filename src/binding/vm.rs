@@ -66,8 +66,6 @@ pub fn errinfo() -> Value {
     unsafe { vm::rb_errinfo() }
 }
 
-// TODO: Implement passing raised exception into Ruby
-#[allow(dead_code)]
 pub fn set_errinfo(err: Value) {
     unsafe { vm::rb_set_errinfo(err) }
 }
@@ -143,9 +141,9 @@ extern "C" fn callbox(boxptr: *mut c_void) -> *const c_void {
     fnbox()
 }
 
-pub fn protect<F>(func: F) -> Result<Value, c_int>
+pub fn protect<F, R>(func: F) -> Result<Value, c_int>
 where
-    F: FnOnce(),
+    F: FnOnce() -> R,
 {
     let mut state = 0;
     let value = unsafe {
