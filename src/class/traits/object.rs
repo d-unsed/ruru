@@ -608,8 +608,8 @@ pub trait Object: From<Value> {
     /// let b = Fixnum::new(7);
     /// let c = Fixnum::new(4);
     ///
-    /// assert!(!a.equals(b));
-    /// assert!(a.equals(c));
+    /// assert!(!a.equals(&b));
+    /// assert!(a.equals(&c));
     /// ```
     ///
     /// Ruby:
@@ -622,7 +622,7 @@ pub trait Object: From<Value> {
     /// a == b # false
     /// a == c # true
     /// ```
-    fn equals<T: Object>(&self, other: T) -> bool {
+    fn equals<T: Object>(&self, other: &T) -> bool {
         let v = self.value();
         let m = "==";
         let a = vec![other.value()];
@@ -640,10 +640,9 @@ pub trait Object: From<Value> {
     ///
     /// let a = Fixnum::new(4);
     /// let b = Class::from_existing("Integer");
-    /// let c = Class::from_existing("Integer");
     ///
-    /// assert!(!a.case_equals(b));
-    /// assert!(c.case_equals(a));
+    /// assert!(!a.case_equals(&b));
+    /// assert!(b.case_equals(&a));
     /// ```
     ///
     /// Ruby:
@@ -654,7 +653,7 @@ pub trait Object: From<Value> {
     /// a === Integer # false
     /// Integer === a # true
     /// ```
-    fn case_equals<T: Object>(&self, other: T) -> bool {
+    fn case_equals<T: Object>(&self, other: &T) -> bool {
         let v = self.value();
         let m = "===";
         let a = vec![other.value()];
@@ -674,8 +673,8 @@ pub trait Object: From<Value> {
     /// let b = Fixnum::new(7);
     /// let c = Fixnum::new(4);
     ///
-    /// assert!(!a.is_eql(b));
-    /// assert!(a.is_eql(c));
+    /// assert!(!a.is_eql(&b));
+    /// assert!(a.is_eql(&c));
     /// ```
     ///
     /// Ruby:
@@ -689,7 +688,7 @@ pub trait Object: From<Value> {
     /// a.eql?(b)
     /// a.eql?(c)
     /// ```
-    fn is_eql<T: Object>(&self, other: T) -> bool {
+    fn is_eql<T: Object>(&self, other: &T) -> bool {
         let v = self.value();
         let m = "eql?";
         let a = vec![other.value()];
@@ -709,8 +708,8 @@ pub trait Object: From<Value> {
     /// let b = Fixnum::new(7);
     /// let c = Fixnum::new(4);
     ///
-    /// assert!(!a.is_equal(b));
-    /// assert!(a.is_equal(c));
+    /// assert!(!a.is_equal(&b));
+    /// assert!(a.is_equal(&c));
     /// ```
     ///
     /// Ruby:
@@ -724,7 +723,7 @@ pub trait Object: From<Value> {
     /// a.equal?(b)
     /// a.eqlua?(c)
     /// ```
-    fn is_equal<T: Object>(&self, other: T) -> bool {
+    fn is_equal<T: Object>(&self, other: &T) -> bool {
         let v = self.value();
         let m = "equal?";
         let a = vec![other.value()];
