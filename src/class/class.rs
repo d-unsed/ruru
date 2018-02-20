@@ -174,6 +174,25 @@ impl Class {
         AnyObject::from(instance)
     }
 
+    /// Creates a new instance of `Class`
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use ruru::{Class, Object};
+    ///
+    /// Class::from_existing("String").allocate();
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// String.allocate
+    /// ```
+    pub fn allocate(&self) -> Class {
+        Class::from(self.send("allocate", None).value())
+    }
+
     /// Returns a superclass of the current class
     ///
     /// # Examples
