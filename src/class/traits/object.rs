@@ -596,6 +596,141 @@ pub trait Object: From<Value> {
         AnyObject::from(result)
     }
 
+    /// Alias for Ruby's `==`
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Fixnum, Object, VM};
+    /// # VM::init();
+    ///
+    /// let a = Fixnum::new(4);
+    /// let b = Fixnum::new(7);
+    /// let c = Fixnum::new(4);
+    ///
+    /// assert!(!a.equals(&b));
+    /// assert!(a.equals(&c));
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// a = 4
+    /// b = 7
+    /// c = 4
+    ///
+    /// a == b # false
+    /// a == c # true
+    /// ```
+    fn equals<T: Object>(&self, other: &T) -> bool {
+        let v = self.value();
+        let m = "==";
+        let a = vec![other.value()];
+
+        binding_util::call_method(v, m, Some(a)).is_true()
+    }
+
+    /// Alias for Ruby's `===`
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Fixnum, Object, Class, VM};
+    /// # VM::init();
+    ///
+    /// let a = Fixnum::new(4);
+    /// let b = Class::from_existing("Integer");
+    ///
+    /// assert!(!a.case_equals(&b));
+    /// assert!(b.case_equals(&a));
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// a = 4
+    ///
+    /// a === Integer # false
+    /// Integer === a # true
+    /// ```
+    fn case_equals<T: Object>(&self, other: &T) -> bool {
+        let v = self.value();
+        let m = "===";
+        let a = vec![other.value()];
+
+        binding_util::call_method(v, m, Some(a)).is_true()
+    }
+
+    /// Alias for Ruby's `eql?`
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Fixnum, Object, VM};
+    /// # VM::init();
+    ///
+    /// let a = Fixnum::new(4);
+    /// let b = Fixnum::new(7);
+    /// let c = Fixnum::new(4);
+    ///
+    /// assert!(!a.is_eql(&b));
+    /// assert!(a.is_eql(&c));
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// a = 4
+    /// b = 7
+    /// c = 4
+    ///
+    ///
+    /// a.eql?(b)
+    /// a.eql?(c)
+    /// ```
+    fn is_eql<T: Object>(&self, other: &T) -> bool {
+        let v = self.value();
+        let m = "eql?";
+        let a = vec![other.value()];
+
+        binding_util::call_method(v, m, Some(a)).is_true()
+    }
+
+    /// Alias for Ruby's `equal?`
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{Fixnum, Object, VM};
+    /// # VM::init();
+    ///
+    /// let a = Fixnum::new(4);
+    /// let b = Fixnum::new(7);
+    /// let c = Fixnum::new(4);
+    ///
+    /// assert!(!a.is_equal(&b));
+    /// assert!(a.is_equal(&c));
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// a = 4
+    /// b = 7
+    /// c = 4
+    ///
+    ///
+    /// a.equal?(b)
+    /// a.eqlua?(c)
+    /// ```
+    fn is_equal<T: Object>(&self, other: &T) -> bool {
+        let v = self.value();
+        let m = "equal?";
+        let a = vec![other.value()];
+
+        binding_util::call_method(v, m, Some(a)).is_true()
+    }
+
     /// Checks whether the object responds to given method
     ///
     /// # Examples
