@@ -15,6 +15,7 @@ pub mod typed_data;
 pub mod types;
 pub mod util;
 
+pub use class::any_exception::AnyException;
 pub use class::any_object::AnyObject;
 pub use class::array::Array;
 pub use class::boolean::Boolean;
@@ -32,6 +33,7 @@ pub use class::thread::Thread;
 pub use class::vm::VM;
 
 pub use class::traits::object::Object;
+pub use class::traits::exception::Exception;
 pub use class::traits::verified_object::VerifiedObject;
 
 #[test]
