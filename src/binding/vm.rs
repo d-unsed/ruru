@@ -29,12 +29,45 @@ pub fn require(name: &str) {
     }
 }
 
+// "evaluation can raise an exception."
+pub fn eval_string(string: &str) -> Value {
+    let s = util::str_to_cstring(string);
+
+    unsafe {
+        vm::rb_eval_string(s.as_ptr())
+    }
+}
+
+pub fn eval_string_protect(string: &str) -> Result<Value, c_int> {
+    let s = util::str_to_cstring(string);
+    let mut state = 0;
+    let value = unsafe {
+        vm::rb_eval_string_protect(
+            s.as_ptr(),
+            &mut state as *mut c_int
+        )
+    };
+    if state == 0 {
+        Ok(value)
+    } else {
+        Err(state)
+    }
+}
+
 pub fn raise(exception: Value, message: &str) {
     let message = util::str_to_cstring(message);
 
     unsafe {
         vm::rb_raise(exception, message.as_ptr());
     }
+}
+
+pub fn errinfo() -> Value {
+    unsafe { vm::rb_errinfo() }
+}
+
+pub fn set_errinfo(err: Value) {
+    unsafe { vm::rb_set_errinfo(err) }
 }
 
 pub fn thread_call_without_gvl<F, R, G>(func: F, unblock_func: Option<G>) -> R
@@ -108,9 +141,9 @@ extern "C" fn callbox(boxptr: *mut c_void) -> *const c_void {
     fnbox()
 }
 
-pub fn protect<F>(func: F) -> Result<Value, c_int>
+pub fn protect<F, R>(func: F) -> Result<Value, c_int>
 where
-    F: FnOnce(),
+    F: FnOnce() -> R,
 {
     let mut state = 0;
     let value = unsafe {

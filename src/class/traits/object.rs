@@ -1,14 +1,15 @@
 use std::convert::From;
 
 use binding::class;
+use binding::vm;
 use binding::global::ValueType;
 use binding::util as binding_util;
-use result::{Error, Result};
+use result::{Error, Result as RuruResult};
 use typed_data::DataTypeWrapper;
 use types::{Callback, Value};
 use util;
 
-use {AnyObject, Boolean, Class, VerifiedObject};
+use {AnyObject, Boolean, Class, NilClass, VerifiedObject};
 
 /// `Object`
 ///
@@ -613,6 +614,134 @@ pub trait Object: From<Value> {
         class::respond_to(self.value(), method)
     }
 
+    /// `protect_send` returns Result<AnyObject, AnyObject>
+    /// 
+    /// Protects against crash with `send` when exception object raised which will
+    /// be returned in the `Err` result.
+    /// 
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{RString, Fixnum, Object, Class, VM};
+    /// # VM::init();
+    /// 
+    /// let kernel = Class::from_existing("Kernel");
+    /// 
+    /// let result = kernel.protect_send("nil?".to_string(), None);
+    /// 
+    /// if let Ok(r) = result {
+    ///     assert!(!r.value().is_true());
+    /// } else {
+    ///     unreachable!()
+    /// }
+    /// 
+    /// let kernel = Class::from_existing("Kernel");
+    /// 
+    /// let result = kernel.protect_send(
+    ///     "raise".to_string(),
+    ///     Some(&vec![RString::new("flowers").to_any_object()])
+    /// );
+    /// 
+    /// if let Err(error) = result {
+    ///     assert_eq!(
+    ///         Class::from(error.value()).
+    ///             send("message", None).
+    ///             try_convert_to::<RString>().
+    ///             ok().
+    ///             unwrap().
+    ///             to_str(),
+    ///         "flowers"
+    ///     );
+    /// } else {
+    ///     unreachable!()
+    /// }
+    /// ```
+    fn protect_send(&self, method: String, arguments: Option<&[AnyObject]>) -> Result<AnyObject, AnyObject> {
+        let v = self.value();
+        let arguments = util::arguments_to_values(arguments);
+
+        let closure = move || {
+            binding_util::call_method(v, &method, arguments)
+        };
+
+        let result = vm::protect(closure);
+
+        if let Ok(value) = result {
+            Ok(AnyObject::from(value))
+        } else {
+            let output = Err(AnyObject::from(vm::errinfo()));
+
+            // error cleanup
+            vm::set_errinfo(NilClass::new().value());
+
+            output
+        }
+    }
+
+    /// `protect_public_send` returns Result<AnyObject, AnyObject>
+    /// 
+    /// Protects against crash with `public_send` when exception object raised which will
+    /// be returned in the `Err` result.
+    /// 
+    /// # Examples
+    ///
+    /// ```
+    /// use ruru::{RString, Fixnum, Object, Class, VM};
+    /// # VM::init();
+    /// 
+    /// let kernel = Class::from_existing("Kernel");
+    /// 
+    /// let result = kernel.protect_public_send("nil?".to_string(), None);
+    /// 
+    /// if let Ok(r) = result {
+    ///     assert!(!r.value().is_true());
+    /// } else {
+    ///     unreachable!()
+    /// }
+    /// 
+    /// let kernel = Class::from_existing("Kernel");
+    /// 
+    /// let result = kernel.protect_public_send(
+    ///     "raise".to_string(),
+    ///     Some(&vec![RString::new("flowers").to_any_object()])
+    /// );
+    /// 
+    /// if let Err(error) = result {
+    ///     assert_eq!(
+    ///         Class::from(error.value()).
+    ///             send("message", None).
+    ///             try_convert_to::<RString>().
+    ///             ok().
+    ///             unwrap().
+    ///             to_str(),
+    ///         "flowers"
+    ///     );
+    /// } else {
+    ///     unreachable!()
+    /// }
+    /// ```
+    fn protect_public_send(&self, method: String, arguments: Option<&[AnyObject]>) -> Result<AnyObject, AnyObject> {
+        let v = self.value();
+        let arguments = util::arguments_to_values(arguments);
+
+        let closure = move || {
+            binding_util::call_public_method(v, &method, arguments)
+        };
+
+        let result = vm::protect(closure);
+
+        if let Ok(value) = result {
+            Ok(AnyObject::from(value))
+        } else {
+            let output = Err(AnyObject::from(vm::errinfo()));
+
+            // error cleanup
+            vm::set_errinfo(NilClass::new().value());
+
+            output
+        }
+    }
+
     /// Checks whether the object is `nil`
     ///
     /// # Examples
@@ -1009,7 +1138,7 @@ pub trait Object: From<Value> {
     ///   end
     /// end
     /// ```
-    fn try_convert_to<T: VerifiedObject>(&self) -> Result<T> {
+    fn try_convert_to<T: VerifiedObject>(&self) -> RuruResult<T> {
         if T::is_correct_type(self) {
             let converted_object = unsafe { self.to::<T>() };
 
