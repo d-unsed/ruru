@@ -37,6 +37,10 @@ pub fn raise(exception: Value, message: &str) {
     }
 }
 
+pub fn raise_ex(exception: Value) {
+    unsafe { vm::rb_exc_raise(exception); }
+}
+
 pub fn thread_call_without_gvl<F, R, G>(func: F, unblock_func: Option<G>) -> R
 where
     F: FnOnce() -> R,

@@ -3,7 +3,7 @@ use std::slice;
 use binding::vm;
 use types::{Argc, Value};
 
-use {AnyObject, Class, Object, Proc};
+use {AnyObject, AnyException, Class, Object, Proc};
 
 /// Virtual Machine and helpers
 pub struct VM;
@@ -100,6 +100,51 @@ impl VM {
     /// ```
     pub fn raise(exception: Class, message: &str) {
         vm::raise(exception.value(), message);
+    }
+
+    /// Raises an exception from a native `AnyException` object.
+    ///
+    /// # Examples
+    ///
+    /// ### Built-in exceptions
+    ///
+    /// ```no_run
+    /// use ruru::{Class, VM, Exception, AnyException};
+    /// # VM::init();
+    ///
+    /// VM::raise_ex(AnyException::new("StandardError", Some("something went wrong")));
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// raise StandardError, 'something went wrong'
+    /// ```
+    ///
+    /// ### Custom exceptions
+    ///
+    /// ```no_run
+    /// use ruru::{Class, VM, Exception, AnyException};
+    /// # VM::init();
+    ///
+    /// let standard_error = Class::from_existing("StandardError");
+    /// Class::new("CustomException", Some(&standard_error));
+    ///
+    /// let exception = AnyException::new("CustomException", Some("something went wrong"));
+    ///
+    /// VM::raise_ex(exception);
+    /// ```
+    ///
+    /// Ruby:
+    ///
+    /// ```ruby
+    /// class CustomException < StandardError
+    /// end
+    ///
+    /// raise CustomException, 'Something went wrong'
+    /// ```
+    pub fn raise_ex(exception: AnyException) {
+        vm::raise_ex(exception.value());
     }
 
     /// Converts a block given to current method to a `Proc`
