@@ -3,7 +3,7 @@ use std::slice;
 use binding::vm;
 use types::{Argc, Value};
 
-use {AnyObject, Class, Object, Proc};
+use {AnyObject, Class, Object, Proc, NilClass};
 
 /// Virtual Machine and helpers
 pub struct VM;
@@ -161,9 +161,14 @@ impl VM {
     pub fn eval(string: &str) -> Result<AnyObject, AnyObject> {
         vm::eval_string_protect(string).map(|v|
             AnyObject::from(v)
-        ).map_err(|_|
-            AnyObject::from(vm::errinfo())
-        )
+        ).map_err(|_| {
+            let output = AnyObject::from(vm::errinfo());
+
+            // error cleanup
+            vm::set_errinfo(NilClass::new().value());
+
+            output
+        })
     }
 
     /// Evals string and returns an AnyObject
