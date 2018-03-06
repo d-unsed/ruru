@@ -10,35 +10,6 @@ use binding::util as binding_util;
 /// Programs may make subclasses of Exception, typically of StandardError or
 /// RuntimeError, to provide custom classes and add additional information.
 /// See the subclass list below for defaults for `raise` and `rescue`.
-///
-/// When an exception has been raised but not yet handled (in `rescue`, `ensure`,
-/// `at_exit` and `END` blocks) the global variable `$!` will contain the current
-/// exception and `$@` contains the current exception's backtrace.
-///
-/// It is recommended that a library should have one subclass of StandardError
-/// or RuntimeError and have specific exception types inherit from it. This
-/// allows the user to rescue a generic exception type to catch all exceptions
-/// the library may raise even if future versions of the library add new
-/// exception subclasses.
-///
-/// For example:
-///
-/// ```ruby
-/// class MyLibrary
-///   class Error < RuntimeError
-///   end
-///
-///   class WidgetError < Error
-///   end
-///
-///   class FrobError < Error
-///   end
-///
-/// end
-/// ```
-///
-/// To handle both WidgetError and FrobError the library user can rescue
-/// MyLibrary::Error.
 pub trait Exception: Object {
     /// Construct a new Exception object, optionally passing in a message.
     ///
@@ -128,7 +99,7 @@ pub trait Exception: Object {
         Some(Array::from(result))
     }
 
-    /// Returns the previous exception ($!) at the time this
+    /// Returns the previous exception at the time this
     /// exception was raised. This is useful for wrapping exceptions
     /// and retaining the original exception information.
     ///
