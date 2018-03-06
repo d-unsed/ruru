@@ -39,43 +39,6 @@ use binding::util as binding_util;
 ///
 /// To handle both WidgetError and FrobError the library user can rescue
 /// MyLibrary::Error.
-///
-/// The built-in subclasses of Exception are:
-///
-/// NoMemoryError
-/// ScriptError
-/// LoadError
-/// NotImplementedError
-/// SyntaxError
-/// SecurityError
-/// SignalException
-/// Interrupt
-/// StandardError – default for rescue
-/// ArgumentError
-/// UncaughtThrowError
-/// EncodingError
-/// FiberError
-/// IOError
-/// EOFError
-/// IndexError
-/// KeyError
-/// StopIteration
-/// LocalJumpError
-/// NameError
-/// NoMethodError
-/// RangeError
-/// FloatDomainError
-/// RegexpError
-/// RuntimeError – default for raise
-/// SystemCallError
-/// Errno::*
-/// ThreadError
-/// TypeError
-/// ZeroDivisionError
-/// SystemExit
-/// SystemStackError
-/// fatal – impossible to rescue
-///
 pub trait Exception: Object {
     /// Construct a new Exception object, optionally passing in a message.
     ///
