@@ -14,3 +14,6 @@ license = "MIT"
 [dependencies]
 ruby-sys = "0.3.0"
 lazy_static = "0.2.1"
+
+[features]
+test = ["ruby-sys/test"]
