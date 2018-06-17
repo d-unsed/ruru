@@ -113,6 +113,26 @@ impl RString {
         string::value_to_string_unchecked(self.value())
     }
 
+    /// Retrieves `Vec<u8>` from Ruby `String` object.
+    ///
+    /// Unlike `to_string()` it does not perform any checks for internal null-bytes.
+    ///
+    /// This function may be used to safely get binary data from Ruby.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use ruru::{RString, VM};
+    /// # VM::init();
+    ///
+    /// let string = RString::new("Hello,\0World!");
+    ///
+    /// assert_eq!(string.to_vec_u8_unchecked(), (b"Hello,\0World!").to_vec());
+    /// ```
+    pub fn to_vec_u8_unchecked(&self) -> Vec<u8> {
+        string::value_to_vec_u8_unchecked(self.value())
+    }
+
     /// Retrieves underlying `&str` from Ruby `String` object.
     ///
     /// # Examples
@@ -167,6 +187,28 @@ impl RString {
         let value = self.value();
 
         string::value_to_str_unchecked(value)
+    }
+
+    /// Retrieves underlying `&[u8]` from Ruby `String` object.
+    ///
+    /// Unlike `to_str()` it does not perform any checks for internal null-bytes.
+    ///
+    /// This function may be used to safely get binary data from Ruby.
+    ///
+    /// # Examples
+    ///
+    /// ```no_run
+    /// use ruru::{RString, VM};
+    /// # VM::init();
+    ///
+    /// let string = RString::new("Hello,\0World!");
+    ///
+    /// assert_eq!(string.to_bytes_unchecked(), b"Hello,\0World!");
+    /// ```
+    pub fn to_bytes_unchecked(&self) -> &[u8] {
+        let value = self.value();
+
+        string::value_to_bytes_unchecked(value)
     }
 
     /// Returns the length of the string in bytes
