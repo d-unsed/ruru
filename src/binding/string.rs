@@ -27,10 +27,7 @@ pub fn value_to_string(value: Value) -> String {
 
 pub fn value_to_string_unchecked(value: Value) -> String {
     unsafe {
-        let str = string::rb_string_value_ptr(&value) as *const u8;
-        let len = string::rb_str_len(value) as usize;
-
-        let vec = ::std::slice::from_raw_parts(str, len).to_vec();
+        let vec = value_to_bytes_unchecked(value).to_vec();
 
         String::from_utf8_unchecked(vec)
     }
@@ -44,12 +41,18 @@ pub fn value_to_str<'a>(value: Value) -> &'a str {
     }
 }
 
-pub fn value_to_str_unchecked<'a>(value: Value) -> &'a str {
+pub fn value_to_bytes_unchecked<'a>(value: Value) -> &'a [u8] {
     unsafe {
         let str = string::rb_string_value_ptr(&value) as *const u8;
         let len = string::rb_str_len(value) as usize;
 
-        let slice = ::std::slice::from_raw_parts(str, len);
+        ::std::slice::from_raw_parts(str, len)
+    }
+}
+
+pub fn value_to_str_unchecked<'a>(value: Value) -> &'a str {
+    unsafe {
+        let slice = value_to_bytes_unchecked(value);
 
         ::std::str::from_utf8_unchecked(slice)
     }
