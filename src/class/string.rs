@@ -130,7 +130,7 @@ impl RString {
     /// assert_eq!(string.to_vec_u8_unchecked(), (b"Hello,\0World!").to_vec());
     /// ```
     pub fn to_vec_u8_unchecked(&self) -> Vec<u8> {
-        string::value_to_vec_u8_unchecked(self.value())
+        self.to_bytes_unchecked().to_vec()
     }
 
     /// Retrieves underlying `&str` from Ruby `String` object.

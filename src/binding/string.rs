@@ -25,13 +25,9 @@ pub fn value_to_string(value: Value) -> String {
     }
 }
 
-pub fn value_to_vec_u8_unchecked(value: Value) -> Vec<u8> {
-    value_to_bytes_unchecked(value).to_vec()
-}
-
 pub fn value_to_string_unchecked(value: Value) -> String {
     unsafe {
-        let vec = value_to_vec_u8_unchecked(value);
+        let vec = value_to_bytes_unchecked(value).to_vec();
 
         String::from_utf8_unchecked(vec)
     }
