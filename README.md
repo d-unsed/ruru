@@ -9,6 +9,8 @@
 [![Gitter](https://badges.gitter.im/rust-ruru/general.svg)](https://gitter.im/rust-ruru/general?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge)
 [![Code Triagers Badge](https://www.codetriage.com/d-unseductable/ruru/badges/users.svg)](https://www.codetriage.com/d-unseductable/ruru)
 
+#### This project has been officially forked and development has continued at [https://github.com/danielpclark/rutie](https://github.com/danielpclark/rutie)
+
 <p align="center">
   <img src="http://this-week-in-ruru.org/assets/images/logo.png" width="350" height="350">
   <br>
