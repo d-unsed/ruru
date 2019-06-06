@@ -13,6 +13,7 @@ pub struct RString {
 
 impl RString {
     /// Creates a new instance of Ruby `String` containing given `string`.
+    /// Not that since Rust strings are assumed to be in UTF-8 encoding, this method is equivalent to `new_utf8`.
     ///
     /// # Examples
     ///
@@ -33,7 +34,7 @@ impl RString {
     /// str == 'Hello, World!'
     /// ```
     pub fn new(string: &str) -> Self {
-        Self::from(string::new(string))
+        Self::new_utf8(string)
     }
 
     /// Creates a new instance of Ruby `String`, with UTF8 encoding, containing
