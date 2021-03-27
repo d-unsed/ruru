@@ -16,6 +16,9 @@
   <br>
   <b><a href="http://this-week-in-ruru.org">Website</a></b>
   <br>
+  <br>
+  <a href="https://github.com/danielpclark/rutie">See Rutie for a successor to this project</a>
+  <br>
 </p>
 
 Have you ever considered rewriting some parts of your ~~slow~~ Ruby application?
